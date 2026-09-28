@@ -288,12 +288,11 @@ const KEY_PEOPLE = ["Adam","Noah","Abraham","Moses","David","Jesus"];
 // to death joins the band; the rows stay in order of birth, each joined to its father.
 const INV = window.INV || null;
 if (INV) {
-  const fact = (id, p) => ((INV.entries[id] || {}).f || []).find(f => f.p === p && !f.s);
   PEOPLE.forEach(p => { const l = INV.lives.filter(l => l.name === p.name).sort((a, b) => Math.abs(a.b - p.b) - Math.abs(b.b - p.b))[0];
     if (l && Math.abs(l.b - p.b) < 50) { p.inv = l.id; p.b = l.b; if (l.d != null) p.d = l.d; } });
   const byInv = id => PEOPLE.find(p => p.inv === id);
   INV.lives.forEach(l => { if (l.d == null || byInv(l.id)) return;
-    PEOPLE.push({ name: l.name, b: l.b, d: l.d, ref: (fact(l.id, "lifespan") || {}).r || "", parent: -1, approx: false, kind: "Person", inv: l.id, fatherInv: l.father }); });
+    PEOPLE.push({ name: l.name, b: l.b, d: l.d, ref: l.ref || "", parent: -1, approx: false, kind: "Person", inv: l.id, fatherInv: l.father }); });
   const fatherOf = new Map(PEOPLE.map(p => [p, p.fatherInv ? byInv(p.fatherInv) : p.parent >= 0 ? PEOPLE[p.parent] : null]));
   PEOPLE.sort((a, b) => a.b - b.b);
   PEOPLE.forEach((p, i) => { p.i = i; p.id = "p" + i; });
@@ -345,6 +344,8 @@ const TOLD = {"Genesis":[0,2369],"Exodus":[2369,2514],"Leviticus":[2514,2515],"N
  "Joshua":[2553,2578],"Judges":[2578,2890],"Ruth":[2680,2690],"1 Samuel":[2833,2949],"2 Samuel":[2949,2989],"1 Kings":[2989,3107],"2 Kings":[3107,3442],
  "1 Chronicles":[2949,2989],"2 Chronicles":[2989,3468],"Ezra":[3468,3547],"Nehemiah":[3559,3574],"Esther":[3521,3531],"Job":[2100,2290],
  "Matthew":[4000,4036],"Mark":[4029,4036],"Luke":[3999,4036],"John":[4029,4036],"Acts":[4036,4065]};
+// once all of a book's chapters are in the Inventory, its years told are the first and last dated events it tells (09/28/2026)
+if (INV && INV.books) Object.entries(INV.books).forEach(([b, v]) => { if (v.told) TOLD[b] = v.told; });
 const BOOKS = []; SECTIONS.forEach(([sec, list], si) => list.forEach(([name,s,e,author]) => { const [ts, te] = TOLD[name] || [s, e];
   BOOKS.push({id:"k"+BOOKS.length,name,s,e,ts,te,author,sec,si,kind:"Book"}); }));
 
@@ -762,6 +763,7 @@ function describe(o) {
   return `${o.img ? `<img src="${o.img}" alt="">` : ""}<b>${o.name}</b><i>${o.sub}</i><span class="num">${when(o)} · ${o.ref}</span>`;
 }
 function hover(e) { const t = e.target.closest("[data-id]"); if (!t) { hideTip(); return; } hush(t);
+  const ho = ALL[t.dataset.id]; if (ho && ho.inv && INV) needCard(ho.inv);
   if (tip.dataset.id !== t.dataset.id) { tip.innerHTML = describe(ALL[t.dataset.id]); tip.dataset.id = t.dataset.id; } tip.style.opacity = 1;
   const tw0 = tip.offsetWidth, th0 = tip.offsetHeight;  // kept on the screen, above the pointer when there is no room below
   tip.style.left = Math.max(8, Math.min(innerWidth - tw0 - 8, e.clientX + 16)) + "px";
@@ -779,11 +781,12 @@ function hush(t) {
   lit.forEach(n => n.classList.add("lit")); track.classList.add("hush"); hushed = { el: t, track, lit }; }
 stage.addEventListener("pointerleave", hideTip);
 const panel = document.getElementById("panel"), pbody = document.getElementById("pbody");
-function openPanel(id) { const o = ALL[id]; hideTip(); noteCard("t:" + id); let h = "";
+function openPanel(id) { const o = ALL[id]; if (o.inv && waiting(o.inv)) { afterLoad(o.inv, () => openPanel(id)); return; }
+  hideTip(); noteCard("t:" + id); let h = "";
   if (o.kind === "Graphic") h = `${o.img ? `<img src="${o.img}">` : ""}<div class="body"><div class="kind">${o.pdf ? "Map or chart · free" : o.status}</div><h3>${o.name}</h3><div class="when num">${o.ref} · ${when(o)}</div>
     <p>${o.pdf ? "One printable sheet, 17 × 11 inches. Its own page carries the full-size view, the notes and the sources." : "This sheet is " + o.status.toLowerCase() + ". It will take its place over these years when it is finished."}</p>
     ${o.pdf ? `<div class="acts"><a class="btn1" href="${o.pdf}" download>Download PDF · ${o.size}</a><a class="btn2" href="#">Open the page</a></div>` : ""}<div class="fine">Mock-up: the page is not built yet.</div></div>`;
-  else if (o.inv && INV && INV.entries[o.inv]) { h = invCard(o.inv, o.kind === "Person" ? "Descendants of Adam" : "Events", o); }
+  else if (o.inv && CARDS[o.inv]) { h = invCard(o.inv, o.kind === "Person" ? "Descendants of Adam" : "Events", o); }
   else if (o.kind === "Person") { const sons = PEOPLE.filter(p => p.parent === o.i).map(p => p.name);
     h = `<div class="body"><div class="kind">Descendants of Adam</div><h3>${o.name}</h3><div class="when num">${when(o)}</div>
     <dl><dt>Lived</dt><dd class="num">${o.d - o.b} years</dd><dt>World years</dt><dd class="num">${amS(o.b)} – ${amS(o.d)}</dd><dt>Father</dt><dd>${o.parent >= 0 ? PEOPLE[o.parent].name : "—"}</dd><dt>Son</dt><dd>${sons.join(", ") || "—"}</dd><dt>Scripture</dt><dd>${o.ref}</dd></dl>
@@ -796,8 +799,17 @@ function closePanel() { panel.classList.remove("open"); }
 
 /* ---------- a card written from the Bible Inventory: every line approved against the NKJV, with its verses ---------- */
 // Everything that names an entry is a link to that entry's own card, so the facts lead from one to the next (09/28/2026).
-const REV = {};  // for each entry, the facts elsewhere that name it: children, the events it took part in, the places' events
-if (INV) Object.entries(INV.entries).forEach(([from, en]) => (en.f || []).forEach(f => { if (f.e && !f.s) (REV[f.e] = REV[f.e] || []).push({ from, p: f.p }); }));
+// The Inventory's cards come in files of 200 entries (inv\per0.js holds PER-00000 to PER-00199), each fetched the first time
+// one of its cards is wanted, so the page stays small however large the Inventory grows (09/28/2026).
+const CARDS = {}, LOADING = {}, LOADED = {};
+window.VBI = group => Object.assign(CARDS, group);
+const chunkOf = id => id.slice(0, 3).toLowerCase() + Math.floor(+id.slice(4) / ((INV && INV.chunk) || 200));
+function needCard(id) { if (CARDS[id]) return Promise.resolve(); const k = chunkOf(id);
+  return LOADING[k] || (LOADING[k] = new Promise(res => { const s = document.createElement("script"); s.src = "inv/" + k + ".js";
+    s.onload = s.onerror = () => { LOADED[k] = true; res(); }; document.head.appendChild(s); })); }
+const waiting = id => INV && !CARDS[id] && !LOADED[chunkOf(id)];
+function afterLoad(id, then) { const nav = cardNav, back = cardBack; needCard(id).then(() => { cardNav = nav; cardBack = back; then(); cardNav = false; }); }
+let NM = {};  // the names the card being written links to
 const LABEL = { "name": "Names", "father": "Father", "mother": "Mother", "spouse": "Married", "concubine": "Concubine", "sibling": "Brother or sister",
   "lifespan": "Lived", "meaning of name": "Name means", "reason for name": "Why the name", "lived at": "Lived at", "burial place": "Buried",
   "occupation": "Work", "place": "Where", "participant": "Who", "part of": "Part of", "led by": "Led by", "destination": "To",
@@ -805,7 +817,7 @@ const LABEL = { "name": "Names", "father": "Father", "mother": "Mother", "spouse
 const FIRST = ["name", "birth of", "death of", "creation of", "father", "mother", "spouse", "concubine", "sibling", "lifespan", "age", "meaning of name", "reason for name",
   "place", "participant", "led by", "part of", "destination", "place type", "located in", "lived at", "burial place"];
 const HIDE = new Set(["date", "earliest date", "latest date", "occurred before", "designation"]);
-const go = id => INV.entries[id] ? `<a class="go" data-go="${id}">${INV.entries[id].n}</a>` : "";
+const go = id => { const n = NM[id] || (CARDS[id] && CARDS[id].n); return n ? `<a class="go" data-go="${id}">${n}</a>` : ""; };
 const yearOf = id => { const y = INV.events[id]; return !y ? null : y.y != null ? y.y : y.lo; };
 const yearText = (y, mark = "") => y.y != null ? `${cal(y.y)}${mark} <span class="amy num">AM ${Math.round(y.y).toLocaleString()}</span>` : `between ${cal(y.lo)} and ${cal(y.hi)}${mark}`;
 const tipText = s => (s || "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
@@ -814,18 +826,17 @@ const val = f => f.e ? go(f.e) : f.y != null ? `${cal(f.y)} <span class="amy num
 const ctx = f => f.at ? ` <span class="ctx">at ${go(f.at)}</span>` : f.from || f.to ? ` <span class="ctx">${f.from ? `from ${go(f.from)}` : ""}${f.to ? ` until ${go(f.to)}` : ""}</span>` : "";
 const line = f => `<div>${val(f)}${how(f)}${ctx(f)}${f.r ? `<span class="rf">${f.r}</span>` : ""}</div>`;
 function invCard(id, band, o) {
-  const en = INV.entries[id], fs = en.f || [], kind = { person: "Person", event: "Event", place: "Place", group: "People", object: "Thing", deity: "God", spirit: "Spirit" }[en.k] || en.k;
+  const en = CARDS[id], fs = en.f || [], rv = en.rv || {}; NM = en.nm || {}; const kind = { person: "Person", event: "Event", place: "Place", group: "People", object: "Thing", deity: "God", spirit: "Spirit" }[en.k] || en.k;
   const rows = [], byProp = {};
   fs.forEach(f => (byProp[f.p] = byProp[f.p] || []).push(f));
   const row = (label, html) => { if (html) rows.push(`<dt>${label}</dt><dd>${html}</dd>`); };
   const cell = list => list.filter(f => !f.s).map(line).join("") + list.filter(f => f.s).map(f => `<div class="alt">Also read: ${val(f)}${f.r ? `<span class="rf">${f.r}</span>` : ""}${f.w ? ` — ${f.w}` : ""}</div>`).join("");
   let when = "";
   if (en.k === "person") {
-    const ev = p => (REV[id] || []).filter(r => r.p === p && INV.events[r.from]).map(r => r.from)[0];
-    const born = ev("birth of") || ev("creation of"), died = ev("death of");
-    if (born || died) when = `${born ? cal(yearOf(born)) : "?"} – ${died ? cal(yearOf(died)) : "?"}`;
-    const dateLine = e => { const d = (INV.entries[e].f || []).find(f => (f.p === "date" || f.p === "earliest date") && !f.s) || {}; return `<div>${yearText(INV.events[e], how(d))}${d.r ? `<span class="rf">${d.r}</span>` : ""}</div>`; };
-    if (born) row(ev("creation of") && !ev("birth of") ? "Made" : "Born", dateLine(born));
+    const bd = en.bd || {}, born = bd.born || bd.made, died = bd.died, first = x => x.y != null ? x.y : x.lo;
+    if (born || died) when = `${born ? cal(first(born)) : "?"} – ${died ? cal(first(died)) : "?"}`;
+    const dateLine = x => `<div>${yearText(x, how(x))}${x.r ? `<span class="rf">${x.r}</span>` : ""}</div>`;
+    if (born) row(bd.born ? "Born" : "Made", dateLine(born));
     if (died) row("Died", dateLine(died));
   } else if (en.k === "event" && INV.events[id]) {
     const y = INV.events[id], d = fs.find(f => (f.p === "date" || f.p === "earliest date") && !f.s) || {};
@@ -835,22 +846,16 @@ function invCard(id, band, o) {
   const order = [...FIRST.filter(p => byProp[p]), ...Object.keys(byProp).filter(p => !FIRST.includes(p) && !HIDE.has(p)).sort()];
   order.forEach(p => { if (p === "name" && byProp.name.length === 1 && byProp.name[0].v === en.n) return; row(LABEL[p] || p[0].toUpperCase() + p.slice(1), cell(byProp[p])); });
   // what the rest of the Inventory says of this entry: children, and the events it belongs to
-  const kids = (REV[id] || []).filter(r => (r.p === "father" || r.p === "mother") && INV.entries[r.from]).map(r => r.from);
-  row("Children", [...new Set(kids)].sort((a, b) => (yearOf(((REV[a] || []).find(r => r.p === "birth of") || {}).from) ?? 1e9) - (yearOf(((REV[b] || []).find(r => r.p === "birth of") || {}).from) ?? 1e9)).map(k => `<div>${go(k)}</div>`).join(""));
-  if (en.k !== "event") {
-    const evs = [...new Set((REV[id] || []).filter(r => INV.entries[r.from] && INV.entries[r.from].k === "event").map(r => r.from))]
-      .sort((a, b) => (yearOf(a) ?? 1e9) - (yearOf(b) ?? 1e9));
-    row("Events", evs.map(e => `<div class="evl">${yearOf(e) != null ? `<span class="num yr">${cal(yearOf(e))}</span>` : `<span class="yr"></span>`}${go(e)}</div>`).join(""));
-  } else {
-    const parts = (REV[id] || []).filter(r => r.p === "part of").map(r => r.from).sort((a, b) => (yearOf(a) ?? 1e9) - (yearOf(b) ?? 1e9));
-    row("Includes", parts.map(e => `<div>${go(e)}</div>`).join(""));
-  }
+  row("Children", (rv.kids || []).map(k => `<div>${go(k)}</div>`).join(""));
+  if (en.k !== "event") row("Events", (rv.evs || []).map(e => `<div class="evl">${yearOf(e) != null ? `<span class="num yr">${cal(yearOf(e))}</span>` : `<span class="yr"></span>`}${go(e)}</div>`).join(""));
+  else row("Includes", (rv.inc || []).map(e => `<div>${go(e)}</div>`).join(""));
   const onChart = o && o.kind === "Person" && o.b <= 2553 && !o.approx;
   return `<div class="body"><div class="kind">${band || kind}</div><h3>${en.n}</h3>${when ? `<div class="when num">${when}</div>` : ""}<div class="desc">${en.d}</div>
     <dl>${rows.join("")}</dl>${rows.join("").includes('class="bs"') ? `<div class="key"><b>†</b> reckoned from the years and ages Scripture gives<span>·</span><b>*</b> inferred from Scripture<span>·</span>rest the pointer on a mark to see the working</div>` : ""}${onChart ? `<div class="acts"><a class="btn2" href="#" onclick="openPanel('d0');return false">See it on From Adam to Moses</a></div>` : ""}
     <div class="fine">From the Bible Inventory, ${id}. Every line is approved against the New King James Version; the Inventory now reaches ${INV.through}.</div></div>`;
 }
 function openEntry(id) { const o = Object.values(ALL).find(o => o.inv === id); if (o) { openPanel(o.id); return; }
+  if (waiting(id)) { afterLoad(id, () => openEntry(id)); return; } if (!CARDS[id]) return;
   hideTip(); noteCard("e:" + id); pbody.innerHTML = invCard(id); finishCard(); }
 const cardHist = []; let cardNow = null, cardNav = false, cardBack = false;
 function noteCard(key) {  // a card opened from a card is a step forward; one opened from the timeline starts afresh
@@ -858,7 +863,7 @@ function noteCard(key) {  // a card opened from a card is a step forward; one op
   else if (cardNav && cardNow && cardNow !== key && panel.classList.contains("open")) cardHist.push(cardNow);
   else if (!cardNav) cardHist.length = 0;
   cardNow = key; }
-const cardName = key => { const id = key.slice(2); return key[0] === "t" ? ALL[id].name : INV.entries[id].n; };
+const cardName = key => { const id = key.slice(2); return key[0] === "t" ? ALL[id].name : (CARDS[id] || {}).n || id; };
 function finishCard() {
   const b = pbody.querySelector(".body");
   if (b && cardHist.length) b.insertAdjacentHTML("afterbegin", `<button class="back" id="pback"><i class="chev"></i>${cardName(cardHist[cardHist.length - 1])}</button>`);
@@ -884,7 +889,8 @@ document.fonts.ready.then(() => layout());
 if (new URLSearchParams(location.search).get("sep")) document.body.classList.add("sep-" + new URLSearchParams(location.search).get("sep"));
 layout();
 addEventListener("resize", () => layout());
-setView(-1e6, -1e6 + 2000); toLever(3004);  // the page opens on 2,000 years, the lever on 1,000 BC (the user, 09/27/2026)
+setView(-1e6, -1e6 + 2000); toLever(3004);
+document.body.dataset.lives = PEOPLE.length;  // read by Working\Inventory Link\update_site.py to know the page ran  // the page opens on 2,000 years, the lever on 1,000 BC (the user, 09/27/2026)
 if (document.fonts) document.fonts.ready.then(() => render());
 </script>
 </body>
