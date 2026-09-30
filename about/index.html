@@ -26,6 +26,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Cpath d='M14 4h4v7h6v4h-6v13h-4V15H8v-4h6z' fill='%23fff'/%3E%3C/svg%3E">
 <link rel="icon" href="../favicon.ico" sizes="48x48">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="license" href="https://creativecommons.org/licenses/by/4.0/">
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -132,7 +133,7 @@ section blockquote { margin-bottom: 16px; }
 </main>
 <footer class="foot">
   <span>View.Bible · free Bible maps, timelines and charts</span>
-  <span><a rel="license" href="../about/#reuse">Free to use under CC BY 4.0</a></span>
+  <span><a href="../about/#reuse">Free to use under CC BY 4.0</a></span>
   <span>Scripture: New King James Version</span>
   <span><a href="../sources/">Sources</a></span>
 </footer>
@@ -154,7 +155,7 @@ section blockquote { margin-bottom: 16px; }
     me = localStorage.getItem("vb-not-counted") === "1"; } catch (e) {}
   const nav = ((performance.getEntriesByType && performance.getEntriesByType("navigation")[0]) || {}).type;
   let outside = true; try { outside = !document.referrer || new URL(document.referrer).host !== location.host; } catch (e) {}
-  const robot = navigator.webdriver || /bot|crawl|spider|slurp|headless|lighthouse|preview/i.test(navigator.userAgent);
+  const robot = navigator.webdriver || /bot|crawl|spider|slurp|headless|lighthouse|preview|inspectiontool|googleother/i.test(navigator.userAgent);
   const hit = location.host === "view.bible" && !me && !robot && outside && nav !== "reload" && nav !== "back_forward";
   fetch("https://abacus.jasoncameron.dev/" + (hit ? "hit" : "get") + "/view.bible/visits")
     .then(r => r.ok ? r.json() : null).then(j => { if (j && j.value > 0) el.textContent = j.value.toLocaleString("en-US"); }).catch(() => {});

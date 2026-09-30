@@ -25,6 +25,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.ico" sizes="48x48">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="license" href="https://creativecommons.org/licenses/by/4.0/"><!-- one licence target per page, the CC BY 4.0 deed (09/30/2026) -->
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -139,7 +140,6 @@ html.still *, html.still *::before, html.still *::after { transition: none !impo
 .hitwrap { position: relative; display: flex; }
 .hits { position: absolute; right: 10px; top: -4px; font-family: var(--sans); font-size: 9px; line-height: 11px; color: var(--ink-3);
   font-variant-numeric: tabular-nums; white-space: nowrap; pointer-events: none; }
-.ctrl .note { color: var(--ink-3); font-style: italic; font-family: var(--serif); font-size: 13px; margin-right: 8px; }
 
 /* ---------- stage ---------- */
 .stage { position: absolute; top: var(--top-h); bottom: var(--scrub-h); left: 0; right: 0; transition: top .4s cubic-bezier(.2,.7,.2,1); }
@@ -224,6 +224,7 @@ html.still *, html.still *::before, html.still *::after { transition: none !impo
 .bkn { position: absolute; font-size: 12.5px; line-height: 1; color: var(--ink); white-space: nowrap; pointer-events: none; }
 
 /* maps and charts */
+.dlink { display: contents; color: inherit; text-decoration: none; }  /* a real <a href> to a finished document's page, wrapped so it adds no box of its own: no underline, colour or focus ring (09/30/2026) */
 .card { position: absolute; z-index: 1; background: var(--surface); border: 1px solid var(--rule); cursor: pointer; overflow: hidden; transition: border-color .15s; }
 .card:hover { border-color: var(--ink-2); }
 .card img { display: block; width: 100%; object-fit: cover; object-position: top; background: var(--thumb-bg); }
@@ -311,14 +312,13 @@ html.still *, html.still *::before, html.still *::after { transition: none !impo
 .panel .go:hover { color: var(--gold); text-decoration-color: var(--gold); }
 .panel .evl { display: grid; grid-template-columns: 68px 1fr; gap: 8px; }
 .panel .evl .yr { font-family: var(--sans); font-size: 11.5px; color: var(--ink-3); padding-top: 2px; }
-@media (max-width: 1180px) { .ctrl .note { display: none; } .range span { display: none; } }
+@media (max-width: 1180px) { .range span { display: none; } }
 </style>
 </head>
 <body>
 <header class="top">
   <h1 class="nameplate"><a class="mark" href="#" aria-label="View.Bible">V<span class="smc">iew</span><i>.</i>B<span class="smc">ible</span></a></h1>
   <nav class="ctrl lft">
-    <span class="note">Mock-up · placeholder dates</span>
     <button id="fitBible">Whole Bible</button><button id="fitAll">To today</button>
   </nav>
   <div class="range"><button class="zb" id="zLess" title="500 fewer years">−</button><div class="width" id="width"></div><button class="zb" id="zMore" title="500 more years">+</button></div>
@@ -709,7 +709,8 @@ function drawDocs(w, h, shut) {
   let s = "";
   const INVIEW = DOCS.filter(d => d.e >= v0 && d.s <= v1);  // only the sheets whose years are in the window (the user, 09/27/2026)
   if (shut) { let last = -1e9; INVIEW.map(d => ({ d, m: X((d.s + d.e) / 2) })).sort((u, v) => u.m - v.m).forEach(({ d, m }) => { const cw = 34; let x = Math.max(m - cw / 2, last + 6); last = x + cw;
-      s += d.img ? `<img class="card" data-id="${d.id}" src="${d.img}" style="left:${x}px;top:2px;width:${cw}px;height:22px;object-fit:cover;object-position:top">` : `<div class="card ghost" data-id="${d.id}" style="left:${x}px;top:2px;width:${cw}px;height:22px"></div>`; }); return s; }
+      const box = d.img ? `<img class="card" data-id="${d.id}" src="${d.img}"${d.page ? ` alt="${d.name}"` : ""} style="left:${x}px;top:2px;width:${cw}px;height:22px;object-fit:cover;object-position:top">` : `<div class="card ghost" data-id="${d.id}" style="left:${x}px;top:2px;width:${cw}px;height:22px"></div>`;
+      s += d.page ? `<a class="dlink" href="${d.page}">${box}</a>` : box; }); return s; }  // a real link for a finished sheet, invisible: Google's crawler needs the href (09/30/2026)
   // Open (the user, 09/27/2026): a thin scale of years along the foot; each sheet a label (its title, its years, and its
   // download or its state) on a stem over the bracket of its years, placed as the Events are, crowded sheets sharing one
   // stem; the picture appears, enlarged, when the pointer rests on the label.
@@ -732,9 +733,11 @@ function drawDocs(w, h, shut) {
   units.forEach(u => { if (u.lv == null) return; const x = u[0].x, top0 = 6 + drop + u.lv * blockH;
     boxes.push({ u, q: [x + 9, top0, x + 9 + CW, top0 + (u.length - 1) * (u.slim ? SLIM : blockH) + (u.slim ? 24 : CH)] }); });
   const clash = (q, u) => boxes.some(b => b.u !== u && q[0] < b.q[2] + 6 && q[2] > b.q[0] - 6 && q[1] < b.q[3] + 6 && q[3] > b.q[1] - 6);
-  units.forEach(u => { if (u.lv == null || u.length > 1 || !u[0].d.img) return;
+  units.forEach(u => { if (u.lv == null || u.length > 1 || !u[0].d.img) return; const d = u[0].d;
     const x = u[0].x, top0 = 6 + drop + u.lv * blockH, q = [x + 9, top0 - TH - 4, x + 9 + CW, top0 - 4];
-    if (q[1] >= 4 && !clash(q, u)) { boxes.push({ u: null, q }); s += `<img class="dthumb" data-id="${u[0].d.id}" src="${u[0].d.img}" alt="" style="left:${q[0]}px;top:${q[1]}px;width:${CW}px;height:${TH}px">`; } });
+    if (q[1] >= 4 && !clash(q, u)) { boxes.push({ u: null, q });
+      const img = `<img class="dthumb" data-id="${d.id}" src="${d.img}" alt="${d.page ? d.name : ""}" style="left:${q[0]}px;top:${q[1]}px;width:${CW}px;height:${TH}px">`;
+      s += d.page ? `<a class="dlink" href="${d.page}">${img}</a>` : img; } });
   units.forEach(u => {
     if (u.lv == null) return;
     const x = u[0].x, top0 = 6 + drop + u.lv * blockH, bh = u.slim ? SLIM : blockH, ry = baseY - 14;
@@ -743,8 +746,9 @@ function drawDocs(w, h, shut) {
     if (hi > lo) s += `<div class="lead" style="left:${lo}px;top:${ry}px;width:${hi - lo + 1}px;height:1px"></div>`;
     u.forEach((it, j) => { const d = it.d, tt = top0 + j * bh;
       s += `<div class="lead" style="left:${it.land}px;top:${ry}px;width:1px;height:8px"></div><div class="lead" style="left:${x}px;top:${tt + 12}px;width:9px;height:1px"></div>`;
-      s += `<div class="dc ${d.ghost ? "ghost" : ""} ${u.slim ? "slim" : ""}" data-id="${d.id}" style="left:${x + 9}px;top:${tt}px;width:${CW}px"><div class="t">${d.name}</div>`
-        + (u.slim ? "" : `<div class="u num">${cal(d.s)} – ${cal(d.e)} · ${d.ref}</div><div class="k">${d.pdf ? `Download PDF · ${d.size}` : d.status}</div>`) + `</div>`; });
+      const card = `<div class="dc ${d.ghost ? "ghost" : ""} ${u.slim ? "slim" : ""}" data-id="${d.id}" style="left:${x + 9}px;top:${tt}px;width:${CW}px"><div class="t">${d.name}</div>`
+        + (u.slim ? "" : `<div class="u num">${cal(d.s)} – ${cal(d.e)} · ${d.ref}</div><div class="k">${d.pdf ? `Download PDF · ${d.size}` : d.status}</div>`) + `</div>`;
+      s += d.page ? `<a class="dlink" href="${d.page}">${card}</a>` : card; });  // the label too becomes a real link when the sheet is finished (09/30/2026)
   });
   return s;
 }
@@ -806,6 +810,9 @@ stage.addEventListener("pointermove", e => { if (!drag) { hover(e); return; } co
 stage.addEventListener("pointercancel", () => { drag = null; stage.classList.remove("drag"); });
 stage.addEventListener("pointerup", e => { if (!drag) return; stage.classList.remove("drag");
   if (drag.moved <= 3) { const t = document.elementFromPoint(e.clientX, e.clientY), hit = t && t.closest("[data-id]"); if (hit) openPanel(hit.dataset.id); } drag = null; });
+// a finished document's thumbnail and label are real links now (M029, 09/30/2026): a mouse or touch click already opens
+// the card above, by pointer position; this stops the link's own navigation, and opens the card only for a keyboard click
+stage.addEventListener("click", e => { const t = e.target.closest("[data-id]"); if (t && t.closest("a.dlink")) { e.preventDefault(); if (e.detail === 0) openPanel(t.dataset.id); } });
 let sdrag = null;
 strack.addEventListener("pointerdown", e => { e.preventDefault(); toLever(SAM(e.clientX - strack.getBoundingClientRect().left)); sdrag = true; strack.setPointerCapture(e.pointerId); });
 strack.addEventListener("pointermove", e => { if (sdrag) toLever(SAM(e.clientX - strack.getBoundingClientRect().left)); });
@@ -996,7 +1003,7 @@ if (document.fonts) document.fonts.ready.then(() => render());
     me = localStorage.getItem("vb-not-counted") === "1"; } catch (e) {}
   const nav = ((performance.getEntriesByType && performance.getEntriesByType("navigation")[0]) || {}).type;
   let outside = true; try { outside = !document.referrer || new URL(document.referrer).host !== location.host; } catch (e) {}
-  const robot = navigator.webdriver || /bot|crawl|spider|slurp|headless|lighthouse|preview/i.test(navigator.userAgent);
+  const robot = navigator.webdriver || /bot|crawl|spider|slurp|headless|lighthouse|preview|inspectiontool|googleother/i.test(navigator.userAgent);
   const hit = location.host === "view.bible" && !me && !robot && outside && nav !== "reload" && nav !== "back_forward";
   fetch("https://abacus.jasoncameron.dev/" + (hit ? "hit" : "get") + "/view.bible/visits")
     .then(r => r.ok ? r.json() : null).then(j => { if (j && j.value > 0) el.textContent = j.value.toLocaleString("en-US"); }).catch(() => {});
