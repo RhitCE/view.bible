@@ -2,7 +2,6 @@
 <html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
-<meta name="robots" content="noindex">
 <link rel="preload" href="../fonts/newsreader-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/eb-garamond-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -87,6 +86,10 @@ blockquote { margin: 12px 0 0; padding: 2px 0 2px 18px; border-left: 2px solid v
   display: flex; flex-wrap: wrap; gap: 6px 18px; }
 .foot a { color: var(--ink-3); } .foot a:hover { color: var(--gold); }
 table { border-collapse: collapse; }
+/* the visit counter over "Sources" (the owner, 09/30/2026: a small number, no label) */
+.hitwrap { position: relative; display: flex; }
+.hits { position: absolute; right: 10px; top: -4px; font-family: var(--sans); font-size: 9px; line-height: 11px; color: var(--ink-3);
+  font-variant-numeric: tabular-nums; white-space: nowrap; pointer-events: none; }
 @media print { .top nav, .foot { display: none; } }
 main { max-width: 680px; margin: 0 auto; padding: 56px 16px 0; }
 h1 { font-weight: 400; font-size: 40px; margin: 0 0 12px; }
@@ -100,8 +103,8 @@ a { overflow-wrap: anywhere; }
 </style>
 </head>
 <body class="sources"><header class="top">
-  <a class="mark" href="../index.html" aria-label="View.Bible, the timeline">V<span class="smc">iew</span><i>.</i>B<span class="smc">ible</span></a>
-  <nav aria-label="Site"><a href="../index.html">Timeline</a><a href="../library/index.html">Library</a><a href="../about/index.html">About</a><a href="../sources/index.html" aria-current="page">Sources</a><span class="div"></span><button id="theme" type="button" title="Show the page light or dark">Dark</button></nav>
+  <a class="mark" href="../" aria-label="View.Bible, the timeline">V<span class="smc">iew</span><i>.</i>B<span class="smc">ible</span></a>
+  <nav aria-label="Site"><a href="../">Timeline</a><a href="../library/">Library</a><a href="../about/">About</a><span class="hitwrap"><a href="../sources/" aria-current="page">Sources</a><span class="hits" id="hits" aria-hidden="true"></span></span><span class="div"></span><button id="theme" type="button" title="Show the page light or dark">Dark</button></nav>
 </header>
 <main>
   <h1>Sources</h1>
@@ -150,13 +153,32 @@ a { overflow-wrap: anywhere; }
 </main>
 <footer class="foot">
   <span>View.Bible · free Bible maps, timelines and charts</span>
-  <span><a rel="license" href="../about/index.html#reuse">Free to use under CC BY 4.0</a></span>
+  <span><a rel="license" href="../about/#reuse">Free to use under CC BY 4.0</a></span>
   <span>Scripture: New King James Version</span>
-  <span><a href="../sources/index.html">Sources</a></span>
+  <span><a href="../sources/">Sources</a></span>
 </footer>
 <script>(function () { const b = document.getElementById("theme"), d = document.documentElement;
   const label = () => b.textContent = d.dataset.theme === "dark" ? "Light" : "Dark"; label();
   b.onclick = () => { d.dataset.theme = d.dataset.theme === "dark" ? "light" : "dark"; try { localStorage.setItem("vb-theme", d.dataset.theme); } catch (e) {} label(); };
+})();</script>
+<script>/* the visit counter (the owner, 09/30/2026): the small number over "Sources" counts visits. Abacus
+   (abacus.jasoncameron.dev), a free counting service that needs no account, keeps the number. A visit is counted when a
+   reader comes in from outside the site; moving between pages, reloading or going back does not count again. Robots, the
+   copies on the maker's computer and any browser once opened at view.bible/?not-counted are never counted
+   (view.bible/?counted undoes it). If the service does not answer, no number shows. The same script is in the timeline, index.src.html. */
+(function () { const el = document.getElementById("hits"); if (!el) return;
+  let me = false;
+  try { const q = location.search;
+    if (/[?&]not-counted\b/.test(q)) { localStorage.setItem("vb-not-counted", "1"); alert("Visits from this browser will not be counted."); }
+    if (/[?&]counted\b/.test(q)) { localStorage.removeItem("vb-not-counted"); alert("Visits from this browser will be counted again."); }
+    if (/counted\b/.test(q)) history.replaceState(null, "", location.pathname + location.hash);
+    me = localStorage.getItem("vb-not-counted") === "1"; } catch (e) {}
+  const nav = ((performance.getEntriesByType && performance.getEntriesByType("navigation")[0]) || {}).type;
+  let outside = true; try { outside = !document.referrer || new URL(document.referrer).host !== location.host; } catch (e) {}
+  const robot = navigator.webdriver || /bot|crawl|spider|slurp|headless|lighthouse|preview/i.test(navigator.userAgent);
+  const hit = location.host === "view.bible" && !me && !robot && outside && nav !== "reload" && nav !== "back_forward";
+  fetch("https://abacus.jasoncameron.dev/" + (hit ? "hit" : "get") + "/view.bible/visits")
+    .then(r => r.ok ? r.json() : null).then(j => { if (j && j.value > 0) el.textContent = j.value.toLocaleString("en-US"); }).catch(() => {});
 })();</script>
 </body>
 </html>

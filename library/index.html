@@ -2,7 +2,6 @@
 <html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
-<meta name="robots" content="noindex">
 <link rel="preload" href="../fonts/newsreader-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/eb-garamond-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -104,6 +103,10 @@ blockquote { margin: 12px 0 0; padding: 2px 0 2px 18px; border-left: 2px solid v
   display: flex; flex-wrap: wrap; gap: 6px 18px; }
 .foot a { color: var(--ink-3); } .foot a:hover { color: var(--gold); }
 table { border-collapse: collapse; }
+/* the visit counter over "Sources" (the owner, 09/30/2026: a small number, no label) */
+.hitwrap { position: relative; display: flex; }
+.hits { position: absolute; right: 10px; top: -4px; font-family: var(--sans); font-size: 9px; line-height: 11px; color: var(--ink-3);
+  font-variant-numeric: tabular-nums; white-space: nowrap; pointer-events: none; }
 @media print { .top nav, .foot { display: none; } }
 main { max-width: 960px; margin: 0 auto; padding: 44px 16px 0; }
 h1 { font-size: 40px; line-height: 46px; font-weight: 400; margin: 0 0 10px; }
@@ -133,8 +136,8 @@ h1 { font-size: 40px; line-height: 46px; font-weight: 400; margin: 0 0 10px; }
 </style>
 </head>
 <body class="lib libPlus"><header class="top">
-  <a class="mark" href="../index.html" aria-label="View.Bible, the timeline">V<span class="smc">iew</span><i>.</i>B<span class="smc">ible</span></a>
-  <nav aria-label="Site"><a href="../index.html">Timeline</a><a href="../library/index.html" aria-current="page">Library</a><a href="../about/index.html">About</a><a href="../sources/index.html">Sources</a><span class="div"></span><button id="theme" type="button" title="Show the page light or dark">Dark</button></nav>
+  <a class="mark" href="../" aria-label="View.Bible, the timeline">V<span class="smc">iew</span><i>.</i>B<span class="smc">ible</span></a>
+  <nav aria-label="Site"><a href="../">Timeline</a><a href="../library/" aria-current="page">Library</a><a href="../about/">About</a><span class="hitwrap"><a href="../sources/">Sources</a><span class="hits" id="hits" aria-hidden="true"></span></span><span class="div"></span><button id="theme" type="button" title="Show the page light or dark">Dark</button></nav>
 </header>
 <main>
   <h1>Bible Maps, Charts and Timelines</h1>
@@ -143,12 +146,12 @@ h1 { font-size: 40px; line-height: 46px; font-weight: 400; margin: 0 0 10px; }
   <input class="filter" type="search" placeholder="Search: a book, a chapter, a place or a person" aria-label="Search the Library">
   <p class="none">Nothing in the Library matches that yet.</p>
   <div class="books">Books: <a href="#genesis">Genesis</a><a href="#exodus">Exodus</a><a href="#joshua">Joshua</a></div>
-  <div class="testament"><div class="label">Old Testament</div><div class="bk" id="genesis"><h2>Genesis</h2></div><div class="r" data-k="from adam to moses adam to moses genealogy timeline genesis 5 – exodus 6 chart genesis exodus twenty-six generations on one scale of years, from the ages scripture gives, with judah’s line to david. adam seth enosh cainan mahalalel jared enoch methuselah lamech noah shem arphaxad salah eber peleg reu serug nahor terah abraham (abram) isaac jacob levi kohath amram moses"><a class="th" href="../adam-to-moses-genealogy/index.html" tabindex="-1"><img src="../img/adam-to-moses-genealogy-timeline-900.jpg" width="102" height="65" loading="lazy" alt=""></a>
-  <div><div class="t"><a href="../adam-to-moses-genealogy/index.html">Adam to Moses Genealogy Timeline</a></div><div class="n">From Adam to Moses</div><div class="m">Chart · Genesis 5 – Exodus 6</div></div>
-  <div class="act"><a href="../files/adam-to-moses-genealogy-timeline.pdf" download>PDF · 1.0 MB</a></div></div><div class="soon" data-k="abraham’s journeys  genesis 11–25 map genesis two maps of abraham’s travels, from ur to canaan and within the land.">Coming: Abraham’s Journeys (in progress)</div><div class="bk" id="exodus"><h2>Exodus</h2></div><div class="soon" data-k="the route of the exodus  exodus – deuteronomy map exodus the stages of the journey from egypt to the jordan.">Coming: The Route of the Exodus (planned)</div><div class="soon" data-k="from adam to moses adam to moses genealogy timeline genesis 5 – exodus 6 chart genesis exodus twenty-six generations on one scale of years, from the ages scripture gives, with judah’s line to david. adam seth enosh cainan mahalalel jared enoch methuselah lamech noah shem arphaxad salah eber peleg reu serug nahor terah abraham (abram) isaac jacob levi kohath amram moses">Also: <a href="../adam-to-moses-genealogy/index.html">Adam to Moses Genealogy Timeline</a>, listed under Genesis</div><div class="bk" id="joshua"><h2>Joshua</h2></div><div class="r" data-k="the allotment of the land map of the twelve tribes of israel joshua 13–21 map joshua each tribe’s territory on shaded relief, with its verses, the cities of refuge and an index of 110 places. acco achzib ai aijalon anathoth aphek arad aroer aroer ashdod ashkelon ashtaroth beersheba beth anath beth emek beth hoglah beth horon beth nimrah beth shean beth shemesh bethel bethlehem betonim bezer cabul mt. carmel chinnereth city of salt dan debir dibon dor edrei eglon ekron eltekeh en dor en gedi gath gath hepher gath rimmon gaza gezer gibeon golan greater sidon hammath hammon hannathon hazor hebron hepher mt. hermon heshbon hormah hosah ibleam jabneel jahaza janohah japhia jazer jehud jericho jerusalem jezreel jokneam joppa juttah kadesh barnea kanah kedemoth kedesh kirjath jearim kishion lachish libnah mahanaim medeba megiddo mephaath mishal mizpah moladah naarah mt. nebo neiel rabbah rakkath ramah ramoth gilead rehob rimmon sarid sharuhen shechem shiloh socoh succoth taanach mt. tabor tappuah timnah timnath serah tirzah tyre yiron zaphon ziklag ziph reuben gad manasseh, east half levi judah ephraim manasseh, west half benjamin simeon zebulun issachar asher naphtali dan caleb othniel and achsah the daughters of zelophehad joshua"><a class="th" href="../joshua-allotment-map/index.html" tabindex="-1"><img src="../img/joshua-13-21-tribal-allotment-map-900.jpg" width="102" height="65" loading="lazy" alt=""></a>
-  <div><div class="t"><a href="../joshua-allotment-map/index.html">Map of the Twelve Tribes of Israel</a></div><div class="n">The Allotment of the Land</div><div class="m">Map · Joshua 13–21</div></div>
+  <div class="testament"><div class="label">Old Testament</div><div class="bk" id="genesis"><h2>Genesis</h2></div><div class="r" data-k="from adam to moses adam to moses genealogy timeline genesis 5 – exodus 6 chart genesis exodus twenty-six generations on one scale of years, from the ages scripture gives, with judah’s line to david. adam seth enosh cainan mahalalel jared enoch methuselah lamech noah shem arphaxad salah eber peleg reu serug nahor terah abraham (abram) isaac jacob levi kohath amram moses"><a class="th" href="../adam-to-moses-genealogy/" tabindex="-1"><img src="../img/adam-to-moses-genealogy-timeline-900.jpg" width="102" height="65" loading="lazy" alt=""></a>
+  <div><div class="t"><a href="../adam-to-moses-genealogy/">Adam to Moses Genealogy Timeline</a></div><div class="n">From Adam to Moses</div><div class="m">Chart · Genesis 5 – Exodus 6</div></div>
+  <div class="act"><a href="../files/adam-to-moses-genealogy-timeline.pdf" download>PDF · 1.0 MB</a></div></div><div class="soon" data-k="abraham’s journeys  genesis 11–25 map genesis two maps of abraham’s travels, from ur to canaan and within the land.">Coming: Abraham’s Journeys (in progress)</div><div class="bk" id="exodus"><h2>Exodus</h2></div><div class="soon" data-k="the route of the exodus  exodus – deuteronomy map exodus the stages of the journey from egypt to the jordan.">Coming: The Route of the Exodus (planned)</div><div class="soon" data-k="from adam to moses adam to moses genealogy timeline genesis 5 – exodus 6 chart genesis exodus twenty-six generations on one scale of years, from the ages scripture gives, with judah’s line to david. adam seth enosh cainan mahalalel jared enoch methuselah lamech noah shem arphaxad salah eber peleg reu serug nahor terah abraham (abram) isaac jacob levi kohath amram moses">Also: <a href="../adam-to-moses-genealogy/">Adam to Moses Genealogy Timeline</a>, listed under Genesis</div><div class="bk" id="joshua"><h2>Joshua</h2></div><div class="r" data-k="the allotment of the land map of the twelve tribes of israel joshua 13–21 map joshua each tribe’s territory on shaded relief, with its verses, the cities of refuge and an index of 110 places. acco achzib ai aijalon anathoth aphek arad aroer aroer ashdod ashkelon ashtaroth beersheba beth anath beth emek beth hoglah beth horon beth nimrah beth shean beth shemesh bethel bethlehem betonim bezer cabul mt. carmel chinnereth city of salt dan debir dibon dor edrei eglon ekron eltekeh en dor en gedi gath gath hepher gath rimmon gaza gezer gibeon golan greater sidon hammath hammon hannathon hazor hebron hepher mt. hermon heshbon hormah hosah ibleam jabneel jahaza janohah japhia jazer jehud jericho jerusalem jezreel jokneam joppa juttah kadesh barnea kanah kedemoth kedesh kirjath jearim kishion lachish libnah mahanaim medeba megiddo mephaath mishal mizpah moladah naarah mt. nebo neiel rabbah rakkath ramah ramoth gilead rehob rimmon sarid sharuhen shechem shiloh socoh succoth taanach mt. tabor tappuah timnah timnath serah tirzah tyre yiron zaphon ziklag ziph reuben gad manasseh, east half levi judah ephraim manasseh, west half benjamin simeon zebulun issachar asher naphtali dan caleb othniel and achsah the daughters of zelophehad joshua"><a class="th" href="../joshua-allotment-map/" tabindex="-1"><img src="../img/joshua-13-21-tribal-allotment-map-900.jpg" width="102" height="65" loading="lazy" alt=""></a>
+  <div><div class="t"><a href="../joshua-allotment-map/">Map of the Twelve Tribes of Israel</a></div><div class="n">The Allotment of the Land</div><div class="m">Map · Joshua 13–21</div></div>
   <div class="act"><a href="../files/joshua-13-21-tribal-allotment-map.pdf" download>PDF · 13.5 MB</a></div></div><div class="soon" data-k="cities of refuge and the levites  joshua 20–21 map joshua the six cities of refuge and the forty-eight cities of the levites.">Coming: Cities of Refuge and the Levites (planned)</div></div><div class="soon" style="margin-top:26px" data-k="the kings of israel and judah  1 samuel – 2 kings chart 1 samuel 2 samuel 1 kings 2 kings the kings of israel and judah, from saul to the exile.">Also coming: The Kings of Israel and Judah (1 Samuel – 2 Kings, planned)</div>
-  <p class="close">Every map and chart also stands at its place in time on <a href="../index.html">the timeline</a>.</p>
+  <p class="close">Every map and chart also stands at its place in time on <a href="../">the timeline</a>.</p>
 </main>
 <script>document.documentElement.classList.add("js");
 const f = document.querySelector(".filter"), none = document.querySelector(".none");
@@ -158,13 +161,32 @@ f.addEventListener("input", () => { const q = f.value.trim().toLowerCase(); let 
   none.style.display = q && !any ? "block" : "none"; });</script>
 <footer class="foot">
   <span>View.Bible · free Bible maps, timelines and charts</span>
-  <span><a rel="license" href="../about/index.html#reuse">Free to use under CC BY 4.0</a></span>
+  <span><a rel="license" href="../about/#reuse">Free to use under CC BY 4.0</a></span>
   <span>Scripture: New King James Version</span>
-  <span><a href="../sources/index.html">Sources</a></span>
+  <span><a href="../sources/">Sources</a></span>
 </footer>
 <script>(function () { const b = document.getElementById("theme"), d = document.documentElement;
   const label = () => b.textContent = d.dataset.theme === "dark" ? "Light" : "Dark"; label();
   b.onclick = () => { d.dataset.theme = d.dataset.theme === "dark" ? "light" : "dark"; try { localStorage.setItem("vb-theme", d.dataset.theme); } catch (e) {} label(); };
+})();</script>
+<script>/* the visit counter (the owner, 09/30/2026): the small number over "Sources" counts visits. Abacus
+   (abacus.jasoncameron.dev), a free counting service that needs no account, keeps the number. A visit is counted when a
+   reader comes in from outside the site; moving between pages, reloading or going back does not count again. Robots, the
+   copies on the maker's computer and any browser once opened at view.bible/?not-counted are never counted
+   (view.bible/?counted undoes it). If the service does not answer, no number shows. The same script is in the timeline, index.src.html. */
+(function () { const el = document.getElementById("hits"); if (!el) return;
+  let me = false;
+  try { const q = location.search;
+    if (/[?&]not-counted\b/.test(q)) { localStorage.setItem("vb-not-counted", "1"); alert("Visits from this browser will not be counted."); }
+    if (/[?&]counted\b/.test(q)) { localStorage.removeItem("vb-not-counted"); alert("Visits from this browser will be counted again."); }
+    if (/counted\b/.test(q)) history.replaceState(null, "", location.pathname + location.hash);
+    me = localStorage.getItem("vb-not-counted") === "1"; } catch (e) {}
+  const nav = ((performance.getEntriesByType && performance.getEntriesByType("navigation")[0]) || {}).type;
+  let outside = true; try { outside = !document.referrer || new URL(document.referrer).host !== location.host; } catch (e) {}
+  const robot = navigator.webdriver || /bot|crawl|spider|slurp|headless|lighthouse|preview/i.test(navigator.userAgent);
+  const hit = location.host === "view.bible" && !me && !robot && outside && nav !== "reload" && nav !== "back_forward";
+  fetch("https://abacus.jasoncameron.dev/" + (hit ? "hit" : "get") + "/view.bible/visits")
+    .then(r => r.ok ? r.json() : null).then(j => { if (j && j.value > 0) el.textContent = j.value.toLocaleString("en-US"); }).catch(() => {});
 })();</script>
 </body>
 </html>

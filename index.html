@@ -2,7 +2,6 @@
 <html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
-<meta name="robots" content="noindex">
 <link rel="preload" href="fonts/newsreader-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/eb-garamond-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -47,7 +46,13 @@
    "name": "View.Bible",
    "url": "https://view.bible/",
    "logo": "https://view.bible/img/view-bible-icon-512.png",
-   "description": "A free library of Bible maps, timelines and charts."
+   "description": "A free library of Bible maps, timelines and charts.",
+   "founder": {
+    "@type": "Person",
+    "@id": "https://view.bible/#maker",
+    "name": "Michael A. Thompson",
+    "url": "https://view.bible/about/"
+   }
   },
   {
    "@type": "WebPage",
@@ -130,6 +135,10 @@ html.still *, html.still *::before, html.still *::after { transition: none !impo
 .ctrl button, .ctrl a { padding: 6px 10px; color: var(--ink-2); text-decoration: none; }
 .ctrl button:hover, .ctrl a:hover { color: var(--ink); }
 .ctrl .div { width: 1px; height: 18px; background: var(--rule); margin: 0 6px; }
+/* the visit counter over "Sources" (the owner, 09/30/2026: a small number, no label) */
+.hitwrap { position: relative; display: flex; }
+.hits { position: absolute; right: 10px; top: -4px; font-family: var(--sans); font-size: 9px; line-height: 11px; color: var(--ink-3);
+  font-variant-numeric: tabular-nums; white-space: nowrap; pointer-events: none; }
 .ctrl .note { color: var(--ink-3); font-style: italic; font-family: var(--serif); font-size: 13px; margin-right: 8px; }
 
 /* ---------- stage ---------- */
@@ -316,13 +325,13 @@ html.still *, html.still *::before, html.still *::after { transition: none !impo
   <nav class="ctrl">
     <button id="theme">Light</button>
     <span class="div"></span>
-    <a href="library/index.html">Library</a><a href="about/index.html">About</a><a href="sources/index.html">Sources</a>
+    <a href="library/">Library</a><a href="about/">About</a><span class="hitwrap"><a href="sources/">Sources</a><span class="hits" id="hits" aria-hidden="true"></span></span>
   </nav>
 </header>
 
 <noscript><div class="nojs"><p>View.Bible is an interactive timeline of the Bible’s people and events, with free maps and charts to download. The timeline needs JavaScript; the maps and charts do not:</p>
-<!--docs--><ul><li><a href="adam-to-moses-genealogy/index.html">From Adam to Moses</a>: Adam to Moses Genealogy Timeline (Genesis 5 – Exodus 6)</li><li><a href="joshua-allotment-map/index.html">The Allotment of the Land</a>: Map of the Twelve Tribes of Israel (Joshua 13–21)</li></ul><!--/docs-->
-<p><a href="library/index.html">The Library</a> · <a href="about/index.html">About</a> · <a href="sources/index.html">Sources</a></p></div></noscript>
+<!--docs--><ul><li><a href="adam-to-moses-genealogy/">From Adam to Moses</a>: Adam to Moses Genealogy Timeline (Genesis 5 – Exodus 6)</li><li><a href="joshua-allotment-map/">The Allotment of the Land</a>: Map of the Twelve Tribes of Israel (Joshua 13–21)</li></ul><!--/docs-->
+<p><a href="library/">The Library</a> · <a href="about/">About</a> · <a href="sources/">Sources</a></p></div></noscript>
 
 <main class="stage" id="stage">
   <div class="axis" id="axis"></div>
@@ -421,10 +430,10 @@ const BOOKS = []; SECTIONS.forEach(([sec, list], si) => list.forEach(([name,s,e,
   BOOKS.push({id:"k"+BOOKS.length,name,s,e,ts,te,author,sec,si,kind:"Book"}); }));
 
 const DOCS = [
- {id:"d0",name:"From Adam to Moses",sub:"Genealogy timeline chart",s:0,e:2553,img:"img/adam-to-moses.jpg",pdf:"files/adam-to-moses-genealogy-timeline.pdf",page:"adam-to-moses-genealogy/index.html",size:"1.0 MB",ref:"Genesis 5 – Exodus 6"},
+ {id:"d0",name:"From Adam to Moses",sub:"Genealogy timeline chart",s:0,e:2553,img:"img/adam-to-moses.jpg",pdf:"files/adam-to-moses-genealogy-timeline.pdf",page:"adam-to-moses-genealogy/",size:"1.0 MB",ref:"Genesis 5 – Exodus 6"},
  {id:"d1",name:"Abraham's Journeys",sub:"Two maps · in progress",s:2083,e:2183,img:"img/abraham.jpg",ref:"Genesis 11–25",status:"In progress"},
  {id:"d2",name:"The Route of the Exodus",sub:"Planned",s:2513,e:2553,ref:"Exodus – Deuteronomy",status:"Planned",ghost:true},
- {id:"d3",name:"The Allotment of the Land",sub:"Relief map of the tribes",s:2553,e:2560,img:"img/joshua-allotment.jpg",pdf:"files/joshua-13-21-tribal-allotment-map.pdf",page:"joshua-allotment-map/index.html",size:"13.5 MB",ref:"Joshua 13–21"},
+ {id:"d3",name:"The Allotment of the Land",sub:"Relief map of the tribes",s:2553,e:2560,img:"img/joshua-allotment.jpg",pdf:"files/joshua-13-21-tribal-allotment-map.pdf",page:"joshua-allotment-map/",size:"13.5 MB",ref:"Joshua 13–21"},
  {id:"d4",name:"Cities of Refuge and the Levites",sub:"Planned",s:2553,e:2560,ref:"Joshua 20–21",status:"Planned",ghost:true},
  {id:"d5",name:"The Kings of Israel and Judah",sub:"Planned",s:2909,e:3416,ref:"1 Samuel – 2 Kings",status:"Planned",ghost:true},
  {id:"d6",name:"Paul's Journeys",sub:"Planned",s:4046,e:4063,ref:"Acts 13–28",status:"Planned",ghost:true},
@@ -973,5 +982,24 @@ requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement
 document.body.dataset.lives = PEOPLE.length;  // read by Working\Inventory Link\update_site.py to know the page ran  // the page opens on 2,000 years, the lever on 1,000 BC (the user, 09/27/2026)
 if (document.fonts) document.fonts.ready.then(() => render());
 </script>
+<script>/* the visit counter (the owner, 09/30/2026): the small number over "Sources" counts visits. Abacus
+   (abacus.jasoncameron.dev), a free counting service that needs no account, keeps the number. A visit is counted when a
+   reader comes in from outside the site; moving between pages, reloading or going back does not count again. Robots, the
+   copies on the maker's computer and any browser once opened at view.bible/?not-counted are never counted
+   (view.bible/?counted undoes it). If the service does not answer, no number shows. The same script is in pages.py (COUNT_JS). */
+(function () { const el = document.getElementById("hits"); if (!el) return;
+  let me = false;
+  try { const q = location.search;
+    if (/[?&]not-counted\b/.test(q)) { localStorage.setItem("vb-not-counted", "1"); alert("Visits from this browser will not be counted."); }
+    if (/[?&]counted\b/.test(q)) { localStorage.removeItem("vb-not-counted"); alert("Visits from this browser will be counted again."); }
+    if (/counted\b/.test(q)) history.replaceState(null, "", location.pathname + location.hash);
+    me = localStorage.getItem("vb-not-counted") === "1"; } catch (e) {}
+  const nav = ((performance.getEntriesByType && performance.getEntriesByType("navigation")[0]) || {}).type;
+  let outside = true; try { outside = !document.referrer || new URL(document.referrer).host !== location.host; } catch (e) {}
+  const robot = navigator.webdriver || /bot|crawl|spider|slurp|headless|lighthouse|preview/i.test(navigator.userAgent);
+  const hit = location.host === "view.bible" && !me && !robot && outside && nav !== "reload" && nav !== "back_forward";
+  fetch("https://abacus.jasoncameron.dev/" + (hit ? "hit" : "get") + "/view.bible/visits")
+    .then(r => r.ok ? r.json() : null).then(j => { if (j && j.value > 0) el.textContent = j.value.toLocaleString("en-US"); }).catch(() => {});
+})();</script>
 </body>
 </html>

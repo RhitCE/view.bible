@@ -2,7 +2,6 @@
 <html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
-<meta name="robots" content="noindex">
 <link rel="preload" href="../fonts/newsreader-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/eb-garamond-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -70,7 +69,10 @@
    "license": "https://creativecommons.org/licenses/by/4.0/",
    "creditText": "View.Bible",
    "creator": {
-    "@id": "https://view.bible/#publisher"
+    "@type": "Person",
+    "@id": "https://view.bible/#maker",
+    "name": "Michael A. Thompson",
+    "url": "https://view.bible/about/"
    },
    "publisher": {
     "@id": "https://view.bible/#publisher"
@@ -97,7 +99,10 @@
    "acquireLicensePage": "https://view.bible/about/#reuse",
    "creditText": "View.Bible",
    "creator": {
-    "@id": "https://view.bible/#publisher"
+    "@type": "Person",
+    "@id": "https://view.bible/#maker",
+    "name": "Michael A. Thompson",
+    "url": "https://view.bible/about/"
    },
    "copyrightNotice": "© 2026 View.Bible. CC BY 4.0. Other notices: https://view.bible/sources/"
   },
@@ -164,6 +169,10 @@ blockquote { margin: 12px 0 0; padding: 2px 0 2px 18px; border-left: 2px solid v
   display: flex; flex-wrap: wrap; gap: 6px 18px; }
 .foot a { color: var(--ink-3); } .foot a:hover { color: var(--gold); }
 table { border-collapse: collapse; }
+/* the visit counter over "Sources" (the owner, 09/30/2026: a small number, no label) */
+.hitwrap { position: relative; display: flex; }
+.hits { position: absolute; right: 10px; top: -4px; font-family: var(--sans); font-size: 9px; line-height: 11px; color: var(--ink-3);
+  font-variant-numeric: tabular-nums; white-space: nowrap; pointer-events: none; }
 @media print { .top nav, .foot { display: none; } }
 .gen { width: 100%; font-size: 15px; }
 .gen th { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); text-align: left; padding: 0 10px 8px 0; border-bottom: 1px solid var(--rule); }
@@ -220,8 +229,8 @@ html[data-theme="dark"] .solid { color: #141414; }
 </style>
 </head>
 <body class="doc docF"><header class="top">
-  <a class="mark" href="../index.html" aria-label="View.Bible, the timeline">V<span class="smc">iew</span><i>.</i>B<span class="smc">ible</span></a>
-  <nav aria-label="Site"><a href="../index.html">Timeline</a><a href="../library/index.html">Library</a><a href="../about/index.html">About</a><a href="../sources/index.html">Sources</a><span class="div"></span><button id="theme" type="button" title="Show the page light or dark">Dark</button></nav>
+  <a class="mark" href="../" aria-label="View.Bible, the timeline">V<span class="smc">iew</span><i>.</i>B<span class="smc">ible</span></a>
+  <nav aria-label="Site"><a href="../">Timeline</a><a href="../library/">Library</a><a href="../about/">About</a><span class="hitwrap"><a href="../sources/">Sources</a><span class="hits" id="hits" aria-hidden="true"></span></span><span class="div"></span><button id="theme" type="button" title="Show the page light or dark">Dark</button></nav>
 </header>
 <main>
   <div class="grid">
@@ -233,31 +242,50 @@ html[data-theme="dark"] .solid { color: #141414; }
       <div><h2>Free to use</h2><div class="v"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>, with credit to View.Bible</div></div>
     </aside>
     <div class="main">
-      <nav class="crumb" aria-label="Breadcrumb"><a href="../library/index.html">Library</a> › <a href="../library/index.html#genesis">Genesis</a></nav>
+      <nav class="crumb" aria-label="Breadcrumb"><a href="../library/">Library</a> › <a href="../library/#genesis">Genesis</a></nav>
       <div class="label">Printable chart · Genesis 5 – Exodus 6 · NKJV</div><h1>Adam to Moses Genealogy Timeline</h1><p class="deck"><i>From Adam to Moses</i> · Genesis 5 to Exodus 6: twenty-six generations on one scale of years, with Judah’s line to David</p>
       <a class="plate" href="../img/adam-to-moses-genealogy-timeline-2400.jpg" title="See it full size"><img src="../img/adam-to-moses-genealogy-timeline-1600.jpg" srcset="../img/adam-to-moses-genealogy-timeline-900.jpg 900w, ../img/adam-to-moses-genealogy-timeline-1600.jpg 1600w, ../img/adam-to-moses-genealogy-timeline-2400.jpg 2400w" sizes="(min-width: 1300px) 1000px, 90vw" width="1600" height="1035" alt="The chart From Adam to Moses: twenty-six bars, one for each generation from Adam to Moses, on a scale of years from Adam’s creation, with the Flood marked at the year 1656 and Judah’s line to David beside the line."></a><p class="cap"><span><i>From Adam to Moses</i>, version 2. Sources: the New King James Version and Ussher’s <i>Annals</i> as a check. Click the chart to enlarge.</span><a href="../img/adam-to-moses-genealogy-timeline-2400.jpg">Full size</a></p>
     </div>
   </div>
   <div class="more">
     <section><p>The twenty-six generations from Adam to Moses on one scale of years. Each life is a bar from birth to death, reckoned from the ages Scripture gives, so you can see at a glance whose lives overlapped: Methuselah died in the year of the Flood, and Shem was still living when Isaac was fifty.</p><p>The chart marks the Flood in the year 1656 from Adam, the promise to Abram, Jacob’s move to Egypt and the Exodus, and sets Judah’s line to David beside the line to Moses. A panel shows how every year is reckoned and where the choices lie. Archbishop Ussher’s <i>Annals of the World</i>, used as a check, gives the same years.</p><p>Names and ages follow the New King James Version. The years are arithmetic from those ages: a reckoning, not a statement of Scripture.</p><p class="small"><i>Chart by View.Bible.</i></p></section>
-    <section class="when"><h2>When</h2><svg class="strip" width="380" height="30" viewBox="0 0 380 30" role="img" aria-label="4004–1451 BC, on the time from Creation to AD 100"><line x1="0" x2="380" y1="15.0" y2="15.0" stroke="var(--ink-3)"/><line x1="153.4" x2="153.4" y1="11.0" y2="19.0" stroke="var(--rule)"/><line x1="192.9" x2="192.9" y1="11.0" y2="19.0" stroke="var(--rule)"/><line x1="212.8" x2="212.8" y1="11.0" y2="19.0" stroke="var(--rule)"/><line x1="232.7" x2="232.7" y1="11.0" y2="19.0" stroke="var(--rule)"/><line x1="236.4" x2="236.4" y1="11.0" y2="19.0" stroke="var(--rule)"/><line x1="269.4" x2="269.4" y1="11.0" y2="19.0" stroke="var(--rule)"/><line x1="280.5" x2="280.5" y1="11.0" y2="19.0" stroke="var(--rule)"/><line x1="316.4" x2="316.4" y1="11.0" y2="19.0" stroke="var(--rule)"/><line x1="333.4" x2="333.4" y1="11.0" y2="19.0" stroke="var(--rule)"/><line x1="370.5" x2="370.5" y1="11.0" y2="19.0" stroke="var(--rule)"/><line x1="373.8" x2="373.8" y1="11.0" y2="19.0" stroke="var(--rule)"/><rect x="0.0" y="10.0" width="236.4" height="10" fill="var(--label)"/></svg><div class="stripl"><span>Creation</span><span>AD 100</span></div><p>4004–1451 BC, as Archbishop Ussher reckoned the years: a reckoning from the ages Scripture gives, not a statement of Scripture (<a href="../about/index.html#checked">how the years are counted</a>).</p><a class="go" href="../index.html#d0">See it on the timeline →</a></section>
+    <section class="when"><h2>When</h2><svg class="strip" width="380" height="30" viewBox="0 0 380 30" role="img" aria-label="4004–1451 BC, on the time from Creation to AD 100"><line x1="0" x2="380" y1="15.0" y2="15.0" stroke="var(--ink-3)"/><line x1="153.4" x2="153.4" y1="11.0" y2="19.0" stroke="var(--rule)"/><line x1="192.9" x2="192.9" y1="11.0" y2="19.0" stroke="var(--rule)"/><line x1="212.8" x2="212.8" y1="11.0" y2="19.0" stroke="var(--rule)"/><line x1="232.7" x2="232.7" y1="11.0" y2="19.0" stroke="var(--rule)"/><line x1="236.4" x2="236.4" y1="11.0" y2="19.0" stroke="var(--rule)"/><line x1="269.4" x2="269.4" y1="11.0" y2="19.0" stroke="var(--rule)"/><line x1="280.5" x2="280.5" y1="11.0" y2="19.0" stroke="var(--rule)"/><line x1="316.4" x2="316.4" y1="11.0" y2="19.0" stroke="var(--rule)"/><line x1="333.4" x2="333.4" y1="11.0" y2="19.0" stroke="var(--rule)"/><line x1="370.5" x2="370.5" y1="11.0" y2="19.0" stroke="var(--rule)"/><line x1="373.8" x2="373.8" y1="11.0" y2="19.0" stroke="var(--rule)"/><rect x="0.0" y="10.0" width="236.4" height="10" fill="var(--label)"/></svg><div class="stripl"><span>Creation</span><span>AD 100</span></div><p>4004–1451 BC, as Archbishop Ussher reckoned the years: a reckoning from the ages Scripture gives, not a statement of Scripture (<a href="../about/#checked">how the years are counted</a>).</p><a class="go" href="../#d0">See it on the timeline →</a></section>
     <section class="wide"><h2>Downloads</h2><div class="dlrow"><img src="../img/adam-to-moses-genealogy-timeline-900.jpg" width="64" height="41" alt=""><span class="n">From Adam to Moses (PDF, for printing)</span><span class="f">PDF · 1.0 MB</span><a class="go" href="../files/adam-to-moses-genealogy-timeline.pdf" download>Download</a></div><div class="dlrow"><img src="../img/adam-to-moses-genealogy-timeline-900.jpg" width="64" height="41" alt=""><span class="n">Picture, large</span><span class="f">JPG 2400 px · 0.5 MB</span><a class="go" href="../img/adam-to-moses-genealogy-timeline-2400.jpg" download>Download</a></div><div class="dlrow"><img src="../img/adam-to-moses-genealogy-timeline-900.jpg" width="64" height="41" alt=""><span class="n">Picture, medium</span><span class="f">JPG 1600 px · 0.3 MB</span><a class="go" href="../img/adam-to-moses-genealogy-timeline-1600.jpg" download>Download</a></div></section>
     <section class="wide"><h2>The line, generation by generation (26)</h2><p class="small">Years from Adam, as the chart reckons them; c. marks a life whose length is given but not its year of birth.</p><div class="tablewrap"><table class="gen"><thead><tr><th>No.</th><th>Name</th><th>Born</th><th>Died</th><th>Lived</th><th>Next born at</th><th>Scripture</th></tr></thead><tbody><tr><td>1</td><td>Adam</td><td>0</td><td>930</td><td>930</td><td>130</td><td>Genesis 5:3–5</td></tr><tr><td>2</td><td>Seth</td><td>130</td><td>1042</td><td>912</td><td>105</td><td>Genesis 5:6–8</td></tr><tr><td>3</td><td>Enosh</td><td>235</td><td>1140</td><td>905</td><td>90</td><td>Genesis 5:9–11</td></tr><tr><td>4</td><td>Cainan</td><td>325</td><td>1235</td><td>910</td><td>70</td><td>Genesis 5:12–14</td></tr><tr><td>5</td><td>Mahalalel</td><td>395</td><td>1290</td><td>895</td><td>65</td><td>Genesis 5:15–17</td></tr><tr><td>6</td><td>Jared</td><td>460</td><td>1422</td><td>962</td><td>162</td><td>Genesis 5:18–20</td></tr><tr><td>7</td><td>Enoch</td><td>622</td><td>987</td><td>365</td><td>65</td><td>Genesis 5:21–24</td></tr><tr><td>8</td><td>Methuselah</td><td>687</td><td>1656</td><td>969</td><td>187</td><td>Genesis 5:25–27</td></tr><tr><td>9</td><td>Lamech</td><td>874</td><td>1651</td><td>777</td><td>182</td><td>Genesis 5:28–31</td></tr><tr><td>10</td><td>Noah</td><td>1056</td><td>2006</td><td>950</td><td>502</td><td>Genesis 5:32; 7:6; 9:28–29; 11:10</td></tr><tr><td>11</td><td>Shem</td><td>1558</td><td>2158</td><td>600</td><td>100</td><td>Genesis 11:10–11</td></tr><tr><td>12</td><td>Arphaxad</td><td>1658</td><td>2096</td><td>438</td><td>35</td><td>Genesis 11:12–13</td></tr><tr><td>13</td><td>Salah</td><td>1693</td><td>2126</td><td>433</td><td>30</td><td>Genesis 11:14–15</td></tr><tr><td>14</td><td>Eber</td><td>1723</td><td>2187</td><td>464</td><td>34</td><td>Genesis 11:16–17</td></tr><tr><td>15</td><td>Peleg</td><td>1757</td><td>1996</td><td>239</td><td>30</td><td>Genesis 11:18–19</td></tr><tr><td>16</td><td>Reu</td><td>1787</td><td>2026</td><td>239</td><td>32</td><td>Genesis 11:20–21</td></tr><tr><td>17</td><td>Serug</td><td>1819</td><td>2049</td><td>230</td><td>30</td><td>Genesis 11:22–23</td></tr><tr><td>18</td><td>Nahor</td><td>1849</td><td>1997</td><td>148</td><td>29</td><td>Genesis 11:24–25</td></tr><tr><td>19</td><td>Terah</td><td>1878</td><td>2083</td><td>205</td><td>130</td><td>Genesis 11:26, 32; 12:4; Acts 7:4</td></tr><tr><td>20</td><td>Abraham (Abram)</td><td>2008</td><td>2183</td><td>175</td><td>100</td><td>Genesis 21:5; 25:7</td></tr><tr><td>21</td><td>Isaac</td><td>2108</td><td>2288</td><td>180</td><td>60</td><td>Genesis 25:26; 35:28</td></tr><tr><td>22</td><td>Jacob</td><td>2168</td><td>2315</td><td>147</td><td>c. 87</td><td>Genesis 47:9, 28</td></tr><tr><td>23</td><td>Levi</td><td>c. 2255</td><td>c. 2392</td><td>137</td><td></td><td>Exodus 6:16</td></tr><tr><td>24</td><td>Kohath</td><td>c. 2285</td><td>c. 2418</td><td>133</td><td></td><td>Exodus 6:18</td></tr><tr><td>25</td><td>Amram</td><td>c. 2348</td><td>c. 2485</td><td>137</td><td></td><td>Exodus 6:20</td></tr><tr><td>26</td><td>Moses</td><td>2433</td><td>2553</td><td>120</td><td></td><td>Exodus 7:7; Deuteronomy 34:7</td></tr></tbody></table></div></section><section class=""><h2>Where Moses leaves the line: Judah’s line</h2><p>The line divides among the sons of Jacob and Leah. From Levi, her third son, come Kohath, Amram, and Aaron and Moses (Exodus 6:16–20). From Judah, her fourth (Genesis 29:34–35), comes the line to David: Perez (by Tamar, Genesis 38), Hezron, Ram, Amminadab, Nahshon, Salmon, Boaz (by Rahab), Obed (by Ruth), Jesse, David (Ruth 4:18–22; 1 Chronicles 2:3–15; Matthew 1:2–6). No ages are recorded for Judah’s line, so its names hang from Jacob without bars and are not set on the scale of years.</p></section><section class=""><h2>How the years are reckoned</h2><p>Each birth year is the father’s birth year plus his age when the son was born (Genesis 5; 11:10–26). Shem was born when Noah was 502 (Genesis 5:32; 11:10), and Abram when Terah was 130 (Genesis 11:26, 32; 12:4; Acts 7:4). The 430 years run from the promise to Abram (2083) to the Exodus (2513): 215 years in Canaan and 215 in Egypt (Exodus 12:40–41; Galatians 3:16–17). Levi, Kohath and Amram have their lengths of life but not their years of birth, so they are placed approximately.</p></section>
-    <section><h2>Sources</h2><div class="src"><h3>New King James Version</h3><p class="small">Names, spellings, ages and short quotations.</p><blockquote>Scripture taken from the New King James Version®. Copyright © 1982 by Thomas Nelson. Used by permission. All rights reserved.</blockquote></div><div class="src"><h3>James Ussher, <i>Annals of the World</i> (1650–1654)</h3><p class="small">A check on the reckoning of the years. Public domain.</p></div><p class="small">Every source the site uses: <a href="../sources/index.html">Sources</a>.</p></section>
+    <section><h2>Sources</h2><div class="src"><h3>New King James Version</h3><p class="small">Names, spellings, ages and short quotations.</p><blockquote>Scripture taken from the New King James Version®. Copyright © 1982 by Thomas Nelson. Used by permission. All rights reserved.</blockquote></div><div class="src"><h3>James Ussher, <i>Annals of the World</i> (1650–1654)</h3><p class="small">A check on the reckoning of the years. Public domain.</p></div><p class="small">Every source the site uses: <a href="../sources/">Sources</a>.</p></section>
     <section><h2>How to cite</h2><blockquote>From View.Bible, <i>From Adam to Moses</i> (Genesis 5 – Exodus 6), version 2, https://view.bible/adam-to-moses-genealogy/, CC BY 4.0.</blockquote></section>
-    <section><h2>In Bible order</h2><div class="pns"><span></span><a class="pn" href="../joshua-allotment-map/index.html"><img src="../img/joshua-13-21-tribal-allotment-map-900.jpg" width="120" height="78" alt=""><span><span class="label">Next</span><br>Map of the Twelve Tribes of Israel</span></a></div></section>
+    <section><h2>In Bible order</h2><div class="pns"><span></span><a class="pn" href="../joshua-allotment-map/"><img src="../img/joshua-13-21-tribal-allotment-map-900.jpg" width="120" height="78" alt=""><span><span class="label">Next</span><br>Map of the Twelve Tribes of Israel</span></a></div></section>
     <section><a class="solid again" href="../files/adam-to-moses-genealogy-timeline.pdf" download>Download PDF · 1.0 MB</a></section>
   </div>
 </main>
 <footer class="foot">
   <span>View.Bible · free Bible maps, timelines and charts</span>
-  <span><a rel="license" href="../about/index.html#reuse">Free to use under CC BY 4.0</a></span>
+  <span><a rel="license" href="../about/#reuse">Free to use under CC BY 4.0</a></span>
   <span>Scripture: New King James Version</span>
-  <span><a href="../sources/index.html">Sources</a></span>
+  <span><a href="../sources/">Sources</a></span>
 </footer>
 <script>(function () { const b = document.getElementById("theme"), d = document.documentElement;
   const label = () => b.textContent = d.dataset.theme === "dark" ? "Light" : "Dark"; label();
   b.onclick = () => { d.dataset.theme = d.dataset.theme === "dark" ? "light" : "dark"; try { localStorage.setItem("vb-theme", d.dataset.theme); } catch (e) {} label(); };
+})();</script>
+<script>/* the visit counter (the owner, 09/30/2026): the small number over "Sources" counts visits. Abacus
+   (abacus.jasoncameron.dev), a free counting service that needs no account, keeps the number. A visit is counted when a
+   reader comes in from outside the site; moving between pages, reloading or going back does not count again. Robots, the
+   copies on the maker's computer and any browser once opened at view.bible/?not-counted are never counted
+   (view.bible/?counted undoes it). If the service does not answer, no number shows. The same script is in the timeline, index.src.html. */
+(function () { const el = document.getElementById("hits"); if (!el) return;
+  let me = false;
+  try { const q = location.search;
+    if (/[?&]not-counted\b/.test(q)) { localStorage.setItem("vb-not-counted", "1"); alert("Visits from this browser will not be counted."); }
+    if (/[?&]counted\b/.test(q)) { localStorage.removeItem("vb-not-counted"); alert("Visits from this browser will be counted again."); }
+    if (/counted\b/.test(q)) history.replaceState(null, "", location.pathname + location.hash);
+    me = localStorage.getItem("vb-not-counted") === "1"; } catch (e) {}
+  const nav = ((performance.getEntriesByType && performance.getEntriesByType("navigation")[0]) || {}).type;
+  let outside = true; try { outside = !document.referrer || new URL(document.referrer).host !== location.host; } catch (e) {}
+  const robot = navigator.webdriver || /bot|crawl|spider|slurp|headless|lighthouse|preview/i.test(navigator.userAgent);
+  const hit = location.host === "view.bible" && !me && !robot && outside && nav !== "reload" && nav !== "back_forward";
+  fetch("https://abacus.jasoncameron.dev/" + (hit ? "hit" : "get") + "/view.bible/visits")
+    .then(r => r.ok ? r.json() : null).then(j => { if (j && j.value > 0) el.textContent = j.value.toLocaleString("en-US"); }).catch(() => {});
 })();</script>
 </body>
 </html>
