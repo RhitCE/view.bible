@@ -59,6 +59,7 @@
    "@type": "WebPage",
    "@id": "https://view.bible/#webpage",
    "url": "https://view.bible/",
+   "dateModified": "2026-09-30",
    "name": "View.Bible: Interactive Bible Timeline, Free Maps and Charts",
    "description": "Scroll through the Bible’s people and events on one timeline, with the verses for each, and download free maps and charts as printable PDFs.",
    "isPartOf": {
@@ -330,7 +331,7 @@ html.still *, html.still *::before, html.still *::after { transition: none !impo
 </header>
 
 <noscript><div class="nojs"><p>View.Bible is an interactive timeline of the Bible’s people and events, with free maps and charts to download. The timeline needs JavaScript; the maps and charts do not:</p>
-<!--docs--><ul><li><a href="adam-to-moses-genealogy/">From Adam to Moses</a>: Adam to Moses Genealogy Timeline (Genesis 5 – Exodus 6)</li><li><a href="joshua-allotment-map/">The Allotment of the Land</a>: Map of the Twelve Tribes of Israel (Joshua 13–21)</li></ul><!--/docs-->
+<!--docs--><ul><li><a href="adam-to-moses-genealogy/">From Adam to Moses</a>: Adam to Moses Genealogy Timeline (Genesis 5 – Exodus 6)</li><li><a href="joshua-allotment-map/">The Allotment of the Land</a>: Map of the Twelve Tribes of Israel (Joshua 13–21)</li><li><a href="exodus-route-map/">The Route of the Exodus</a>: Map of the Route of the Exodus (Exodus 12 – Numbers 33)</li><li><a href="cities-of-refuge-map/">Cities of Refuge and the Levites</a>: Cities of Refuge Map: the Six Cities and 48 Levitical Cities (Joshua 20–21)</li><li><a href="kings-of-israel-and-judah-chart/">The Kings of Israel and Judah</a>: Kings of Israel and Judah Chart (1 Samuel 8 – 2 Kings 25)</li></ul><!--/docs-->
 <p><a href="library/">The Library</a> · <a href="about/">About</a> · <a href="sources/">Sources</a></p></div></noscript>
 
 <main class="stage" id="stage">
@@ -430,12 +431,12 @@ const BOOKS = []; SECTIONS.forEach(([sec, list], si) => list.forEach(([name,s,e,
   BOOKS.push({id:"k"+BOOKS.length,name,s,e,ts,te,author,sec,si,kind:"Book"}); }));
 
 const DOCS = [
- {id:"d0",name:"From Adam to Moses",sub:"Genealogy timeline chart",s:0,e:2553,img:"img/adam-to-moses.jpg",pdf:"files/adam-to-moses-genealogy-timeline.pdf",page:"adam-to-moses-genealogy/",size:"1.0 MB",ref:"Genesis 5 – Exodus 6"},
+ {id:"d0",name:"From Adam to Moses",sub:"Genealogy timeline chart",s:0,e:2553,img:"img/adam-to-moses-genealogy-timeline-900.jpg",img240:"img/adam-to-moses-genealogy-timeline-240.jpg",pdf:"files/adam-to-moses-genealogy-timeline.pdf",page:"adam-to-moses-genealogy/",size:"1.0 MB",ref:"Genesis 5 – Exodus 6"},
  {id:"d1",name:"Abraham's Journeys",sub:"Two maps · in progress",s:2083,e:2183,img:"img/abraham.jpg",ref:"Genesis 11–25",status:"In progress"},
- {id:"d2",name:"The Route of the Exodus",sub:"Planned",s:2513,e:2553,ref:"Exodus – Deuteronomy",status:"Planned",ghost:true},
- {id:"d3",name:"The Allotment of the Land",sub:"Relief map of the tribes",s:2553,e:2560,img:"img/joshua-allotment.jpg",pdf:"files/joshua-13-21-tribal-allotment-map.pdf",page:"joshua-allotment-map/",size:"13.5 MB",ref:"Joshua 13–21"},
- {id:"d4",name:"Cities of Refuge and the Levites",sub:"Planned",s:2553,e:2560,ref:"Joshua 20–21",status:"Planned",ghost:true},
- {id:"d5",name:"The Kings of Israel and Judah",sub:"Planned",s:2909,e:3416,ref:"1 Samuel – 2 Kings",status:"Planned",ghost:true},
+ {id:"d2",name:"The Route of the Exodus",sub:"Map of the forty-two stages",s:2513,e:2553,img:"img/exodus-12-numbers-33-route-of-the-exodus-900.jpg",img240:"img/exodus-12-numbers-33-route-of-the-exodus-240.jpg",pdf:"files/exodus-12-numbers-33-route-of-the-exodus.pdf",page:"exodus-route-map/",size:"11.5 MB",sheet:"Two printable pages, 17 × 11 inches.",ref:"Exodus 12 – Numbers 33"},
+ {id:"d3",name:"The Allotment of the Land",sub:"Relief map of the tribes",s:2553,e:2560,img:"img/joshua-13-21-tribal-allotment-map-900.jpg",img240:"img/joshua-13-21-tribal-allotment-map-240.jpg",pdf:"files/joshua-13-21-tribal-allotment-map.pdf",page:"joshua-allotment-map/",size:"13.5 MB",ref:"Joshua 13–21"},
+ {id:"d4",name:"Cities of Refuge and the Levites",sub:"Map of the forty-eight cities",s:2553,e:2560,img:"img/joshua-20-21-cities-of-refuge-and-the-levites-900.jpg",img240:"img/joshua-20-21-cities-of-refuge-and-the-levites-240.jpg",pdf:"files/joshua-20-21-cities-of-refuge-and-the-levites.pdf",page:"cities-of-refuge-map/",size:"7.1 MB",sheet:"Two printable pages, 17 × 11 inches.",ref:"Joshua 20–21"},
+ {id:"d5",name:"The Kings of Israel and Judah",sub:"Reign chart, Saul to Zedekiah",s:2954,e:3418,img:"img/1-samuel-8-2-kings-25-kings-of-israel-and-judah-900.jpg",img240:"img/1-samuel-8-2-kings-25-kings-of-israel-and-judah-240.jpg",pdf:"files/1-samuel-8-2-kings-25-kings-of-israel-and-judah.pdf",page:"kings-of-israel-and-judah-chart/",size:"1.5 MB",ref:"1 Samuel 8 – 2 Kings 25"},
  {id:"d6",name:"Paul's Journeys",sub:"Planned",s:4046,e:4063,ref:"Acts 13–28",status:"Planned",ghost:true},
 ].map(d => ({...d,kind:"Graphic"}));
 
@@ -736,7 +737,7 @@ function drawDocs(w, h, shut) {
   units.forEach(u => { if (u.lv == null || u.length > 1 || !u[0].d.img) return; const d = u[0].d;
     const x = u[0].x, top0 = 6 + drop + u.lv * blockH, q = [x + 9, top0 - TH - 4, x + 9 + CW, top0 - 4];
     if (q[1] >= 4 && !clash(q, u)) { boxes.push({ u: null, q });
-      const img = `<img class="dthumb" data-id="${d.id}" src="${d.img}" alt="${d.page ? d.name : ""}" style="left:${q[0]}px;top:${q[1]}px;width:${CW}px;height:${TH}px">`;
+      const img = `<img class="dthumb" data-id="${d.id}" src="${d.img}"${d.img240 ? ` srcset="${d.img240} 240w, ${d.img} 900w" sizes="${CW}px"` : ""} alt="${d.page ? `${d.name}, ${d.sub.toLowerCase()}` : ""}" style="left:${q[0]}px;top:${q[1]}px;width:${CW}px;height:${TH}px">`;
       s += d.page ? `<a class="dlink" href="${d.page}">${img}</a>` : img; } });
   units.forEach(u => {
     if (u.lv == null) return;
@@ -870,8 +871,8 @@ stage.addEventListener("pointerleave", hideTip);
 const panel = document.getElementById("panel"), pbody = document.getElementById("pbody");
 function openPanel(id) { const o = ALL[id]; if (o.inv && waiting(o.inv)) { afterLoad(o.inv, () => openPanel(id)); return; }
   hideTip(); noteCard("t:" + id); let h = "";
-  if (o.kind === "Graphic") h = `${o.img ? `<img src="${o.img}">` : ""}<div class="body"><div class="kind">${o.pdf ? "Map or chart · free" : o.status}</div><h3>${o.name}</h3><div class="when num">${o.ref} · ${when(o)}</div>
-    <p>${o.pdf ? "One printable sheet, 17 × 11 inches. Its own page carries the full-size view, the notes and the sources." : "This sheet is " + o.status.toLowerCase() + ". It will take its place over these years when it is finished."}</p>
+  if (o.kind === "Graphic") h = `${o.img ? `<img src="${o.img}"${o.page ? ` alt="${o.name}, ${o.sub.toLowerCase()}"` : ""}>` : ""}<div class="body"><div class="kind">${o.pdf ? "Map or chart · free" : o.status}</div><h3>${o.name}</h3><div class="when num">${o.ref} · ${when(o)}</div>
+    <p>${o.pdf ? (o.sheet || "One printable sheet, 17 × 11 inches.") + " Its own page carries the full-size view, the notes and the sources." : "This sheet is " + o.status.toLowerCase() + ". It will take its place over these years when it is finished."}</p>
     ${o.pdf ? `<div class="acts"><a class="btn1" href="${o.pdf}" download>Download PDF · ${o.size}</a>${o.page ? `<a class="btn2" href="${o.page}">Open the page</a>` : ""}</div>` : ""}</div>`;
   else if (o.inv && CARDS[o.inv]) { h = invCard(o.inv, o.kind === "Person" ? "Descendants of Adam" : "Events", o); }
   else if (o.kind === "Person") { const sons = PEOPLE.filter(p => p.parent === o.i).map(p => p.name);
