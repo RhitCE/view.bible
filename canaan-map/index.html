@@ -9,6 +9,14 @@
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <link rel="license" href="https://creativecommons.org/licenses/by/4.0/">
 <style>
+@font-face { font-family: "EB Garamond"; font-style: normal; font-weight: 400; font-display: block; src: url(../fonts/eb-garamond-latin-400-normal.woff2) format("woff2"); }
+header .vb-mark { font-family: "EB Garamond", var(--serif); font-size: 20px; color: var(--ink); text-decoration: none; line-height: 1; white-space: nowrap; padding-right: 18px; border-right: 1px solid var(--rule); }
+header .vb-mark .smc { font-variant-caps: all-small-caps; letter-spacing: .07em; }
+header .vb-mark i { font-style: normal; margin: 0 .04em 0 -.03em; }
+@media (max-width:839px) { header .vb-mark { font-size: 16px; padding-right: 12px; } }
+@media (max-width:359px) { header .vb-mark { display: none; } }
+</style>
+<style>
 
 :root { --paper:#f4ecda; --ink:#2b2118; --soft:#6b5d4c; --rule:#cdbf9f; --accent:#8a691e; --israel:#1f4fa6; --callink:#1f160d;
   --serif:"Palatino Linotype","Book Antiqua",Palatino,Georgia,serif; }
@@ -186,7 +194,7 @@ details.credit { font-size:11px; color:var(--soft); padding:0 12px 6px 0; line-h
 <style>#names .lbl { fill:#1f160d; }</style>
 </head>
 <body>
-<header><h1>Who lived where, and when</h1>
+<header><a class="vb-mark" href="../" aria-label="View.Bible, the timeline">V<span class="smc">iew</span><i>.</i>B<span class="smc">ible</span></a><h1>Who lived where, and when</h1>
 <span class="sub">A proof of concept · the NKJV's statements of who dwelt in, held or ruled each place, and the names of places in their years · v20 · 10/02/2026</span></header>
 <main>
  <aside id="left">
