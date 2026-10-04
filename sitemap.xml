@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url><loc>https://view.bible/</loc><lastmod>2026-10-03</lastmod></url>
-  <url><loc>https://view.bible/about/</loc><lastmod>2026-09-30</lastmod></url>
-  <url><loc>https://view.bible/adam-to-moses-genealogy/</loc><lastmod>2026-09-30</lastmod><image:image><image:loc>https://view.bible/img/adam-to-moses-genealogy-timeline-2400.jpg</image:loc></image:image></url>
-  <url><loc>https://view.bible/cities-of-refuge-map/</loc><lastmod>2026-09-30</lastmod><image:image><image:loc>https://view.bible/img/joshua-20-21-cities-of-refuge-and-the-levites-2400.jpg</image:loc></image:image></url>
-  <url><loc>https://view.bible/exodus-route-map/</loc><lastmod>2026-09-30</lastmod><image:image><image:loc>https://view.bible/img/exodus-12-numbers-33-route-of-the-exodus-2400.jpg</image:loc></image:image></url>
-  <url><loc>https://view.bible/joshua-allotment-map/</loc><lastmod>2026-09-30</lastmod><image:image><image:loc>https://view.bible/img/joshua-13-21-tribal-allotment-map-2400.jpg</image:loc></image:image></url>
-  <url><loc>https://view.bible/kings-of-israel-and-judah-chart/</loc><lastmod>2026-09-30</lastmod><image:image><image:loc>https://view.bible/img/1-samuel-8-2-kings-25-kings-of-israel-and-judah-2400.jpg</image:loc></image:image></url>
-  <url><loc>https://view.bible/library/</loc><lastmod>2026-09-30</lastmod></url>
-  <url><loc>https://view.bible/sources/</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://view.bible/about/</loc><lastmod>2026-10-03</lastmod></url>
+  <url><loc>https://view.bible/adam-to-moses-genealogy/</loc><lastmod>2026-10-03</lastmod><image:image><image:loc>https://view.bible/img/adam-to-moses-genealogy-timeline-2400.jpg</image:loc></image:image></url>
+  <url><loc>https://view.bible/cities-of-refuge-map/</loc><lastmod>2026-10-03</lastmod><image:image><image:loc>https://view.bible/img/joshua-20-21-cities-of-refuge-and-the-levites-2400.jpg</image:loc></image:image></url>
+  <url><loc>https://view.bible/exodus-route-map/</loc><lastmod>2026-10-03</lastmod><image:image><image:loc>https://view.bible/img/exodus-12-numbers-33-route-of-the-exodus-2400.jpg</image:loc></image:image></url>
+  <url><loc>https://view.bible/joshua-allotment-map/</loc><lastmod>2026-10-03</lastmod><image:image><image:loc>https://view.bible/img/joshua-13-21-tribal-allotment-map-2400.jpg</image:loc></image:image></url>
+  <url><loc>https://view.bible/kings-of-israel-and-judah-chart/</loc><lastmod>2026-10-03</lastmod><image:image><image:loc>https://view.bible/img/1-samuel-8-2-kings-25-kings-of-israel-and-judah-2400.jpg</image:loc></image:image></url>
+  <url><loc>https://view.bible/library/</loc><lastmod>2026-10-03</lastmod></url>
+  <url><loc>https://view.bible/sources/</loc><lastmod>2026-10-03</lastmod></url>
 </urlset>

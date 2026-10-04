@@ -35,7 +35,7 @@
    "@type": "CollectionPage",
    "@id": "https://view.bible/library/#webpage",
    "url": "https://view.bible/library/",
-   "dateModified": "2026-09-30",
+   "dateModified": "2026-10-03",
    "name": "Bible Maps, Charts and Timelines",
    "isPartOf": {
     "@id": "https://view.bible/#website"
@@ -199,19 +199,32 @@ f.addEventListener("input", () => { const q = f.value.trim().toLowerCase(); let 
    (abacus.jasoncameron.dev), a free counting service that needs no account, keeps the number. A visit is counted when a
    reader comes in from outside the site; moving between pages, reloading or going back does not count again. Robots, the
    copies on the maker's computer and any browser once opened at view.bible/?not-counted are never counted
-   (view.bible/?counted undoes it). If the service does not answer, no number shows. The same script is in the timeline, index.src.html. */
-(function () { const el = document.getElementById("hits"); if (!el) return;
+   (view.bible/?counted undoes it). If the service does not answer, no number shows.
+   Two more counts, kept but not shown (the owner, 10/03/2026; update_site.py writes them into the Update Log): "browsers",
+   each browser the first time it is counted (it remembers that in its own storage, with no cookie; a private window or
+   cleared storage counts again), and "dl-<file name>", each click on a Download link (a click, not a finished download;
+   a file opened straight from a search or a shared link is not seen). The same script is in the timeline, index.src.html. */
+(function () { const A = "https://abacus.jasoncameron.dev/", N = "view.bible/";
   let me = false;
   try { const q = location.search;
     if (/[?&]not-counted\b/.test(q)) { localStorage.setItem("vb-not-counted", "1"); alert("Visits from this browser will not be counted."); }
     if (/[?&]counted\b/.test(q)) { localStorage.removeItem("vb-not-counted"); alert("Visits from this browser will be counted again."); }
     if (/counted\b/.test(q)) history.replaceState(null, "", location.pathname + location.hash);
     me = localStorage.getItem("vb-not-counted") === "1"; } catch (e) {}
+  const robot = navigator.webdriver || /bot|crawl|spider|slurp|headless|lighthouse|preview|inspectiontool|googleother/i.test(navigator.userAgent);
+  const live = location.host === "view.bible" && !me && !robot;
+  if (live) { const tally = ev => { if (ev.type === "auxclick" && ev.button !== 1) return;
+      const a = ev.target && ev.target.closest && ev.target.closest("a[download]"); if (!a) return;
+      const f = (a.getAttribute("href") || "").split(/[?#]/)[0].split("/").pop().replace(/[^A-Za-z0-9_.-]/g, "");
+      if (f) fetch(A + "hit/" + N + ("dl-" + f).slice(0, 64), { keepalive: true }).catch(() => {}); };
+    addEventListener("click", tally); addEventListener("auxclick", tally); }
+  const el = document.getElementById("hits"); if (!el) return;
   const nav = ((performance.getEntriesByType && performance.getEntriesByType("navigation")[0]) || {}).type;
   let outside = true; try { outside = !document.referrer || new URL(document.referrer).host !== location.host; } catch (e) {}
-  const robot = navigator.webdriver || /bot|crawl|spider|slurp|headless|lighthouse|preview|inspectiontool|googleother/i.test(navigator.userAgent);
-  const hit = location.host === "view.bible" && !me && !robot && outside && nav !== "reload" && nav !== "back_forward";
-  fetch("https://abacus.jasoncameron.dev/" + (hit ? "hit" : "get") + "/view.bible/visits")
+  const hit = live && outside && nav !== "reload" && nav !== "back_forward";
+  if (hit) try { if (!localStorage.getItem("vb-seen")) { localStorage.setItem("vb-seen", new Date().toISOString().slice(0, 10));
+    fetch(A + "hit/" + N + "browsers").catch(() => {}); } } catch (e) {}
+  fetch(A + (hit ? "hit/" : "get/") + N + "visits")
     .then(r => r.ok ? r.json() : null).then(j => { if (j && j.value > 0) el.textContent = j.value.toLocaleString("en-US"); }).catch(() => {});
 })();</script>
 </body>
