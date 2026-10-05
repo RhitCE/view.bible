@@ -331,7 +331,7 @@ html.still *, html.still *::before, html.still *::after { transition: none !impo
 </header>
 
 <noscript><div class="nojs"><p>View.Bible is an interactive timeline of the Bible’s people and events, with free maps and charts to download. The timeline needs JavaScript; the maps and charts do not:</p>
-<!--docs--><ul><li><a href="adam-to-moses-genealogy/">From Adam to Moses</a>: Adam to Moses Genealogy Timeline (Genesis 5 – Exodus 6)</li><li><a href="joshua-allotment-map/">The Allotment of the Land</a>: Map of the Twelve Tribes of Israel (Joshua 13–21)</li><li><a href="exodus-route-map/">The Route of the Exodus</a>: Map of the Route of the Exodus (Exodus 12 – Numbers 33)</li><li><a href="cities-of-refuge-map/">Cities of Refuge and the Levites</a>: Cities of Refuge Map: the Six Cities and 48 Levitical Cities (Joshua 20–21)</li><li><a href="kings-of-israel-and-judah-chart/">The Kings of Israel and Judah</a>: Kings of Israel and Judah Chart (1 Samuel 8 – 2 Kings 25)</li></ul><!--/docs-->
+<!--docs--><ul><li><a href="adam-to-moses-genealogy/">From Adam to Moses</a>: Adam to Moses Genealogy Timeline (Genesis 5 – Exodus 6)</li><li><a href="joshua-allotment-map/">The Allotment of the Land</a>: Map of the Twelve Tribes of Israel (Joshua 13–21)</li><li><a href="exodus-route-map/">The Route of the Exodus</a>: Map of the Route of the Exodus (Exodus 12 – Numbers 33)</li><li><a href="cities-of-refuge-map/">Cities of Refuge and the Levites</a>: Cities of Refuge Map: the Six Cities and 48 Levitical Cities (Joshua 20–21)</li><li><a href="kings-of-israel-and-judah-chart/">The Kings of Israel and Judah</a>: Kings of Israel and Judah Chart (1 Samuel 8 – 2 Kings 25)</li><li><a href="canaan-map/">Who Lived Where, and When</a>: Canaan Map: Who Lived Where, from Abraham to Joshua (Genesis 11 – Joshua 21)</li></ul><!--/docs-->
 <p><a href="library/">The Library</a> · <a href="about/">About</a> · <a href="sources/">Sources</a></p></div></noscript>
 
 <main class="stage" id="stage">
@@ -432,6 +432,7 @@ const BOOKS = []; SECTIONS.forEach(([sec, list], si) => list.forEach(([name,s,e,
 
 const DOCS = [
  {id:"d0",name:"From Adam to Moses",sub:"Genealogy timeline chart",s:0,e:2553,img:"img/adam-to-moses-genealogy-timeline-900.jpg",img240:"img/adam-to-moses-genealogy-timeline-240.jpg",pdf:"files/adam-to-moses-genealogy-timeline.pdf",page:"adam-to-moses-genealogy/",size:"1.0 MB",ref:"Genesis 5 – Exodus 6"},
+ {id:"d7",name:"Who Lived Where, and When",sub:"Animated map, year by year",s:2008,e:2560,img:"img/canaan-map-900.jpg",img240:"img/canaan-map-240.jpg",page:"canaan-map/",open:"Animated map · free",sheet:"An animated map that plays in the browser: who lived where in Canaan and Egypt, year by year, as the NKJV states it.",ref:"Genesis 11 – Joshua 21"},  /* the Canaan Map, the Inhabitants Slider of Map Assets: no PDF, its page plays it (10/04/2026) */
  {id:"d1",name:"Abraham's Journeys",sub:"Two maps · in progress",s:2083,e:2183,img:"img/abraham.jpg",ref:"Genesis 11–25",status:"In progress"},
  {id:"d2",name:"The Route of the Exodus",sub:"Map of the forty-two stages",s:2513,e:2553,img:"img/exodus-12-numbers-33-route-of-the-exodus-900.jpg",img240:"img/exodus-12-numbers-33-route-of-the-exodus-240.jpg",pdf:"files/exodus-12-numbers-33-route-of-the-exodus.pdf",page:"exodus-route-map/",size:"11.5 MB",sheet:"Two printable pages, 17 × 11 inches.",ref:"Exodus 12 – Numbers 33"},
  {id:"d3",name:"The Allotment of the Land",sub:"Relief map of the tribes",s:2553,e:2560,img:"img/joshua-13-21-tribal-allotment-map-900.jpg",img240:"img/joshua-13-21-tribal-allotment-map-240.jpg",pdf:"files/joshua-13-21-tribal-allotment-map.pdf",page:"joshua-allotment-map/",size:"13.5 MB",ref:"Joshua 13–21"},
@@ -748,7 +749,7 @@ function drawDocs(w, h, shut) {
     u.forEach((it, j) => { const d = it.d, tt = top0 + j * bh;
       s += `<div class="lead" style="left:${it.land}px;top:${ry}px;width:1px;height:8px"></div><div class="lead" style="left:${x}px;top:${tt + 12}px;width:9px;height:1px"></div>`;
       const card = `<div class="dc ${d.ghost ? "ghost" : ""} ${u.slim ? "slim" : ""}" data-id="${d.id}" style="left:${x + 9}px;top:${tt}px;width:${CW}px"><div class="t">${d.name}</div>`
-        + (u.slim ? "" : `<div class="u num">${cal(d.s)} – ${cal(d.e)} · ${d.ref}</div><div class="k">${d.pdf ? `Download PDF · ${d.size}` : d.status}</div>`) + `</div>`;
+        + (u.slim ? "" : `<div class="u num">${cal(d.s)} – ${cal(d.e)} · ${d.ref}</div><div class="k">${d.pdf ? `Download PDF · ${d.size}` : d.open || d.status}</div>`) + `</div>`;
       s += d.page ? `<a class="dlink" href="${d.page}">${card}</a>` : card; });  // the label too becomes a real link when the sheet is finished (09/30/2026)
   });
   return s;
@@ -871,9 +872,9 @@ stage.addEventListener("pointerleave", hideTip);
 const panel = document.getElementById("panel"), pbody = document.getElementById("pbody");
 function openPanel(id) { const o = ALL[id]; if (o.inv && waiting(o.inv)) { afterLoad(o.inv, () => openPanel(id)); return; }
   hideTip(); noteCard("t:" + id); let h = "";
-  if (o.kind === "Graphic") h = `${o.img ? `<img src="${o.img}"${o.page ? ` alt="${o.name}, ${o.sub.toLowerCase()}"` : ""}>` : ""}<div class="body"><div class="kind">${o.pdf ? "Map or chart · free" : o.status}</div><h3>${o.name}</h3><div class="when num">${o.ref} · ${when(o)}</div>
-    <p>${o.pdf ? (o.sheet || "One printable sheet, 17 × 11 inches.") + " Its own page carries the full-size view, the notes and the sources." : "This sheet is " + o.status.toLowerCase() + ". It will take its place over these years when it is finished."}</p>
-    ${o.pdf ? `<div class="acts"><a class="btn1" href="${o.pdf}" download>Download PDF · ${o.size}</a>${o.page ? `<a class="btn2" href="${o.page}">Open the page</a>` : ""}</div>` : ""}</div>`;
+  if (o.kind === "Graphic") h = `${o.img ? `<img src="${o.img}"${o.page ? ` alt="${o.name}, ${o.sub.toLowerCase()}"` : ""}>` : ""}<div class="body"><div class="kind">${o.pdf ? "Map or chart · free" : o.open || o.status}</div><h3>${o.name}</h3><div class="when num">${o.ref} · ${when(o)}</div>
+    <p>${o.pdf ? (o.sheet || "One printable sheet, 17 × 11 inches.") + " Its own page carries the full-size view, the notes and the sources." : o.open ? o.sheet : "This sheet is " + o.status.toLowerCase() + ". It will take its place over these years when it is finished."}</p>
+    ${o.pdf ? `<div class="acts"><a class="btn1" href="${o.pdf}" download>Download PDF · ${o.size}</a>${o.page ? `<a class="btn2" href="${o.page}">Open the page</a>` : ""}</div>` : o.open && o.page ? `<div class="acts"><a class="btn1" href="${o.page}">Open the map</a></div>` : ""}</div>`;
   else if (o.inv && CARDS[o.inv]) { h = invCard(o.inv, o.kind === "Person" ? "Descendants of Adam" : "Events", o); }
   else if (o.kind === "Person") { const sons = PEOPLE.filter(p => p.parent === o.i).map(p => p.name);
     h = `<div class="body"><div class="kind">Descendants of Adam</div><h3>${o.name}</h3><div class="when num">${when(o)}</div>
