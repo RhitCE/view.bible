@@ -59,7 +59,7 @@
    "@type": "WebPage",
    "@id": "https://view.bible/#webpage",
    "url": "https://view.bible/",
-   "dateModified": "2026-10-05",
+   "dateModified": "2026-10-06",
    "name": "View.Bible: Interactive Bible Timeline, Free Maps and Charts",
    "description": "Scroll through the Bible’s people and events on one timeline, with the verses for each, and download free maps and charts as printable PDFs.",
    "isPartOf": {
@@ -313,6 +313,28 @@ html.still *, html.still *::before, html.still *::after { transition: none !impo
 .panel .go:hover { color: var(--gold); text-decoration-color: var(--gold); }
 .panel .evl { display: grid; grid-template-columns: 68px 1fr; gap: 8px; }
 .panel .evl .yr { font-family: var(--sans); font-size: 11.5px; color: var(--ink-3); padding-top: 2px; }
+/* the way to the interactive map (the owner, 10/06/2026, Decision D038; Study 15's first choice, J6-B, after the NHS
+   website's action links): on the front page a gold arrow in a circle and the map's full title, one link, in the white
+   space under the controls; with a band open the same link, smaller, at the right end of the slim bar. One of the two
+   shows at a time; phones (no hover, a coarse pointer) show neither, as before. */
+.maplink { position: absolute; left: 50%; transform: translateX(-50%); top: calc(var(--pad-top) + 60px + (var(--pad-bot) - 30px) / 2);
+  display: flex; align-items: center; gap: 12px; height: 30px; white-space: nowrap; text-decoration: none; transition: opacity .4s cubic-bezier(.2,.7,.2,1); }
+.maplink .arr, .ctrl .maplink-slim .arr { flex: none; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--gold) 55%, transparent); font-family: var(--sans); color: var(--gold); line-height: 1; }  /* the − and + buttons' own ring */
+.maplink .arr { width: 30px; height: 30px; font-size: 17px; }
+.maplink .w { font-family: var(--serif); font-size: 20px; line-height: 30px; color: var(--ink);
+  text-decoration: underline; text-decoration-color: var(--rule); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.maplink .w b { font-weight: 600; }
+.maplink:hover .arr, .ctrl .maplink-slim:hover .arr { border-color: var(--gold); }
+.maplink:hover .w { color: var(--gold); text-decoration-color: var(--gold); }
+.maplink:focus-visible, .ctrl a.maplink-slim:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+body:not(.front) .maplink, .maptight .maplink { opacity: 0; visibility: hidden; pointer-events: none; }
+.ctrl a.maplink-slim { display: none; align-items: center; gap: 6px; margin-left: 8px; padding: 0; color: var(--ink); }
+body:not(.front) .ctrl a.maplink-slim, .maptight .ctrl a.maplink-slim { display: inline-flex; }
+.ctrl .maplink-slim .arr { width: 22px; height: 22px; font-size: 13px; }
+.ctrl .maplink-slim .w { font-size: 13.5px; color: var(--ink); }
+.ctrl a.maplink-slim:hover .w { color: var(--gold); }
+@media (hover: none) and (pointer: coarse) { .maplink, .ctrl a.maplink-slim { display: none !important; } }
 @media (max-width: 1180px) { .range span { display: none; } }
 </style>
 </head>
@@ -326,8 +348,9 @@ html.still *, html.still *::before, html.still *::after { transition: none !impo
   <nav class="ctrl">
     <button id="theme">Light</button>
     <span class="div"></span>
-    <a href="library/">Library</a><a href="about/">About</a><span class="hitwrap"><a href="sources/">Sources</a><span class="hits" id="hits" aria-hidden="true"></span></span>
+    <a href="library/">Library</a><a href="about/">About</a><span class="hitwrap"><a href="sources/">Sources</a><span class="hits" id="hits" aria-hidden="true"></span></span><a class="maplink-slim" href="canaan-map/"><span class="arr" aria-hidden="true">→</span><span class="w">Canaan Map</span></a>
   </nav>
+  <a class="maplink" href="canaan-map/"><span class="arr" aria-hidden="true">→</span><span class="w"><b>Canaan Map:</b> Who Lived Where, from Abraham to Joshua</span></a>
 </header>
 
 <noscript><div class="nojs"><p>View.Bible is an interactive timeline of the Bible’s people and events, with free maps and charts to download. The timeline needs JavaScript; the maps and charts do not:</p>
@@ -475,6 +498,8 @@ function layout() {
     root.setProperty("--rule-top", (t0 + fs + g1) + "px"); root.setProperty("--pad-top", (t0 + fs + g1 + 1 + g2) + "px");
     root.setProperty("--pad-bot", Math.max(0, TOP - (t0 + fs + g1 + 1 + g2) - 60) + "px"); }
   root.setProperty("--top-h", TOP + "px"); document.body.classList.toggle("front", !open);
+  // the line to the map takes its slim form when the white space under the controls is too low for it (D038, 10/06/2026)
+  document.body.classList.toggle("maptight", !open && parseFloat(root.getPropertyValue("--pad-bot")) < 40);
   stage.style.setProperty("--axis-h", AX + "px"); bandsEl.scrollTop = 0;
   sizeBands(); settle();
 }
