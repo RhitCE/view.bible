@@ -59,7 +59,7 @@
    "@type": "WebPage",
    "@id": "https://view.bible/#webpage",
    "url": "https://view.bible/",
-   "dateModified": "2026-10-07",
+   "dateModified": "2026-10-08",
    "name": "View.Bible: Interactive Bible Timeline, Free Maps and Charts",
    "description": "Scroll through the Bible’s people and events on one timeline, with the verses for each, and download free maps and charts as printable PDFs.",
    "isPartOf": {
@@ -316,7 +316,8 @@ html.still *, html.still *::before, html.still *::after { transition: none !impo
 /* the way to the interactive map (the owner, 10/06/2026, Decision D038; Study 15's first choice, J6-B, after the NHS
    website's action links): on the front page a gold arrow in a circle and the map's full title, one link, in the white
    space under the controls; with a band open the same link, smaller, at the right end of the slim bar. One of the two
-   shows at a time; phones (no hover, a coarse pointer) show neither, as before. */
+   shows at a time. Tablets such as the iPad show them too (the owner, 10/08/2026, Decision D041); phones (a touch screen
+   under 600 px wide or 500 px high) show neither, as before. */
 .maplink { position: absolute; left: 50%; transform: translateX(-50%); top: calc(var(--pad-top) + 60px + (var(--pad-bot) - 30px) / 2);
   display: flex; align-items: center; gap: 12px; height: 30px; white-space: nowrap; text-decoration: none; transition: opacity .4s cubic-bezier(.2,.7,.2,1); }
 .maplink .arr, .ctrl .maplink-slim .arr { flex: none; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%;
@@ -331,10 +332,12 @@ html.still *, html.still *::before, html.still *::after { transition: none !impo
 body:not(.front) .maplink, .maptight .maplink { opacity: 0; visibility: hidden; pointer-events: none; }
 .ctrl a.maplink-slim { display: none; align-items: center; gap: 6px; margin-left: 8px; padding: 0; color: var(--ink); }
 body:not(.front) .ctrl a.maplink-slim, .maptight .ctrl a.maplink-slim { display: inline-flex; }
+body.mapnoroom .ctrl a.maplink-slim { display: none; }  /* no room for it beside the years (layout(), D041) */
 .ctrl .maplink-slim .arr { width: 22px; height: 22px; font-size: 13px; }
 .ctrl .maplink-slim .w { font-size: 13.5px; color: var(--ink); }
 .ctrl a.maplink-slim:hover .w { color: var(--gold); }
-@media (hover: none) and (pointer: coarse) { .maplink, .ctrl a.maplink-slim { display: none !important; } }
+@media (hover: none) and (pointer: coarse) and (max-width: 599px), (hover: none) and (pointer: coarse) and (max-height: 499px) {
+  .maplink, .ctrl a.maplink-slim { display: none !important; } }
 @media (max-width: 1180px) { .range span { display: none; } }
 </style>
 </head>
@@ -500,6 +503,11 @@ function layout() {
   root.setProperty("--top-h", TOP + "px"); document.body.classList.toggle("front", !open);
   // the line to the map takes its slim form when the white space under the controls is too low for it (D038, 10/06/2026)
   document.body.classList.toggle("maptight", !open && parseFloat(root.getPropertyValue("--pad-bot")) < 40);
+  // and the slim form stays hidden where the controls on the right have no room for it beside the years (a band open on
+  // a narrow screen, such as an iPad held upright; the line returns when the band closes) (D041, 10/08/2026)
+  const slim = document.querySelector(".ctrl a.maplink-slim"); document.body.classList.remove("mapnoroom");
+  if (getComputedStyle(slim).display !== "none") document.body.classList.toggle("mapnoroom",
+    slim.parentElement.firstElementChild.getBoundingClientRect().left < document.querySelector(".range").getBoundingClientRect().right + 12);
   stage.style.setProperty("--axis-h", AX + "px"); bandsEl.scrollTop = 0;
   sizeBands(); settle();
 }
