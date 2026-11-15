@@ -59,7 +59,7 @@
    "@type": "WebPage",
    "@id": "https://view.bible/#webpage",
    "url": "https://view.bible/",
-   "dateModified": "2026-11-10",
+   "dateModified": "2026-11-15",
    "name": "View.Bible: Interactive Bible Timeline, Free Maps and Charts",
    "description": "Scroll through the Bible’s people and events on one timeline, with the verses for each, and download free maps and charts as printable PDFs.",
    "isPartOf": {
@@ -359,6 +359,9 @@ body.mapnoroom .ctrl a.maplink-slim { display: none; }  /* no room for it beside
 .nm .fb-od { display: inline-block; width: 6px; height: 6px; border: 1px solid var(--ink-3); border-radius: 50%; margin-right: 4px; vertical-align: 1px; box-sizing: border-box; }
 .nm .fb-of { font-style: italic; font-size: .82em; color: var(--ink-3); margin-left: 5px; }
 .nm .fb-more { font-family: var(--sans); font-size: 9.5px; color: var(--ink-3); margin-left: 6px; }
+.nm .fb-nd { font-style: italic; color: var(--ink-2); }
+.fb-head { position: absolute; font-family: var(--sans); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; }
+.nm.fb-w { background: var(--bg); box-shadow: 0 0 0 2px var(--bg); }  /* a name stands clear of the family lines behind it (D047) */
 @media (hover: none) and (pointer: coarse) and (max-width: 599px), (hover: none) and (pointer: coarse) and (max-height: 499px) {
   .maplink, .ctrl a.maplink-slim { display: none !important; } }
 @media (max-width: 1180px) { .range span { display: none; } }
@@ -440,7 +443,7 @@ if (BAND) {
   BAND.rows.forEach(r => { if (r.k !== "k" && r.k !== "n") { r.a = r.a ?? r.b; r.b = r.b ?? r.a; }
     const o = { name: r.n, kind: "Person", inv: r.i, band: r, ref: "", parent: -1, approx: r.k !== "x",
       b: r.k === "k" ? r.p : (r.a ?? r.b), d: r.k === "k" ? r.p : (r.b ?? r.a) };
-    if (r.k === "n") UNDATED.push(o); else { o.i = PEOPLE.length; o.id = "p" + o.i; PEOPLE.push(o); }
+    if (r.k === "n") { o.id = "u" + UNDATED.length; UNDATED.push(o); } else { o.i = PEOPLE.length; o.id = "p" + o.i; PEOPLE.push(o); }
     BYINV.set(r.i, o); });
   const all = [...PEOPLE, ...UNDATED];
   all.forEach(o => { const r = o.band;
@@ -536,7 +539,7 @@ const BANDS = [
  {key:"books",name:"Books of the Bible",deck:"The years each book tells; the box marks when it was written"},
  {key:"docs",name:"Maps and Charts",deck:"Free to download and print, placed over the years they show"},
 ];
-const ALL = Object.fromEntries([...PEOPLE,...EVENTS,...BOOKS,...DOCS].map(o => [o.id,o]));
+const ALL = Object.fromEntries([...PEOPLE,...UNDATED,...EVENTS,...BOOKS,...DOCS].map(o => [o.id,o]));
 
 /* ======================= STATE AND FRAME ======================= */
 const DMIN = -150, DMAX = TODAY + 150;
@@ -548,6 +551,11 @@ BANDS.forEach(b => {
   el.querySelector(".bhead").addEventListener("click", () => { open = open === b.key ? null : b.key; layout(); });
   bandsEl.append(el); b.el = el; b.track = el.querySelector(".track");
 });
+// the people band draws only the rows in sight, so it is drawn again as the bands scroll (D047)
+const peopleTrack = () => BANDS.find(b => b.key === "people").track;
+let scrollTick = 0;
+bandsEl.addEventListener("scroll", () => { if (open !== "people" || scrollTick) return;
+  scrollTick = requestAnimationFrame(() => { scrollTick = 0; const t = peopleTrack(); t.innerHTML = drawPeople(W(), t.clientHeight, false); }); }, { passive: true });
 
 function layout() {
   // With no band open (the page as it first loads) the years and the shut bands sit at the foot, over the lever, and the
@@ -580,7 +588,7 @@ function sizeBands() {
   const hs = {};
   // an open band is as tall as its content needs to be read; when that is more than the screen holds, the bands scroll
   // between the years at the top and the lever at the foot, which stay in place (the user, 09/27/2026)
-  const NEED = { people: livesSized * 11 + 12 + 38, books: BOOKS.length * 12.5 + 10 + 6 * (SECTIONS.length - 1) + 38 };
+  const NEED = { people: livesSized * BAND_ROW + 12 + 38, books: BOOKS.length * 12.5 + 10 + 6 * (SECTIONS.length - 1) + 38 };
   if (open) {
     BANDS.forEach(b => hs[b.key] = b.key === open ? 0 : (b.key === "docs" ? DOCS_MIN : SHUT));
     hs[open] = Math.max(H - Object.values(hs).reduce((a, c) => a + c, 0), NEED[open] || 0);
@@ -672,15 +680,18 @@ function drawPeople(w, h, shut) {
     let h0 = 0, h1 = wd, words = "";
     if (fs) {
       const born = c + cal(p.b), died = `${c}${cal(p.d)} · ${p.d - p.b} years`, lw = nameW(p.name) + 6 + dateW(born), top = y - fs / 2 + 1, on = a - 9 - lw >= 0;
-      if (on) { words += `<div class="nm" style="left:${a - 9 - lw}px;top:${top}px;font-size:${fs}px">${p.name}<small class="num">${born}</small></div>`; h0 = -9 - lw; }
+      if (on) { words += `<div class="nm fb-w" style="left:${a - 9 - lw}px;top:${top}px;font-size:${fs}px">${p.name}<small class="num">${born}</small></div>`; h0 = -9 - lw; }
       words += `<div class="nm" style="left:${b + 9}px;top:${top}px;font-size:${fs}px">${on ? "" : p.name}<small class="num"${on ? ' style="margin-left:0"' : ""}>${died}</small></div>`;
       h1 = b + 9 + (on ? 0 : nameW(p.name) + 6) + dateW(died) - a; }
     s += `<div class="life ${p.approx ? "approx" : ""}" data-id="${p.id}" style="left:${a}px;width:${wd}px;top:${y}px">${hitStrip(h0 - 4, h1 + 4, rowH)}</div>${words}`; });
   return s;
 }
 
-/* The band of D046. Wider than 1,000 years only the lives with their own years take rows, the rest folded as '+n' after
-   a relative's name; at 1,000 years or less every placed life in view. A life's own years: its bar, an end known only
+/* The band of D047. Every name takes its own row at every width, never folded, and the band scrolls (the owner,
+   10/09/2026): every placed life in view, and each person with no years in a row under the relative that places them
+   in view, the name only, set at that relative's start, with no line or date; families in which no one has years at the
+   foot, under 'Families with no years given', at the left of the screen. Only the rows in sight are drawn, again
+   as the band scrolls. A life's own years: its bar, an end known only
    within a window fading across it; a life known by its events: a hairline over their years, a dot at each; one limit
    only: a ring and an arrow; a life placed by its kin: a hollow ring, no years. The lines: a parent's stem at the
    child's start, dashed where generations may be missing (Green, 1890) or the link is graded possible or doubtful, dotted
@@ -693,19 +704,37 @@ const bandKin = o => [...o.pars.map(x => x.q), ...o.kids, ...o.sps.map(x => x.q)
 function bandRows() {
   const key = v0 + "," + v1; if (bandCache && bandCache.key === key) return bandCache;
   const inView = o => { const r = o.band; return Math.max(o.b, o.d) >= v0 && Math.min(o.b, o.d) <= v1; };
-  let vis = BORDER.filter(inView);
-  const fold = new Map(), noYears = new Map();
-  if (v1 - v0 > 1000) {
-    const keep = new Set(vis.filter(o => o.band.k === "x" || o.band.k === "w"));
-    vis.forEach(o => { if (keep.has(o)) return; const k = bandKin(o).find(q => keep.has(q)); if (k) fold.set(k, (fold.get(k) || 0) + 1); });
-    vis = vis.filter(o => keep.has(o));
-  } else {
-    const on = new Set(vis);
-    UNDATED.forEach(u => { const k = bandKin(u).find(q => on.has(q)) || (u.band.ln && on.has(BYINV.get(u.band.ln)) ? BYINV.get(u.band.ln) : null);
-      if (k) noYears.set(k, (noYears.get(k) || 0) + 1); });
+  const placed = BORDER.filter(inView), on = new Set(placed), under = new Map();
+  // each person with no years goes under a relative in view, or under one placed so, until no more are found (however
+  // long the line: Luke's list from Nathan to Heli runs more than twelve generations with no years, 11/15/2026)
+  let left = UNDATED;
+  for (let pass = 0; pass <= UNDATED.length && left.length; pass++) {
+    const rest = [];
+    left.forEach(u => { const k = bandKin(u).find(q => on.has(q)) || (u.band.ln && on.has(BYINV.get(u.band.ln)) ? BYINV.get(u.band.ln) : null);
+      if (!k) { rest.push(u); return; } if (!under.has(k)) under.set(k, []); under.get(k).push(u); });
+    if (rest.length === left.length) break;
+    under.forEach(list => list.forEach(u => on.add(u))); left = rest;
   }
-  bandCache = { key, vis, fold, noYears }; return bandCache;
+  const vis = [], put = o => { vis.push(o); (under.get(o) || []).forEach(u => { u.b = u.d = o.b; put(u); }); };
+  placed.forEach(put);
+  // and last, under a heading, the families in which no one has years, at the left of the screen in every window; a
+  // person with no years whose family has years, none of them in view, is out of view like them (D047, 11/15/2026)
+  left = left.filter(o => NOYEARS_FAMILY.has(o));
+  if (left.length) { const at = v0 + 12 / W() * (v1 - v0), done = new Set(), rest = left.slice().sort((p, q) => (p.band.t || "\uffff").localeCompare(q.band.t || "\uffff"));
+    vis.push(NOYEARS_HEAD);
+    const tie = o => { if (done.has(o)) return; done.add(o); o.b = o.d = at; vis.push(o); bandKin(o).filter(q => rest.includes(q) && !done.has(q)).forEach(tie); };
+    rest.forEach(tie); }
+  bandCache = { key, vis }; return bandCache;
 }
+const NOYEARS_HEAD = { head: true, name: "Families with no years given" };
+// the people with no years whose whole family, through every kin link and tribe line the band draws, has no one with years
+const NOYEARS_FAMILY = new Set();
+if (BAND) { const done = new Set(), un = new Set(UNDATED);
+  UNDATED.forEach(u => { if (done.has(u)) return; const fam = new Set([u]), st = [u]; let dated = false;
+    while (st.length) { const x = st.pop(); done.add(x); if (!un.has(x)) { dated = true; continue; }
+      [...bandKin(x), ...(x.band.ln && BYINV.get(x.band.ln) ? [BYINV.get(x.band.ln)] : [])].forEach(q => { if (!fam.has(q)) { fam.add(q); st.push(q); } }); }
+    if (!dated) fam.forEach(q => NOYEARS_FAMILY.add(q)); }); }
+const BAND_ROW = BAND ? 14 : 11;  // the least height of a row: names large enough to read, however many
 function drawBand(w, h, shut) {
   let s = "";
   if (shut) {
@@ -715,23 +744,28 @@ function drawBand(w, h, shut) {
       if (KEY_PEOPLE.includes(p.name) && x > last) { s += `<div class="lab" style="left:${x + 5}px;top:${y - 17}px">${p.name}</div>`; last = x + tw(p.name) + 14; } });
     return s;
   }
-  const { vis, fold, noYears } = bandRows(), top = 6, rowH = Math.min(22, Math.max(11, (h - 12) / Math.max(1, vis.length)));
+  const { vis } = bandRows(), top = 6, rowH = Math.min(22, Math.max(BAND_ROW, (h - 12) / Math.max(1, vis.length)));
   const yOf = new Map(); vis.forEach((p, k) => yOf.set(p, top + k * rowH + rowH / 2));
-  const fs = rowH >= 18 ? 14 : rowH >= 13 ? 13 : rowH >= 10 ? 11.5 : 10.5;
+  const fs = rowH >= 18 ? 14 : 13;
+  // only what is in sight of the scrolling bands, with a margin
+  const tr = peopleTrack().getBoundingClientRect(), br = bandsEl.getBoundingClientRect(), lo = br.top - tr.top - 300, hi = br.bottom - tr.top + 300;
+  const seen = (y0, y1) => Math.max(y0, y1) >= lo && Math.min(y0, y1) <= hi;
   // the lines first, so that the marks and words lie over them
-  vis.forEach(p => { const y1 = yOf.get(p), x = X(p.b);
-    p.pars.forEach(l => { const y0 = yOf.get(l.q); if (y0 == null) return;
+  vis.forEach(p => { if (p.head) return; const y1 = yOf.get(p), x = X(p.b);
+    p.pars.forEach(l => { const y0 = yOf.get(l.q); if (y0 == null || !seen(y0, y1)) return;
       s += `<div class="stem ${l.st === "d" ? "fb-dash" : ""}" style="left:${x}px;top:${Math.min(y0, y1)}px;height:${Math.abs(y1 - y0)}px"></div><div class="joint" style="left:${x}px;top:${y0 + 1}px"></div>`; });
-    p.alts.forEach(q => { const y0 = yOf.get(q); if (y0 == null) return;
+    p.alts.forEach(q => { const y0 = yOf.get(q); if (y0 == null || !seen(y0, y1)) return;
       s += `<div class="stem fb-alt" style="left:${x - 5}px;top:${Math.min(y0, y1)}px;height:${Math.abs(y1 - y0)}px"></div><div class="fb-or" style="left:${x - 18}px;top:${(y0 + y1) / 2 - 6}px">or</div>`; });
-    p.sps.forEach(l => { const y0 = yOf.get(l.q); if (y0 == null || y0 >= y1) return;
+    p.sps.forEach(l => { const y0 = yOf.get(l.q); if (y0 == null || y0 >= y1 || !seen(y0, y1)) return;
       s += `<div class="fb-eq" style="left:${Math.min(x, X(l.q.b)) - 13}px;top:${(y0 + y1) / 2 - 7}px">${l.cc ? "-" : "="}</div>`; });
-    if (!p.pars.some(l => yOf.has(l.q))) p.sibs.forEach(q => { const y0 = yOf.get(q); if (y0 == null || y0 >= y1) return;
+    if (!p.pars.some(l => yOf.has(l.q))) p.sibs.forEach(q => { const y0 = yOf.get(q); if (y0 == null || y0 >= y1 || !seen(y0, y1)) return;
       s += `<div class="fb-br" style="left:${Math.max(2, Math.min(x, X(q.b)) - 6)}px;top:${y0}px;height:${y1 - y0}px"></div>`; });
-    p.same.forEach(q => { const y0 = yOf.get(q); if (y0 == null || y0 >= y1) return;
+    p.same.forEach(q => { const y0 = yOf.get(q); if (y0 == null || y0 >= y1 || !seen(y0, y1)) return;
       s += `<div class="fb-same" style="left:${Math.min(x, X(q.b)) - 9}px;top:${y0}px;height:${y1 - y0}px"></div>`; }); });
   const nameW = t => mw(t, `${fs}px Newsreader`) * 1.03 + 1, dateW = t => mw(t, `10.5px ${SANS}`) * 1.03 + 1;
-  vis.forEach(p => { const r = p.band, y = yOf.get(p) - 1, c = r.tc ? calT : cal, low = r.f === 30 || r.pos;
+  vis.forEach(p => { if (!seen(yOf.get(p), yOf.get(p))) return;
+    if (p.head) { s += `<div class="fb-head" style="left:12px;top:${yOf.get(p) - 6}px">${p.name}</div>`; return; }
+    const r = p.band, y = yOf.get(p) - 1, c = r.tc ? calT : cal, low = r.f === 30 || r.pos;
     let a = X(p.b), b = X(p.d), mark = "", born = "", died = "";
     if (r.k === "x") { mark = `<div class="fb-bar ${low ? "fb-hol" : ""}" style="left:${a}px;width:${Math.max(2, b - a)}px;top:${y}px"></div>`;
       born = c(r.a); died = `${c(r.b)} · ${r.b - r.a} years`; }
@@ -745,15 +779,14 @@ function drawBand(w, h, shut) {
         (r.ev || [r.a, r.b]).filter(e => e >= r.a && e <= r.b).map(e => `<div class="fb-dot" style="left:${X(e)}px;top:${y + 1}px"></div>`).join(""); }
     else if (r.k === "e1") { const at = X(r.a ?? r.b); a = b = at;
       mark = `<div class="fb-ring" style="left:${at}px;top:${y}px"></div><div class="fb-arw" style="left:${r.one === "from" ? at + 6 : at - 16}px;top:${y - 6}px">${r.one === "from" ? "\u2192" : "\u2190"}</div>`; }
-    else { mark = `<div class="fb-ring" style="left:${a}px;top:${y}px"></div>`; }
+    else if (r.k === "k") { mark = `<div class="fb-ring" style="left:${a}px;top:${y}px"></div>`; }
     const fig = r.f ? `<span class="fb-pc">${r.f}%</span>` : "", od = r.pos ? `<span class="fb-od"></span>` : "";
     const tag = r.lnn ? `<span class="fb-of">of ${r.lnn}</span>` : "";
-    const more = (fold.get(p) ? `<span class="fb-more">+${fold.get(p)}</span>` : "") + (noYears.get(p) ? `<span class="fb-more">+${noYears.get(p)}, no years</span>` : "");
-    const lw = nameW(p.name) + (born ? 6 + dateW(born) : 0) + (od ? 10 : 0), tp = y - fs / 2 + 1, on = a - 9 - lw >= 0 && r.k !== "k" && r.k !== "e1";
+   const lw = nameW(p.name) + (born ? 6 + dateW(born) : 0) + (od ? 10 : 0), tp = y - fs / 2 + 1, on = a - 9 - lw >= 0 && r.k !== "k" && r.k !== "e1" && r.k !== "n";
     let words = "", h0 = 0, h1 = Math.max(2, b - a);
-    if (on) { words += `<div class="nm" style="left:${a - 9 - lw}px;top:${tp}px;font-size:${fs}px">${od}${p.name}${born ? `<small class="num">${born}</small>` : ""}</div>`; h0 = -9 - lw; }
-    const after = `${on ? "" : od + p.name}${died ? `<small class="num"${on ? ' style="margin-left:0"' : ""}>${died}</small>` : ""}${fig}${tag}${more}`;
-    words += `<div class="nm" style="left:${b + 9}px;top:${tp}px;font-size:${fs}px">${after}</div>`;
+    if (on) { words += `<div class="nm fb-w" style="left:${a - 9 - lw}px;top:${tp}px;font-size:${fs}px">${od}${p.name}${born ? `<small class="num">${born}</small>` : ""}</div>`; h0 = -9 - lw; }
+    const after = `${on ? "" : od + (r.k === "n" ? `<span class="fb-nd">${p.name}</span>` : p.name)}${died ? `<small class="num"${on ? ' style="margin-left:0"' : ""}>${died}</small>` : ""}${fig}${tag}`;
+    words += `<div class="nm fb-w" style="left:${b + 9}px;top:${tp}px;font-size:${fs}px">${after}</div>`;
     h1 = b + 9 + nameW(p.name) + 60 - a;
     s += `<div class="hit" data-id="${p.id}" style="left:${a + h0 - 4}px;width:${h1 - h0 + 8}px;top:${y + 1 - rowH / 2}px;height:${rowH}px"></div>${mark}${words}`; });
   return s;
@@ -1021,7 +1054,7 @@ function when(o) { const s = o.s ?? o.b, e = o.e ?? o.d; return e == null ? cal(
 function describe(o) {
   if (o.band) { const r = o.band, c = r.tc ? calT : cal;
     const how = { x: `Lived ${r.b - r.a} years`, w: "Born and died within the years shown", e: "Known by the events Scripture places", e1: r.one === "from" ? "Known from this year on" : "Known by this year",
-      k: "Placed by the family; no years given" }[r.k];
+      k: "Placed by the family; no years given", n: "Named in the family; no years given" }[r.k];
     const yrs = r.k === "x" ? `${c(r.a)} – ${c(r.b)}` : r.k === "w" ? `c. ${c(r.a)} – c. ${c(r.b)}` : r.k === "e" ? (r.b > r.a ? `${c(r.a)} – ${c(r.b)}` : c(r.a)) : r.k === "e1" ? c(r.a ?? r.b) : "";
     return `<b>${o.name}</b><i>${how}${r.f ? ` · ${r.f}%` : ""}${r.pos ? " · possible" : ""}</i>${yrs ? `<span class="num">${yrs}</span>` : ""}`; }
   if (o.kind === "Person") return `<b>${o.name}</b><i>Lived ${o.d - o.b} years${o.approx ? ", placed approximately" : ""}</i><span class="num">${when(o)} · ${o.ref}</span>`;
