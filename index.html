@@ -362,8 +362,39 @@ body.mapnoroom .ctrl a.maplink-slim { display: none; }  /* no room for it beside
 .nm .fb-nd { font-style: italic; color: var(--ink-2); }
 .fb-head { position: absolute; font-family: var(--sans); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; }
 .nm.fb-w { background: var(--bg); box-shadow: 0 0 0 2px var(--bg); }  /* a name stands clear of the family lines behind it (D047) */
+/* the name box of D065 (Study 44, J01 Bible text scholar's option, after Wikipedia's search box): the first of the
+   controls, before 'Whole Bible', on the front page and in the slim bar; where it cannot stand clear of the site's name,
+   the words 'Find a name' in its place open it, and the name is never hidden or replaced (D065 point 2) */
+.nbox { flex: none; position: relative; width: 220px; height: 30px; }
+.nbox input { display: block; width: 100%; height: 30px; margin: 0; padding: 0 10px; border: 1px solid var(--rule); border-radius: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--serif); font-size: 14px; outline: none; -webkit-appearance: none; appearance: none; }
+.nbox input::placeholder { font-style: italic; font-size: 13.5px; color: var(--ink-3); opacity: 1; }
+.nbox input:focus { border-color: var(--gold); }
+.ctrl button.nfind { display: none; }
+.ctrl button.nfind:hover, .ctrl button.nfind.on { color: var(--gold); }
+body.nwords .ctrl .nbox { display: none; }
+body.nwords .ctrl button.nfind { display: inline-block; }
+body.nwords .nbox.float { display: block; position: fixed; z-index: 26; box-shadow: var(--shadow); }
+body.ncorner .ctrl .ndiv { display: none; }
+body.ncorner .nbox.float ~ button.nfind { visibility: hidden; }  /* the box it opens stands over the words */
+body.ncorner .ctrl button.nfind { position: fixed; z-index: 4; left: 28px; top: calc(var(--top-h) + 18px); width: 48px; padding: 0 4px 0 0; white-space: normal; text-align: left; line-height: 15px; background: var(--bg); }
+body.nmarkoff .mark { visibility: hidden; }  /* a desktop screen too narrow for the box: the name gives it its place only while it is open */
+.nlist { position: fixed; z-index: 25; width: 440px; display: none; flex-direction: column; background: var(--surface); border: 1px solid var(--rule); box-shadow: var(--shadow); }
+.nlist.on { display: flex; }
+.nlist .nl-sc { flex: 1 1 auto; min-height: 0; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
+.nlist .nl { padding: 8px 12px; border-bottom: 1px solid var(--hair); cursor: pointer; }
+.nlist .nl-n { font-size: 15px; font-weight: 600; line-height: 1.3; color: var(--ink); }
+.nlist .nl-n i { font-weight: 400; }
+.nlist .nl:hover .nl-n, .nlist .nl.gold .nl-n { color: var(--gold); }
+.nlist .nl-w { margin-left: 8px; font-family: var(--sans); font-size: 10.5px; font-weight: 400; color: var(--ink-3); }
+.nlist .nl-w em { font-family: var(--serif); font-size: 12px; margin-right: 5px; }
+.nlist .nl-pre { display: inline-block; width: 6px; height: 6px; border: 1px solid var(--ink-3); border-radius: 50%; margin-right: 5px; vertical-align: 2px; box-sizing: border-box; }
+.nlist .nl-d { margin-top: 2px; font-size: 13px; line-height: 1.4; font-style: italic; color: var(--ink-2); }
+.nlist .nl-none { padding: 10px 12px; font-size: 13.5px; font-style: italic; color: var(--ink-3); }
+.nlist .nl-ct { flex: none; padding: 6px 12px; border-top: 1px solid var(--rule); font-family: var(--sans); font-size: 10.5px; color: var(--ink-3); }
+.nm.picked, .nm.picked .fb-nd { color: var(--gold); }  /* the person chosen in the name box, marked on the band until the card closes; a name with no years too */
 @media (hover: none) and (pointer: coarse) and (max-width: 599px), (hover: none) and (pointer: coarse) and (max-height: 499px) {
-  .maplink, .ctrl a.maplink-slim { display: none !important; } }
+  .maplink, .ctrl a.maplink-slim, .nbox, .ctrl button.nfind, .ctrl .ndiv, .nlist { display: none !important; } }
 @media (max-width: 1180px) { .range span { display: none; } }
 </style>
 </head>
@@ -371,7 +402,7 @@ body.mapnoroom .ctrl a.maplink-slim { display: none; }  /* no room for it beside
 <header class="top">
   <h1 class="nameplate"><a class="mark" href="#" aria-label="View.Bible">V<span class="smc">iew</span><i>.</i>B<span class="smc">ible</span></a></h1>
   <nav class="ctrl lft">
-    <button id="fitBible">Whole Bible</button><button id="fitAll">To today</button>
+    <span class="nbox" id="nbox"><input id="nq" type="text" autocomplete="off" spellcheck="false" placeholder="Find a person by name" aria-label="Find a person by name" role="combobox" aria-expanded="false" aria-controls="nlist" aria-autocomplete="list"></span><button class="nfind" id="nfind" aria-label="Find a person by name">Find a name</button><span class="div ndiv"></span><button id="fitBible">Whole Bible</button><button id="fitAll">To today</button>
   </nav>
   <div class="range"><button class="zb" id="zLess" title="500 fewer years">−</button><div class="width" id="width"></div><button class="zb" id="zMore" title="500 more years">+</button></div>
   <nav class="ctrl">
@@ -417,6 +448,9 @@ const PEOPLE = [ // the Adam to Moses chart (years from Adam), then later lives 
  ["Joshua",2468,2578,"Joshua 24:29",-1,1],["David",2919,2989,"2 Samuel 5:4",-1,1],["Solomon",2971,3029,"1 Kings 11:42",28,1],["Jesus",4000,4036,"Luke 3:23",-1,1]
 ].map(([name,b,d,ref,parent=-1,approx=0],i) => ({id:"p"+i,i,name,b,d,ref,parent,approx:!!approx,kind:"Person"}));
 const KEY_PEOPLE = ["Adam","Noah","Abraham","Moses","David","Jesus"];
+// on the people band, the same six by their Inventory numbers, so that a namesake (Noah the daughter of Zelophehad,
+// PER-00496) is never labelled in their place (11/15/2026)
+const KEY_INV = ["PER-00011", "PER-00035", "PER-00003", "PER-00353", "PER-00661", "PER-03010"];
 // The Bible Inventory (Project Data\Inventory, kept by its own chat) supplies the facts when its export stands beside the
 // page (09/28/2026). Each life the chart shares with it takes its entry and years; every life the Inventory dates from birth
 // to death joins the band; the rows stay in order of birth, each joined to its father.
@@ -555,8 +589,19 @@ BANDS.forEach(b => {
 const peopleTrack = () => BANDS.find(b => b.key === "people").track;
 let scrollTick = 0;
 bandsEl.addEventListener("scroll", () => { if (open !== "people" || scrollTick) return;
-  scrollTick = requestAnimationFrame(() => { scrollTick = 0; const t = peopleTrack(); t.innerHTML = drawPeople(W(), t.clientHeight, false); }); }, { passive: true });
+  scrollTick = requestAnimationFrame(() => { scrollTick = 0; const t = peopleTrack(); t.innerHTML = drawPeople(W(), t.clientHeight, false); markPick(); }); }, { passive: true });
+// the person chosen in the name box (D065): their row stays marked, the rest of the band stepped back and the name in
+// gold, until the card closes or something else is picked
+let picked = null;
+function markPick() {
+  const t = peopleTrack(); if (hushed) return;  // while the pointer rests on a row, that row is marked instead
+  t.querySelectorAll(".picked").forEach(n => n.classList.remove("picked", "lit"));
+  const h = picked && open === "people" ? t.querySelector(`.hit[data-id="${picked}"]`) : null;
+  t.classList.toggle("hush", !!h); if (!h) return;
+  for (let n = h; n && (n === h || !n.dataset.id); n = n.nextElementSibling) n.classList.add("lit", "picked");
+}
 
+let laidOut = { open: undefined, w: 0 };  // what layout() last laid out
 function layout() {
   // With no band open (the page as it first loads) the years and the shut bands sit at the foot, over the lever, and the
   // masthead takes all the room above: the name large, a hairline and the row of controls, spaced generously and set a
@@ -575,7 +620,11 @@ function layout() {
   const slim = document.querySelector(".ctrl a.maplink-slim"); document.body.classList.remove("mapnoroom");
   if (getComputedStyle(slim).display !== "none") document.body.classList.toggle("mapnoroom",
     slim.parentElement.firstElementChild.getBoundingClientRect().left < document.querySelector(".range").getBoundingClientRect().right + 12);
-  stage.style.setProperty("--axis-h", AX + "px"); bandsEl.scrollTop = 0;
+  fitNameBox();  // the name box, or where it has no room the words 'Find a name' (D065)
+  // the bands go back to the top when a band opens or shuts or the width changes, not when only the height does (a tablet's
+  // keyboard, a window made taller) (11/15/2026)
+  stage.style.setProperty("--axis-h", AX + "px"); if (laidOut.open !== open || laidOut.w !== innerWidth) bandsEl.scrollTop = 0;
+  laidOut = { open, w: innerWidth };
   sizeBands(); settle();
 }
 const SHUT_H = 76;  // a shut band, with room for the rule beneath it
@@ -609,12 +658,16 @@ function step(raw) { return [1,2,5,10,20,25,50,100,200,250,500,1000,2000].find(s
 /* ======================= AXIS ======================= */
 function drawAxis() {
   const w = W(), off = Math.max(0, axis.clientHeight - 66); let s = "";  // off: how far the years have dropped down
+  // where the words 'Find a name' stand in the corner under the bar (a tablet with a band open, D065), the years start past them
+  const nf = document.body.classList.contains("ncorner") ? document.getElementById("nfind").getBoundingClientRect() : null;
+  const cut = nf ? nf.right - axis.getBoundingClientRect().left + 6 : -1e9;
+  const clear = (x, t, font) => x - mw(t, font) / 2 >= cut;
   ERAS.forEach(e => { const a = X(e[1]), b = X(e[2]); if (a > 0 && a < w) s += `<div class="erasep" style="left:${a}px;height:${14 + off}px"></div>`;
-    const l = Math.max(0, a), r = Math.min(w, b); if (r - l > 50) s += `<div class="era" style="left:${l}px;width:${r - l}px">${e[0]}</div>`; });
+    const l = Math.max(0, a, cut - 7), r = Math.min(w, b); if (r - l > 50) s += `<div class="era" style="left:${l}px;width:${r - l}px">${e[0]}</div>`; });
   const st = step((v1 - v0) / w * 110);
-  for (let t = Math.ceil(v0 / st) * st; t <= v1; t += st) if (t >= 0) s += `<div class="am num" style="left:${X(t)}px;top:${28 + off}px">${(t + 0).toLocaleString()}</div>`;
-  for (let n = st; n <= 4200; n += st) { const am = 4004 - n; if (am >= v0 && am <= v1 && X(am) > 34) s += `<div class="cal num" style="left:${X(am)}px;top:${45 + off}px">${n.toLocaleString()} BC</div><div class="tk" style="left:${X(am)}px"></div>`; }
-  for (let n = st; n <= 2100; n += st) { const am = n + 4003; if (am >= v0 && am <= v1) s += `<div class="cal num" style="left:${X(am)}px;top:${45 + off}px">AD ${n.toLocaleString()}</div><div class="tk" style="left:${X(am)}px"></div>`; }
+  for (let t = Math.ceil(v0 / st) * st; t <= v1; t += st) if (t >= 0 && clear(X(t), (t + 0).toLocaleString(), "13px Newsreader")) s += `<div class="am num" style="left:${X(t)}px;top:${28 + off}px">${(t + 0).toLocaleString()}</div>`;
+  for (let n = st; n <= 4200; n += st) { const am = 4004 - n; if (am >= v0 && am <= v1 && X(am) > 34) s += `${clear(X(am), n.toLocaleString() + " BC", "italic 12.5px Newsreader") ? `<div class="cal num" style="left:${X(am)}px;top:${45 + off}px">${n.toLocaleString()} BC</div>` : ""}<div class="tk" style="left:${X(am)}px"></div>`; }
+  for (let n = st; n <= 2100; n += st) { const am = n + 4003; if (am >= v0 && am <= v1) s += `${clear(X(am), "AD " + n.toLocaleString(), "italic 12.5px Newsreader") ? `<div class="cal num" style="left:${X(am)}px;top:${45 + off}px">AD ${n.toLocaleString()}</div>` : ""}<div class="tk" style="left:${X(am)}px"></div>`; }
   // a small tick at every hundred years, BC and AD, where they stand far enough apart (the user, 09/27/2026)
   if (100 * w / (v1 - v0) >= 6) { for (let n = 100; n <= 4100; n += 100) { const am = 4004 - n; if (am >= v0 && am <= v1 && n % st) s += `<div class="tk mi" style="left:${X(am)}px"></div>`; }
     for (let n = 100; n <= 2100; n += 100) { const am = n + 4003; if (am >= v0 && am <= v1 && n % st) s += `<div class="tk mi" style="left:${X(am)}px"></div>`; } }
@@ -741,7 +794,7 @@ function drawBand(w, h, shut) {
     const y = 20; s += `<div class="base" style="top:${y}px;opacity:.5"></div>`; let last = -1e9;
     BORDER.slice().sort((a, b) => a.b - b.b).forEach(p => { const x = X(p.b); if (x < -10 || x > w + 10) return;
       s += `<div class="hit" data-id="${p.id}" style="left:${x - 3}px;top:${y - 5}px;width:7px;height:11px"></div><div class="tk" style="left:${x}px;top:${y - 3}px;height:7px;background:var(--ink-2);opacity:${p.band.k === "x" || p.band.k === "w" ? 1 : .4}"></div>`;
-      if (KEY_PEOPLE.includes(p.name) && x > last) { s += `<div class="lab" style="left:${x + 5}px;top:${y - 17}px">${p.name}</div>`; last = x + tw(p.name) + 14; } });
+      if (KEY_INV.includes(p.inv) && x > last) { s += `<div class="lab" style="left:${x + 5}px;top:${y - 17}px">${p.name}</div>`; last = x + tw(p.name) + 14; } });
     return s;
   }
   const { vis } = bandRows(), top = 6, rowH = Math.min(22, Math.max(BAND_ROW, (h - 12) / Math.max(1, vis.length)));
@@ -986,7 +1039,7 @@ function render() {
   BANDS.forEach(b => { const h = b.track.clientHeight, shut = b.el.classList.contains("shut");
     if (hushed && hushed.track === b.track) unhush();
     b.track.innerHTML = b.key === "people" ? drawPeople(w, h, shut) : b.key === "events" ? drawEvents(w, h, shut) : b.key === "books" ? drawBooks(w, h, shut) : drawDocs(w, h, shut); });
-  drawScrub();
+  drawScrub(); markPick();
   // the width in years, and under it the dates the window spans (the years of the world on wide screens)
   widthEl.innerHTML = `<b class="num">${Math.round(v1 - v0).toLocaleString()} <em>years</em></b><small class="num">${cal(Math.max(0, v0))} – ${cal(Math.min(TODAY, v1))}<span> · ${amS(Math.max(0, v0))} – ${amS(Math.min(TODAY, v1))}</span></small>`;
 }
@@ -1045,7 +1098,8 @@ const setTheme = (m, keep) => { document.documentElement.dataset.theme = m; them
 themeBtn.textContent = document.documentElement.dataset.theme === "dark" ? "Light" : "Dark";
 themeBtn.onclick = () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark", true);
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", q => { let t = null; try { t = localStorage.getItem("vb-theme"); } catch (e) {} if (!t) setTheme(q.matches ? "dark" : "light"); });
-addEventListener("keydown", e => { if (e.key === "Escape") closePanel(); if (e.key === "Backspace" && panel.classList.contains("open") && cardHist.length) { e.preventDefault(); cardGoBack(); } if (e.key === "+" || e.key === "=") stepWidth(1); if (e.key === "-") stepWidth(-1);
+addEventListener("keydown", e => { if (e.target && e.target.closest && e.target.closest("#nbox")) return;  // typing in the name box moves nothing else
+  if (e.key === "Escape") closePanel(); if (e.key === "Backspace" && panel.classList.contains("open") && cardHist.length) { e.preventDefault(); cardGoBack(); } if (e.key === "+" || e.key === "=") stepWidth(1); if (e.key === "-") stepWidth(-1);
   const p = (v1 - v0) * .15; if (e.key === "ArrowLeft") animateTo(v0 - p, v1 - p, 200); if (e.key === "ArrowRight") animateTo(v0 + p, v1 + p, 200); });
 
 /* tooltip and card */
@@ -1071,10 +1125,11 @@ function hover(e) { const t = e.target.closest("[data-id]"); if (!t) { hideTip()
 function hideTip() { tip.style.opacity = 0; tip.dataset.id = ""; unhush(); }
 // the thing under the pointer and its own words stay; everything else in the band fades a little
 let hushed = null;
-function unhush() { if (!hushed) return; hushed.track.classList.remove("hush"); hushed.lit.forEach(n => n.classList.remove("lit")); hushed = null; }
+function unhush() { if (!hushed) return; hushed.track.classList.remove("hush"); hushed.lit.forEach(n => n.classList.remove("lit")); hushed = null; markPick(); }
 function hush(t) {
   if (hushed && hushed.el === t && t.isConnected) return; unhush();
   const track = t.closest(".track"); if (!track || track.closest(".band").classList.contains("shut")) return;
+  track.querySelectorAll(".picked").forEach(n => n.classList.remove("picked", "lit"));  // the name box's mark gives way while the pointer rests here
   const lit = [t], stop = n => !n || n.dataset.id || n.classList.contains("wr") || n.classList.contains("life");
   for (let n = t.nextElementSibling; !stop(n); n = n.nextElementSibling) lit.push(n);                       // its words after it
   for (let n = t.previousElementSibling; n && (n.classList.contains("wr") || n.classList.contains("wc")); n = n.previousElementSibling) lit.push(n);  // a book's written box
@@ -1082,6 +1137,7 @@ function hush(t) {
 stage.addEventListener("pointerleave", hideTip);
 const panel = document.getElementById("panel"), pbody = document.getElementById("pbody");
 function openPanel(id) { const o = ALL[id]; if (o.inv && waiting(o.inv)) { afterLoad(o.inv, () => openPanel(id)); return; }
+  if (!picking && picked) { picked = null; markPick(); }  // something else picked: the name box's mark goes
   hideTip(); noteCard("t:" + id); let h = "";
   if (o.kind === "Graphic") h = `${o.img ? `<img src="${o.img}"${o.page ? ` alt="${o.name}, ${o.sub.toLowerCase()}"` : ""}>` : ""}<div class="body"><div class="kind">${o.pdf ? "Map or chart · free" : o.open || o.status}</div><h3>${o.name}</h3><div class="when num">${o.ref} · ${when(o)}</div>
     <p>${o.pdf ? (o.sheet || "One printable sheet, 17 × 11 inches.") + " Its own page carries the full-size view, the notes and the sources." : o.open ? o.sheet : "This sheet is " + o.status.toLowerCase() + ". It will take its place over these years when it is finished."}</p>
@@ -1095,7 +1151,7 @@ function openPanel(id) { const o = ALL[id]; if (o.inv && waiting(o.inv)) { after
   else if (o.kind === "Event") h = `<div class="body"><div class="kind">Events</div><h3>${o.name}</h3><div class="when num">${when(o)}</div>${o.sum ? `<p>${o.sum}.</p>` : ""}<dl><dt>Scripture</dt><dd>${o.ref}</dd><dt>World years</dt><dd class="num">${o.e == null ? amS(o.s) : amS(o.s) + " – " + amS(o.e)}</dd></dl><div class="fine">Placeholder dates and text.</div></div>`;
   else h = `<div class="body"><div class="kind">Books of the Bible · ${o.sec}</div><h3>${o.name}</h3><div class="when num">Written ${when(o)}</div><dl><dt>Writer</dt><dd>${o.author}</dd><dt>World years</dt><dd class="num">${amS(o.s)} – ${amS(o.e)}</dd></dl><div class="fine">Placeholder dates.</div></div>`;
   pbody.innerHTML = h; finishCard(); }
-function closePanel() { panel.classList.remove("open"); }
+function closePanel() { panel.classList.remove("open"); if (picked) { picked = null; markPick(); } }
 
 /* ---------- a card written from the Bible Inventory: every line approved against the NKJV, with its verses ---------- */
 // Everything that names an entry is a link to that entry's own card, so the facts lead from one to the next (09/28/2026).
@@ -1156,6 +1212,7 @@ function invCard(id, band, o) {
 }
 function openEntry(id) { const o = Object.values(ALL).find(o => o.inv === id); if (o) { openPanel(o.id); return; }
   if (waiting(id)) { afterLoad(id, () => openEntry(id)); return; } if (!CARDS[id]) return;
+  if (!picking && picked) { picked = null; markPick(); }
   hideTip(); noteCard("e:" + id); pbody.innerHTML = invCard(id); finishCard(); }
 const cardHist = []; let cardNow = null, cardNav = false, cardBack = false;
 function noteCard(key) {  // a card opened from a card is a step forward; one opened from the timeline starts afresh
@@ -1184,7 +1241,158 @@ pgrip.addEventListener("pointermove", e => { if (panel.classList.contains("sizin
 const endSize = () => { if (!panel.classList.contains("sizing")) return; panel.classList.remove("sizing"); try { localStorage.setItem("vb-card-width", pw); } catch (e) {} };
 pgrip.addEventListener("pointerup", endSize); pgrip.addEventListener("pointercancel", endSize);
 
-new ResizeObserver(() => render()).observe(document.getElementById("stage"));
+/* ======================= THE NAME BOX (D065) ======================= */
+// Study 44, J01 Bible text scholar's option, after Wikipedia's search box (decision D065, 11/15/2026): a box beside the
+// site's name, the first of the controls; from the first letter every match drops below it, the list scrolling, each line
+// the card's name, what the band itself writes of that life, and under it the card's own description line word for word,
+// which is what tells apart the 28 Zechariahs. It searches every person the cards hold, from names.js, which
+// Working\Inventory Link\export_inventory.py writes beside inventory.js; it is fetched the first time the box is used.
+const nq = document.getElementById("nq"), nbox = document.getElementById("nbox"), nfind = document.getElementById("nfind"), markEl = document.querySelector(".mark");
+const nlist = document.createElement("div"); nlist.className = "nlist"; nlist.id = "nlist"; nlist.setAttribute("role", "listbox");
+nlist.innerHTML = `<div class="nl-sc" id="nlsc"></div><div class="nl-ct" id="nlct"></div>`; document.body.append(nlist);
+const nlsc = document.getElementById("nlsc"), nlct = document.getElementById("nlct");
+let NAMES = null, namesWait = null, nHits = [], nGold = -1, picking = false;
+window.VBNAMES = d => { NAMES = d; };
+function needNames() { if (NAMES) return Promise.resolve(); return namesWait || (namesWait = new Promise(res => { const s = document.createElement("script");
+  s.src = "names.js"; s.onload = s.onerror = () => res(); document.head.appendChild(s); })); }
+// capitals and marks ignored; a hyphen counts as a space, so 'Edom' finds Obed-Edom
+const fold = s => (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[‘’'`]/g, "").replace(/[\s\-‐-―]+/g, " ").trim();
+const esc = s => (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+let NPEOPLE = null;  // every person the box can find: {id, n, d, vc, alts, same, keys}
+function namesReady() {
+  if (NPEOPLE) return NPEOPLE;
+  const src = NAMES ? NAMES.people : BAND ? BAND.rows.map(r => [r.i, r.n, (CARDS[r.i] || {}).d || "", r.vc || 0, r.al || []]) : [];  // without names.js, the band's people
+  NPEOPLE = src.map(([id, n, d, vc, alts = [], same = []]) => ({ id, n, d, vc, alts, same, keys: [fold(n), ...alts.map(fold)] }));
+  const byId = new Map(NPEOPLE.map(p => [p.id, p]));
+  // the band row a person is drawn on: their own, or that of an entry the Inventory holds to be the same person
+  NPEOPLE.forEach(p => { if (BYINV.has(p.id)) { p.row = BYINV.get(p.id); return; }
+    const seen = new Set([p.id]), st = [...p.same];
+    while (st.length) { const q = st.shift(); if (seen.has(q)) continue; seen.add(q); if (BYINV.has(q)) { p.row = BYINV.get(q); return; } st.push(...((byId.get(q) || {}).same || [])); } });
+  return NPEOPLE;
+}
+// how well a name matches what is typed: 0 the name itself, 1 it begins the name, 2 it begins a later word of it
+const fit = (k, q) => k === q ? 0 : k.startsWith(q) ? 1 : (" " + k).includes(" " + q) ? 2 : 9;
+function search(raw) {
+  const q = fold(raw); if (!q) return [];
+  const hits = [];
+  namesReady().forEach(p => { let best = 9, alt = null;
+    p.keys.forEach((k, i) => { const t = fit(k, q); if (t < best) { best = t; alt = i ? p.alts[i - 1] : null; } });
+    if (best < 9) hits.push({ p, t: best, alt }); });
+  // the names exactly as typed, then names that begin with it, then the rest; within each, the person the Inventory ties
+  // to the most verses first, then by Inventory number
+  return hits.sort((a, b) => a.t - b.t || b.p.vc - a.p.vc || (a.p.id < b.p.id ? -1 : 1));
+}
+// only what the band itself writes for that life: its own years in the band's words, 'of Levi', the figure or open circle
+function bandWords(o) {
+  if (!o) return { pre: "", post: "not on the timeline" };
+  const r = o.band, c = r.tc ? calT : cal; let yrs = "";
+  if (r.k === "x") yrs = `${c(r.a)} – ${c(r.b)} · ${r.b - r.a} years`;
+  else if (r.k === "w") yrs = `c. ${c(r.a)} – c. ${c(r.b)}`;
+  return { pre: r.pos ? `<span class="nl-pre" title="possible"></span>` : "",
+    post: [yrs ? `<span class="num">${yrs}</span>` : "", r.lnn ? `<em>of ${esc(r.lnn)}</em>` : "", r.f ? `${r.f}%` : ""].filter(Boolean).join(" ") };
+}
+function showList() {
+  const raw = nq.value; if (!fold(raw)) { hideList(); return; }
+  nHits = search(raw); nGold = -1;
+  nlsc.innerHTML = nHits.length ? nHits.map((h, i) => { const w = bandWords(h.p.row);
+      return `<div class="nl" role="option" id="nl${i}" data-i="${i}"><div class="nl-n">${w.pre}${esc(h.p.n)}${h.alt ? ` <i>(${esc(h.alt)})</i>` : ""}${w.post ? `<span class="nl-w">${w.post}</span>` : ""}</div>${h.p.d ? `<div class="nl-d">${esc(h.p.d)}</div>` : ""}</div>`; }).join("")
+    : `<div class="nl-none">No one of that name in the Bible Inventory, which does not yet reach every book.</div>`;
+  nlct.textContent = nHits.length === 1 ? "1 person" : `${nHits.length.toLocaleString()} people`; nlct.style.display = nHits.length ? "" : "none";
+  placeList(); nlist.classList.add("on"); nlsc.scrollTop = 0; nq.setAttribute("aria-expanded", "true"); nq.removeAttribute("aria-activedescendant");
+}
+function placeList() {  // from the box's lower edge, its left on the box's, down to 14 px above the white bar at the foot
+  const r = nq.getBoundingClientRect(), top = r.bottom + 2, left = Math.max(8, Math.min(r.left, innerWidth - 440 - 8));
+  nlist.style.left = left + "px"; nlist.style.top = top + "px"; nlist.style.maxHeight = Math.max(120, Math.min(480, innerHeight - 46 - 14 - top)) + "px";
+}
+function hideList() { nlist.classList.remove("on"); nq.setAttribute("aria-expanded", "false"); nGold = -1; }
+function goldTo(i) {
+  const lines = nlsc.querySelectorAll(".nl"); if (!lines.length) return;
+  if (nGold >= 0 && lines[nGold]) lines[nGold].classList.remove("gold");
+  nGold = Math.max(0, Math.min(lines.length - 1, i)); lines[nGold].classList.add("gold"); lines[nGold].scrollIntoView({ block: "nearest" });
+  nq.setAttribute("aria-activedescendant", "nl" + nGold);
+}
+nq.addEventListener("focus", () => needNames().then(() => { if (document.activeElement === nq && fold(nq.value)) showList(); }));
+nq.addEventListener("click", () => { if (fold(nq.value) && !nlist.classList.contains("on")) needNames().then(showList); });
+nq.addEventListener("input", () => needNames().then(showList));
+nq.addEventListener("keydown", e => {
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); if (!nlist.classList.contains("on")) { if (fold(nq.value)) needNames().then(showList); return; }
+    goldTo(nGold < 0 ? (e.key === "ArrowDown" ? 0 : nHits.length - 1) : nGold + (e.key === "ArrowDown" ? 1 : -1)); }
+  else if (e.key === "Enter") { e.preventDefault(); needNames().then(() => { if (!nlist.classList.contains("on")) showList(); if (nHits.length) choose(nHits[Math.max(0, nGold)].p); }); }
+  else if (e.key === "Escape") { e.preventDefault(); if (nlist.classList.contains("on")) hideList(); else closeFloat(); }
+});
+nlsc.addEventListener("pointerdown", e => e.preventDefault());  // the box keeps the keyboard while a line is clicked
+nlsc.addEventListener("click", e => { const l = e.target.closest(".nl"); if (l) choose(nHits[+l.dataset.i].p); });
+document.addEventListener("pointerdown", e => { if (e.target.closest("#nbox, #nlist, #nfind")) return; hideList(); closeFloat(); }, true);
+// Where the box cannot stand clear of the site's name, the words 'Find a name' stand in its place and open it. On a desktop
+// screen, as the option is written: over the bar at the name's place, 28 px in, the name hidden only while the box is
+// open. On a tablet the name stays (D065 point 2): the box opens below the words, and with a band open just under the bar.
+const tablet = () => matchMedia("(hover: none) and (pointer: coarse)").matches;
+function placeFloat() {
+  const r = nfind.getBoundingClientRect(), cl = document.body.classList; let top, left;
+  if (tablet()) { top = open ? document.querySelector(".top").getBoundingClientRect().bottom + 8 : r.bottom + 6; left = Math.max(14, Math.min(r.left, innerWidth - 220 - 14)); }
+  else { left = 28; top = open ? (60 - 30) / 2 : r.top + r.height / 2 - 15; }
+  cl.toggle("nmarkoff", !tablet() && !!open);  // the slim bar's name gives the box its place while it is open
+  nbox.style.top = top + "px"; nbox.style.left = left + "px"; if (nlist.classList.contains("on")) placeList();
+}
+function openFloat() { nbox.classList.add("float"); nfind.classList.add("on"); placeFloat(); nq.focus(); }
+function closeFloat() { if (!nbox.classList.contains("float")) return; nbox.classList.remove("float"); nbox.style.top = nbox.style.left = ""; nfind.classList.remove("on");
+  document.body.classList.remove("nmarkoff"); hideList(); if (document.activeElement === nq) nq.blur(); }
+nfind.addEventListener("pointerdown", e => e.preventDefault());  // the words take no keyboard, so a second click closes the box
+nfind.addEventListener("click", () => nbox.classList.contains("float") ? closeFloat() : openFloat());
+nq.addEventListener("blur", () => setTimeout(() => { if (document.activeElement !== nq) closeFloat(); }, 0));  // the name comes back when the box closes
+function fitNameBox() {  // called by layout(): does the box stand 16 px clear of the site's name (or of the page's margin)?
+  const cl = document.body.classList, state = () => [cl.contains("nwords"), cl.contains("ncorner"), !!open, tablet()].join();
+  const was = state(), floating = nbox.classList.contains("float");
+  cl.remove("nwords", "ncorner", "nmarkoff");  // the box back in its place to be measured (it stays shown, so it keeps the keyboard)
+  nbox.style.top = nbox.style.left = "";
+  if (getComputedStyle(nbox).display !== "none") {  // on a phone neither shows
+    // the name's own right edge once it has settled: in the slim bar 28 px in at 30 px; on the front page it stands above
+    const mr = markEl.getBoundingClientRect(), limit = open ? 28 + mr.width * 30 / parseFloat(getComputedStyle(markEl).fontSize) + 16 : 28;
+    if (nbox.getBoundingClientRect().left < limit) { cl.add("nwords");
+      // no room in the bar even for the words (a tablet with a band open, where every control is in use): they stand just
+      // under the bar, in the empty corner at its left where the years begin, so the name stays and nothing is covered
+      if (nfind.getBoundingClientRect().left < limit) cl.add("ncorner"); }
+  }
+  // a resize that leaves the box where it was keeps it open (the keyboard of a tablet changes the height); any other closes it
+  if (floating) { if (state() === was && cl.contains("nwords")) placeFloat(); else closeFloat(); }
+  else if (nlist.classList.contains("on")) placeList();
+}
+// choosing a person: one on the band opens the band, moves the years and the scroll to their row, marks it and opens the
+// card; one off the band opens their card alone
+function choose(p) {
+  hideList(); closeFloat(); nq.blur();
+  if (INV) Promise.all([needCard(p.id), p.row ? needCard(p.row.inv) : null]).then(() => place(p)); else place(p);  // the cards first, so they open at once
+}
+function place(p) {
+  const o = p.row;
+  if (!o) { picking = true; if (picked) { picked = null; markPick(); } openEntry(p.id); picking = false; return; }
+  const wasOpen = open === "people", band = BANDS.find(b => b.key === "people");
+  // the window keeps its width; it moves only if the row's start is not already in the part the card leaves uncovered
+  // (with room after it for the name, which a life with no years of its own writes after its start)
+  const pw0 = Math.min(Math.max(pw, 380), Math.max(380, innerWidth - 120)), free = Math.max(120, Math.min(W(), innerWidth - 14 - pw0 - axis.getBoundingClientRect().left - 24));
+  const inSight = am => X(am) >= 8 && X(am) <= free - 160;
+  let at = null;
+  if (!NOYEARS_FAMILY.has(o)) {
+    if (BORDER.includes(o)) at = o.b;
+    else { // a person with no years: the start of the relative they are set under, found through their kin
+      const now = bandRows().vis.includes(o) ? o.b : null;
+      if (now == null || !inSight(now)) { const seen = new Set([o]), st = [o]; let rel = null;
+        while (st.length && !rel) { const x = st.shift(); for (const q of [...bandKin(x), ...(x.band.ln && BYINV.get(x.band.ln) ? [BYINV.get(x.band.ln)] : [])]) {
+          if (seen.has(q)) continue; seen.add(q); if (BORDER.includes(q)) { rel = q; break; } st.push(q); } }
+        at = rel ? rel.b : null; } }
+    if (at != null && !inSight(at)) { const span = v1 - v0; setView(at - free / 2 / W() * span, at - free / 2 / W() * span + span); }
+  }
+  band.el.style.transition = "none";  // the band takes its height at once, so the scroll can be set
+  if (!wasOpen) { open = "people"; layout(); } else { bandCache = null; sizeBands(); render(); }
+  const { vis } = bandRows(), k = vis.indexOf(o), track = band.track;
+  const rowH = Math.min(22, Math.max(BAND_ROW, (track.clientHeight - 12) / Math.max(1, vis.length)));
+  const y = band.el.offsetTop + 38 + 6 + k * rowH + rowH / 2, seenH = innerHeight - topH() - 46 - 66;
+  if (k >= 0) bandsEl.scrollTop = Math.max(0, y - seenH / 2);
+  requestAnimationFrame(() => { band.el.style.transition = ""; });
+  picked = o.id; picking = true;
+  if (p.id === o.inv) openPanel(o.id); else { cardNav = false; openEntry(p.id); }  // a second entry of one person: their own card
+  picking = false; markPick(); settle();
+}
 document.fonts.ready.then(() => layout());
 if (new URLSearchParams(location.search).get("sep")) document.body.classList.add("sep-" + new URLSearchParams(location.search).get("sep"));
 layout();
