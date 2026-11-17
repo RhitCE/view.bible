@@ -201,7 +201,8 @@ function show() {
   const raw = box.value; if (!fold(raw)) { hide(); return; }
   hits = search(raw); gold = -1;
   sc.innerHTML = hits.length ? hits.map((h, i) => { const p = h.p, id = encodeURIComponent(p.id);
-      const map = p.row ? `<a class="go" href="bible-map/index.html#y=${p.row.a}"><span class="arr" aria-hidden="true">→</span>On the Bible Map, in his years</a>`
+      // a life the band places only by its kin (k) has no years given in Scripture, so no place on the map
+      const map = p.row && p.row.k !== "k" ? `<a class="go" href="bible-map/index.html#y=${p.row.a}"><span class="arr" aria-hidden="true">→</span>On the Bible Map, in his years</a>`
         : `<span class="go off"><span class="arr" aria-hidden="true">→</span>No years given for the map</span>`;
       return `<div class="row" role="option" id="r${i}"><div class="who"><div class="n">${esc(p.n)}${p.alts.length ? `<i>also ${esc(p.alts.join(", "))}</i>` : ""}</div>${p.d ? `<div class="d">${esc(p.d)}</div>` : ""}</div>`
         + `<a class="go first" href="bible-timeline/index.html#${id}"><span class="arr" aria-hidden="true">→</span>On the timeline</a>${map}</div>`; }).join("")
