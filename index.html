@@ -114,21 +114,18 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .mark { font-family: "EB Garamond", var(--serif); font-size: 64px; font-weight: 400; color: var(--ink); text-decoration: none; line-height: 1; white-space: nowrap; }
 .mark .smc { font-variant-caps: all-small-caps; letter-spacing: .07em; }
 .mark i { font-style: normal; margin: 0 .04em 0 -.03em; }
-.ways { display: flex; flex-wrap: wrap; justify-content: center; gap: 40px 140px; margin-top: 84px; max-width: calc(100vw - 56px); }
-.way { display: flex; align-items: flex-start; gap: 18px; text-decoration: none; }
 .arr { flex: none; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid var(--gold); color: var(--ink); font-family: var(--sans); }
-.way .arr { width: 40px; height: 40px; font-size: 21px; margin-top: 2px; }
-.way .t { display: block; font-size: 36px; font-weight: 600; line-height: 1.15; color: var(--ink); }
-.way .s { display: block; margin-top: 6px; font-size: 19px; font-style: italic; color: var(--ink-2); }
-.way:hover .t { color: var(--gold); }
-.way:focus-visible { outline: 2px solid var(--ink); outline-offset: 6px; }
-.rule { width: var(--w); height: 1px; background: var(--rule); margin: 70px 0 0; }
+.or { margin-top: 44px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 16px 44px; font-size: 20px; max-width: calc(100vw - 56px); }
+.or .lab { font-style: italic; color: var(--ink-3); }
+.or a { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; }
+.or .arr { width: 30px; height: 30px; font-size: 17px; }
+.or b { font-weight: 600; }
+.or a:hover { color: var(--gold); }
 .lede { margin-top: 44px; font-size: 20px; font-style: italic; color: var(--ink-2); text-align: center; max-width: var(--w); }
-.wrap { position: relative; width: var(--w); margin-top: 22px; }
-.find { display: block; width: 100%; height: 62px; padding: 0 22px; border: 1px solid var(--rule); background: var(--bg); color: var(--ink);
+.wrap { position: relative; width: var(--w); margin-top: 44px; }
+.find { display: block; width: 100%; height: 62px; padding: 0 22px; border: 1px solid var(--gold); background: var(--bg); color: var(--ink);
   font-family: var(--serif); font-size: 26px; outline: none; border-radius: 0; }
 .find::placeholder { font-style: italic; color: var(--ink-3); opacity: 1; }
-.find:focus { border-color: var(--gold); }
 .list { display: none; position: absolute; left: 0; top: 61px; z-index: 5; width: 100%; background: var(--surface); border: 1px solid var(--rule); box-shadow: var(--shadow); }
 .list.on { display: block; }
 .sc { max-height: min(520px, 60vh); overflow-y: auto; }
@@ -146,8 +143,7 @@ a.go:hover { color: var(--gold); }
 .ct { padding: 8px 22px; font-family: var(--sans); font-size: 12px; color: var(--ink-3); }
 .none { padding: 14px 22px; font-size: 17px; font-style: italic; color: var(--ink-2); }
 @media (max-width: 700px) {
-  .page { padding-top: 96px; } .mark { font-size: 46px; } .ways { margin-top: 56px; }
-  .way .t { font-size: 28px; } .way .s { font-size: 17px; } .rule { margin-top: 48px; } .find { font-size: 21px; height: 54px; }
+  .page { padding-top: 96px; } .mark { font-size: 46px; } .or { font-size: 18px; } .find { font-size: 21px; height: 54px; }
   .list { top: 53px; } }
 </style>
 </head>
@@ -155,12 +151,10 @@ a.go:hover { color: var(--gold); }
 <nav class="corner" aria-label="Site"><button id="theme" type="button">Dark</button><span class="div"></span><a href="library/">Library</a><a href="about/">About</a><span class="hitwrap"><a href="sources/">Sources</a><span class="hits" id="hits" aria-hidden="true"></span></span></nav>
 <main class="page">
   <h1 class="nameplate"><a class="mark" href="./" aria-label="View.Bible">V<span class="smc">iew</span><i>.</i>B<span class="smc">ible</span></a></h1>
-  <div class="ways">
-    <a class="way" href="bible-timeline/"><span class="arr" aria-hidden="true">→</span><span><span class="t">On the Timeline</span><span class="s">The Bible’s people, events and books on one scale of years</span></span></a>
-    <a class="way" href="bible-map/"><span class="arr" aria-hidden="true">→</span><span><span class="t">On the Map</span><span class="s">Who lived where, year by year, from Adam to the Gospels</span></span></a>
-  </div>
-  <div class="rule"></div>
-  <p class="lede">Or find anyone in the Bible, then see them on the timeline or on the map.</p>
+  <div class="or"><span class="lab">Or begin with</span>
+    <a href="bible-timeline/"><span class="arr" aria-hidden="true">→</span><span><b>On the Timeline:</b> the Bible’s people, events and books</span></a>
+    <a href="bible-map/"><span class="arr" aria-hidden="true">→</span><span><b>On the Map:</b> Who Lived Where, from Adam to the Gospels</span></a></div>
+  <p class="lede">Find anyone in the Bible, then see them on the timeline or on the map.</p>
   <div class="wrap">
     <input class="find" id="find" type="text" autocomplete="off" spellcheck="false" placeholder="Find a person by name" aria-label="Find a person by name" role="combobox" aria-expanded="false" aria-controls="list" aria-autocomplete="list">
     <div class="list" id="list"><div class="sc" id="sc" role="listbox"></div><div class="ct" id="ct"></div></div>
@@ -207,10 +201,10 @@ function show() {
   const raw = box.value; if (!fold(raw)) { hide(); return; }
   hits = search(raw); gold = -1;
   sc.innerHTML = hits.length ? hits.map((h, i) => { const p = h.p, id = encodeURIComponent(p.id);
-      const map = p.row ? `<a class="go" href="bible-map/index.html#y=${p.row.a}"><span class="arr" aria-hidden="true">→</span>On the Map, in those years</a>`
+      const map = p.row ? `<a class="go" href="bible-map/index.html#y=${p.row.a}"><span class="arr" aria-hidden="true">→</span>On the Bible Map, in his years</a>`
         : `<span class="go off"><span class="arr" aria-hidden="true">→</span>No years given for the map</span>`;
       return `<div class="row" role="option" id="r${i}"><div class="who"><div class="n">${esc(p.n)}${p.alts.length ? `<i>also ${esc(p.alts.join(", "))}</i>` : ""}</div>${p.d ? `<div class="d">${esc(p.d)}</div>` : ""}</div>`
-        + `<a class="go first" href="bible-timeline/index.html#${id}"><span class="arr" aria-hidden="true">→</span>On the Timeline</a>${map}</div>`; }).join("")
+        + `<a class="go first" href="bible-timeline/index.html#${id}"><span class="arr" aria-hidden="true">→</span>On the timeline</a>${map}</div>`; }).join("")
     : `<div class="none">No one of that name in the Bible Inventory, which does not yet reach every book.</div>`;
   ct.textContent = hits.length === 1 ? "1 person" : `${hits.length.toLocaleString()} people`; ct.style.display = hits.length ? "" : "none";
   list.classList.add("on"); sc.scrollTop = 0; box.setAttribute("aria-expanded", "true"); box.removeAttribute("aria-activedescendant");
