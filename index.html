@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>(function () { let t = null; try { t = localStorage.getItem("vb-theme"); } catch (e) {}
   if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-  document.documentElement.dataset.theme = t; document.documentElement.classList.add("still"); })();</script>
+  document.documentElement.dataset.theme = t; })();</script>
 <title>View.Bible: Interactive Bible Timeline, Free Maps and Charts</title>
 <meta name="description" content="Scroll through the Bible’s people and events on one timeline, with the verses for each, and download free maps and charts as printable PDFs.">
 <meta name="robots" content="max-image-preview:large">
@@ -25,7 +25,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.ico" sizes="48x48">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="license" href="https://creativecommons.org/licenses/by/4.0/"><!-- one licence target per page, the CC BY 4.0 deed (09/30/2026) -->
+<link rel="license" href="https://creativecommons.org/licenses/by/4.0/">
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -59,7 +59,7 @@
    "@type": "WebPage",
    "@id": "https://view.bible/#webpage",
    "url": "https://view.bible/",
-   "dateModified": "2026-11-16",
+   "dateModified": "2026-11-17",
    "name": "View.Bible: Interactive Bible Timeline, Free Maps and Charts",
    "description": "Scroll through the Bible’s people and events on one timeline, with the verses for each, and download free maps and charts as printable PDFs.",
    "isPartOf": {
@@ -79,1346 +79,162 @@
 </script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Cpath d='M14 4h4v7h6v4h-6v13h-4V15H8v-4h6z' fill='%23fff'/%3E%3C/svg%3E">
 <style>
-/* Newsreader (Production Type, SIL Open Font License), embedded so the page works opened straight from the file */
+/* The front page as the owner chose it on 11/16/2026 (Option C, revised): the site's name; the two ways in, On the Timeline
+   and On the Map; below them one box to find a person by name, each match going to the timeline or to the map in that
+   person's years. Built 11/17/2026 at his word. The timeline's type and colours (Study 4), light and dark. */
 @font-face { font-family: "Newsreader"; font-style: normal; font-weight: 200 800; font-display: block; src: url(fonts/newsreader-latin-opsz-normal.woff2) format("woff2"); }
-/* EB Garamond (Georg Duffner, SIL Open Font License) for the name only, as the owner chose it in Identity Research.pdf */
 @font-face { font-family: "EB Garamond"; font-style: normal; font-weight: 400; font-display: block; src: url(fonts/eb-garamond-latin-400-normal.woff2) format("woff2"); }
 @font-face { font-family: "Newsreader"; font-style: italic; font-weight: 200 800; font-display: block; src: url(fonts/newsreader-latin-opsz-italic.woff2) format("woff2"); }
-
-/* The colours of Study 4 (Colour Research.pdf, chosen by the owner 09/28/2026): palette "Grapher", after Our World in Data,
-   with the critics' three changes. A neutral page, the maps and charts the only warm things on the screen; gold the one
-   accent, for what you act on; the card's label navy, never red; every text colour at 4.5:1 or more. Light first. */
 :root {
   --bg: #ffffff; --surface: #f7f7f7; --ink: #222222; --ink-2: #505050; --ink-3: #666666; --hair: #e7e7e7; --rule: #cccccc;
-  --label: #1d3d63; --gold: #8a691e; --thumb-bg: #f2f2f2; --mat: #ffffff; --shadow: 0 18px 50px rgba(0,0,0,.14); --bar: #222222;
+  --gold: #8a691e; --shadow: 0 18px 50px rgba(0,0,0,.14);
   --serif: "Newsreader", "Iowan Old Style", Georgia, serif;
   --sans: "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif;
-  --top-h: 60px; --scrub-h: 46px; --axis-h: 66px; --head-h: 38px; --inset: 60px;  /* the timeline starts indented from the band headings (the user, 09/27/2026) */
+  --w: min(900px, calc(100vw - 56px));
 }
 html[data-theme="dark"] {
   --bg: #141414; --surface: #1b1b1b; --ink: #e2e2e2; --ink-2: #b4b4b4; --ink-3: #939393; --hair: #272727; --rule: #393939;
-  --label: #a4b6ca; --gold: #c9a44a; --thumb-bg: #262626; --mat: #262626; --shadow: 0 18px 50px rgba(0,0,0,.6); --bar: #e2e2e2;
+  --gold: #c9a44a; --shadow: 0 18px 50px rgba(0,0,0,.6);
 }
 * { box-sizing: border-box; }
-html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); color: var(--ink); font-family: var(--serif); -webkit-font-smoothing: antialiased; }
+html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--ink); font-family: var(--serif); -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
-.num { font-variant-numeric: lining-nums tabular-nums; }
-/* while the page first lays itself out nothing slides: the masthead's movements are for opening and closing bands */
-html.still *, html.still *::before, html.still *::after { transition: none !important; }
-.nameplate { margin: 0; font: inherit; }
-.nojs { position: absolute; z-index: 6; top: 150px; left: 28px; right: 28px; max-width: 680px; font-size: 17px; line-height: 1.55; background: var(--bg); }
-.nojs li { margin: 6px 0; }
-.sc { font-family: var(--sans); font-size: 10.5px; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); }
-
-/* ---------- masthead ---------- */
-.top { position: absolute; left: 0; right: 0; top: 0; height: var(--top-h); display: flex; align-items: center; padding: 0 28px; border-bottom: 1px solid var(--rule); background: var(--bg); z-index: 5;
-  transition: height .4s cubic-bezier(.2,.7,.2,1), padding-top .4s cubic-bezier(.2,.7,.2,1), padding-bottom .4s cubic-bezier(.2,.7,.2,1); }
-.top::before { content: ""; position: absolute; left: 28px; right: 28px; top: var(--rule-top, 82px); height: 1px; background: var(--rule); opacity: 0; transition: opacity .4s; }
-.front .top { padding-top: var(--pad-top, 76px); padding-bottom: var(--pad-bot, 0px); }
-.front .top::before { opacity: 1; }
-/* the name in the LORD convention (the owner, 09/27/2026): V and B in capitals, the rest in small capitals, a round full stop
-   in the letters' own ink; black and white only */
-.mark { position: absolute; left: 28px; top: 15px; font-family: "EB Garamond", var(--serif); font-size: 30px; font-weight: 400; color: var(--ink); text-decoration: none; line-height: 1;
-  transition: left .4s cubic-bezier(.2,.7,.2,1), top .4s cubic-bezier(.2,.7,.2,1), font-size .4s cubic-bezier(.2,.7,.2,1), transform .4s cubic-bezier(.2,.7,.2,1); }
-.front .mark { left: 50%; top: var(--mark-top, 18px); font-size: var(--mark-fs, 52px); transform: translateX(-50%); }
-.mark .smc { font-variant-caps: all-small-caps; letter-spacing: .07em; }
-.mark i { font-style: normal; margin: 0 .04em 0 -.03em; }
-.range { flex: none; margin: 0 26px; text-align: center; line-height: 1.2; display: flex; align-items: center; gap: 16px; }
-.zb { width: 30px; height: 30px; border: 1px solid var(--rule); border-radius: 50%; font-family: var(--sans); font-size: 17px; line-height: 1; color: var(--ink-2); display: inline-flex; align-items: center; justify-content: center; }
-.zb { color: var(--gold); border-color: color-mix(in srgb, var(--gold) 55%, transparent); }  /* − and + in gold (the user, 09/27/2026) */
-.zb:hover { color: var(--gold); border-color: var(--gold); }
-.range b { display: block; font-weight: 500; font-size: 17px; }
-.range span { font-family: var(--sans); font-size: 11.5px; color: var(--ink-3); }
-.width { min-width: 150px; text-align: center; }  /* the window's width in years, set by − and + (the user, 09/27/2026) */
-.width em { font-style: normal; font-weight: 400; color: var(--ink-2); }
-.range small { display: block; font-family: var(--sans); font-size: 11.5px; color: var(--ink-3); white-space: nowrap; margin-top: 1px; }
-/* the controls either side of the width, in two equal halves so the width stands at the centre (the user, 09/27/2026) */
-.ctrl { flex: 1 1 0; min-width: 0; justify-content: flex-end; display: flex; position: relative; align-items: center; font-family: var(--sans); font-size: 12.5px; color: var(--ink-2); }
-.ctrl button, .ctrl a { padding: 6px 10px; color: var(--ink-2); text-decoration: none; }
-.ctrl button:hover, .ctrl a:hover { color: var(--ink); }
-.ctrl .div { width: 1px; height: 18px; background: var(--rule); margin: 0 6px; }
+.corner { position: absolute; top: 22px; right: 28px; display: flex; align-items: center; font-family: var(--sans); font-size: 13.5px; }
+.corner a, .corner button { padding: 6px 10px; color: var(--ink-2); text-decoration: none; }
+.corner a:hover, .corner button:hover { color: var(--ink); }
+.corner .div { width: 1px; height: 18px; margin: 0 6px; background: var(--rule); }
 /* the visit counter over "Sources" (the owner, 09/30/2026: a small number, no label) */
 .hitwrap { position: relative; display: flex; }
 .hits { position: absolute; right: 10px; top: -4px; font-family: var(--sans); font-size: 9px; line-height: 11px; color: var(--ink-3);
   font-variant-numeric: tabular-nums; white-space: nowrap; pointer-events: none; }
-
-/* ---------- stage ---------- */
-.stage { position: absolute; top: var(--top-h); bottom: var(--scrub-h); left: 0; right: 0; transition: top .4s cubic-bezier(.2,.7,.2,1); }
-.axis { position: absolute; left: var(--inset); right: 0; top: 0; height: var(--axis-h); overflow: hidden; transition: height .4s cubic-bezier(.2,.7,.2,1); }
-.stage::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--axis-h) - 1px); height: 2px; background: var(--ink-3); z-index: 3; transition: top .4s cubic-bezier(.2,.7,.2,1); }
-/* landmarks: faint dashed lines through every band, behind everything (the user, 09/27/2026) */
-.marks { position: absolute; left: var(--inset); right: 0; top: var(--axis-h); bottom: 0; overflow: hidden; pointer-events: none; transition: top .4s cubic-bezier(.2,.7,.2,1); }
-.mk { position: absolute; top: 0; bottom: 0; width: 0; border-left: 1px dashed var(--ink-3); opacity: .6; }
-.mkl { position: absolute; top: 4px; transform: translateX(-50%); padding: 1px 6px; background: var(--bg); font-family: var(--sans); font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; }
-.bands { position: absolute; left: 0; right: 0; top: var(--axis-h); bottom: 0; display: flex; flex-direction: column; transition: top .4s cubic-bezier(.2,.7,.2,1);
-  overflow-x: hidden; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
-.band { position: relative; flex: none; transition: height .4s cubic-bezier(.2,.7,.2,1); overflow: hidden; }
-/* the rule between bands: a gold hairline (the user, 09/27/2026, from Band separator options.png); for comparison
-   ?sep=1 thick over thin in the mid-grey, ?sep=2 a thicker grey rule, ?sep=4 a double gold rule */
-.band::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--gold); pointer-events: none; z-index: 2; }
-.band:last-child::after { display: none; }
-.sep-1 .band::after, .sep-4 .band::after { height: 5px; background: none; border-top: 2px solid var(--ink-3); border-bottom: 1px solid var(--ink-3); }
-.sep-2 .band::after { height: 2px; background: var(--ink-3); }
-.sep-4 .band::after { border-top-color: var(--gold); border-bottom-color: var(--gold); }
-.bhead { position: absolute; left: 0; right: 0; top: 0; height: var(--head-h); display: flex; align-items: baseline; gap: 12px; padding: 12px 28px 0; cursor: pointer; z-index: 2; user-select: none; }
-.bhead h2 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: .005em; white-space: nowrap; }
-.bhead .deck { font-style: italic; font-size: 13.5px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.bhead .open { margin-left: auto; font-family: var(--sans); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
-.bhead:hover h2, .bhead:hover .open { color: var(--gold); }  /* gold on hover (the user, 09/27/2026) */
-.band.shut .deck { display: none; }
-.track { position: absolute; left: var(--inset); right: 0; top: var(--head-h); bottom: 0; overflow: hidden; cursor: grab; touch-action: pan-y; }
-.track.drag { cursor: grabbing; }
-
-/* axis */
-.era { position: absolute; top: 9px; font-family: var(--sans); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 7px; }
-.erasep { position: absolute; top: 6px; height: 14px; width: 1px; background: var(--rule); }
-.am { position: absolute; top: 28px; font-size: 13px; color: var(--ink); transform: translateX(-50%); white-space: nowrap; }
-.cal { position: absolute; top: 45px; font-size: 12.5px; font-style: italic; color: var(--ink-3); transform: translateX(-50%); white-space: nowrap; }
-.tk { position: absolute; bottom: 0; width: 1px; height: 5px; background: var(--ink-3); }
-.tk.mi { height: 3px; opacity: .75; }  /* every hundred years */
-.today { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--label); opacity: .7; }
-
-/* people */
-.life { position: absolute; height: 3px; background: var(--bar); cursor: pointer; }
-.life.approx { background: none; border-top: 1px dashed var(--ink-2); height: 3px; }
-.life::before, .life::after { content: ""; position: absolute; top: -3px; width: 1px; height: 9px; background: inherit; }
-.life.approx::before, .life.approx::after { background: var(--ink-2); top: -4px; }
-.life::before { left: 0; } .life::after { right: 0; }
-.nm { position: absolute; font-size: 13px; line-height: 1; white-space: nowrap; pointer-events: none; }
-.nm small { font-family: var(--sans); font-size: 10.5px; color: var(--ink-3); margin-left: 6px; }
-.hb { position: absolute; }  /* invisible: the whole row answers the pointer, not the thin line alone */
-.bl { position: absolute; background: var(--ink-3); pointer-events: none; }  /* Books: section brackets, leaders, date columns */
-.wr { position: absolute; height: 9px; border: 1px solid var(--ink-2); pointer-events: none; }  /* Books: when written, an open box */
-.wr.approx { border-style: dashed; }
-.wc { position: absolute; height: 0; border-top: 1px dotted var(--ink-3); pointer-events: none; }  /* Books: links a line to its box */
-.onl { position: absolute; padding: 0 6px; background: var(--bg); font-style: italic; line-height: 1; color: var(--ink-2); white-space: nowrap; pointer-events: none; }  /* Books: a name on its long line */
-.bd { position: absolute; font-family: var(--sans); color: var(--ink-3); line-height: 1; white-space: nowrap; pointer-events: none; }
-.stem { position: absolute; width: 1px; background: var(--ink-3); pointer-events: none; }
-.joint { position: absolute; width: 5px; height: 5px; border-radius: 50%; background: var(--ink-2); transform: translate(-50%, -50%); pointer-events: none; }
-.hit { position: absolute; cursor: pointer; }
-.hit:hover + .nm, .life:hover + .nm, .life:hover + .nm small, .life:hover + .nm + .nm small { color: var(--gold); }
-.life:hover { background: var(--gold); }
-
-/* events */
-.base { position: absolute; left: 0; right: 0; height: 1px; background: var(--ink-2); }
-.ev { position: absolute; cursor: pointer; line-height: 1.25; }
-.ev .d { font-family: var(--sans); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); }
-.ev .h { font-size: 15px; font-weight: 600; white-space: nowrap; }
-.ev .s { font-size: 13px; font-style: italic; color: var(--ink-2); white-space: nowrap; }
-.ev .r { font-family: var(--sans); font-size: 10.5px; color: var(--ink-3); }
-.ev:hover .h { color: var(--gold); }
-.pin { position: absolute; width: 7px; height: 7px; border-radius: 50%; background: var(--bg); border: 1.5px solid var(--ink); transform: translate(-50%, -50%); }
-.span { position: absolute; height: 6px; border: 1px solid var(--ink-2); border-top: 0; cursor: pointer; }
-.span:hover { border-color: var(--gold); }
-.spl { position: absolute; z-index: 1; padding: 0 4px 1px; line-height: 1.1; background: var(--bg); font-size: 12.5px; font-style: italic; color: var(--ink-2); white-space: nowrap; pointer-events: none; }
-.lab { position: absolute; font-size: 13px; font-style: italic; color: var(--ink-2); white-space: nowrap; pointer-events: none; }
-
-/* books */
-.sect { position: absolute; left: 28px; font-family: var(--sans); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; }
-.secrule { position: absolute; left: 0; right: 0; height: 1px; background: var(--hair); }
-.bk { position: absolute; height: 3px; background: var(--ink-2); cursor: pointer; min-width: 3px; }
-.bk:hover { background: var(--gold); }
-/* while the pointer rests on one thing, the rest of its band steps back (Study 4) */
-.track > * { transition: opacity .15s; }
-.track.hush > * { opacity: .42; }
-.track.hush > .lit, .track.hush > .base, .track.hush > .dscale, .track.hush > .dtk, .track.hush > .dyr { opacity: 1; }
-.bkn { position: absolute; font-size: 12.5px; line-height: 1; color: var(--ink); white-space: nowrap; pointer-events: none; }
-
-/* maps and charts */
-.dlink { display: contents; color: inherit; text-decoration: none; }  /* a real <a href> to a finished document's page, wrapped so it adds no box of its own: no underline, colour or focus ring (09/30/2026) */
-.card { position: absolute; z-index: 1; background: var(--surface); border: 1px solid var(--rule); cursor: pointer; overflow: hidden; transition: border-color .15s; }
-.card:hover { border-color: var(--ink-2); }
-.card img { display: block; width: 100%; object-fit: cover; object-position: top; background: var(--thumb-bg); }
-.card .ct { padding: 7px 9px 8px; }
-.card .t { font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.card .u { font-size: 12px; font-style: italic; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
-.card .dl { display: inline-block; white-space: nowrap; margin-top: 8px; padding: 5px 10px; border: 1px solid var(--ink); font-family: var(--sans); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
-.card.ghost { background: var(--bg); border-style: dashed; }
-.card.ghost .ph { display: flex; align-items: center; justify-content: center; font-style: italic; color: var(--ink-3); font-size: 13px; border-bottom: 1px dashed var(--rule); }
-.brk { position: absolute; height: 6px; border: 1px solid var(--ink-2); border-top: 0; pointer-events: none; }
-.lead { position: absolute; background: var(--ink-3); pointer-events: none; }
-.dc { position: absolute; z-index: 1; height: 58px; padding: 6px 9px 0; background: var(--surface); border: 1px solid var(--rule); cursor: pointer; overflow: hidden; transition: border-color .15s; }
-.dc:hover { border-color: var(--ink-2); }
-.dc.ghost { background: var(--bg); border-style: dashed; }
-.dc.slim { height: 24px; padding-top: 3px; }
-.dc .t { font-size: 13.5px; font-weight: 600; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.dc .u { font-size: 12px; font-style: italic; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.dc .k { margin-top: 3px; font-family: var(--sans); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
-.dc.ghost .k { font-family: var(--serif); font-size: 12px; font-style: italic; letter-spacing: 0; text-transform: none; color: var(--ink-3); }
-.dthumb { position: absolute; z-index: 1; object-fit: cover; object-position: top; padding: 5px; background: var(--mat); border: 1px solid var(--rule); cursor: pointer; }  /* matted (Study 4) */
-.dthumb:hover { border-color: var(--ink-2); }
-.dscale { position: absolute; left: 0; right: 0; height: 1px; background: var(--rule); pointer-events: none; }  /* Maps and Charts: the scale of years */
-.dtk { position: absolute; width: 1px; height: 4px; background: var(--ink-3); pointer-events: none; }
-.dyr { position: absolute; font-family: var(--sans); font-size: 10px; color: var(--ink-3); transform: translateX(-50%); white-space: nowrap; pointer-events: none; }
-
-/* ---------- the single white bar ---------- */
-.scrub { position: absolute; left: 0; right: 0; bottom: 0; height: var(--scrub-h); border-top: 2px solid var(--ink-3); background: var(--bg); }  /* the fixed frame's edge (the user, 09/27/2026) */
-.stage, .scrub { user-select: none; -webkit-user-select: none; }  /* a drag never selects the words (the user, 09/27/2026) */
-.strack { position: absolute; left: 28px; right: 28px; top: 0; bottom: 0; cursor: pointer; touch-action: none; }
-.sline { position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--rule); }
-.send { position: absolute; top: 50%; transform: translateY(-50%); font-size: 12px; font-style: italic; color: var(--ink-3); background: var(--bg); padding: 0 8px; }
-.sbar { position: absolute; top: 8px; bottom: 8px; width: 5px; margin-left: -2px; background: var(--bar); border-radius: 1px; cursor: grab; }
-.sbar:active { cursor: grabbing; }
-.chev { position: absolute; top: 50%; width: 8px; height: 12px; margin-top: -6px; background: var(--gold); clip-path: polygon(100% 0, 40% 50%, 100% 100%, 60% 100%, 0 50%, 60% 0); pointer-events: none; }  /* the lever moves left and right (the user, 09/27/2026) */
-.chev.r { transform: scaleX(-1); }
-.slab { position: absolute; top: 50%; transform: translateY(-50%); font-size: 13px; white-space: nowrap; color: var(--ink); background: var(--bg); padding: 0 8px; pointer-events: none; }
-.slab span { font-family: var(--sans); font-size: 11px; color: var(--ink-3); margin-left: 6px; }
-
-/* ---------- tooltip and card ---------- */
-.tip { position: fixed; z-index: 20; pointer-events: none; background: var(--surface); border: 1px solid var(--rule); padding: 9px 12px 10px; box-shadow: var(--shadow); max-width: 300px; opacity: 0; transition: opacity .12s; }
-.tip b { display: block; font-size: 15px; font-weight: 600; }
-.tip i { display: block; color: var(--ink-2); font-size: 13px; margin-top: 2px; }
-.tip span { font-family: var(--sans); font-size: 11px; color: var(--ink-3); }
-.tip img { display: block; width: 360px; height: 233px; object-fit: cover; object-position: top; margin: -9px -12px 9px; padding: 6px; background: var(--mat); border-bottom: 1px solid var(--rule); }
-.tip:has(img) { max-width: 360px; }
-.panel { position: fixed; z-index: 15; top: calc(var(--top-h) + 14px); right: 14px; bottom: calc(var(--scrub-h) + 14px); width: var(--pw, 460px); background: var(--surface); border: 1px solid var(--rule); box-shadow: var(--shadow); transform: translateX(calc(100% + 40px)); transition: transform .32s cubic-bezier(.2,.7,.2,1); display: flex; flex-direction: column; overflow: hidden; }
-.panel.open { transform: none; }
-/* the left edge takes a drag to widen the card; a gold hairline shows it on hover (the user, 09/28/2026) */
-.panel .grip { position: absolute; z-index: 3; left: 0; top: 0; bottom: 0; width: 9px; cursor: ew-resize; touch-action: none; }
-.panel .grip::after { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--gold); opacity: 0; transition: opacity .15s; }
-.panel .grip:hover::after, .panel.sizing .grip::after { opacity: 1; }
-.panel.sizing { transition: none; user-select: none; }
-.panel img { width: 100%; display: block; padding: 8px; background: var(--mat); border-bottom: 1px solid var(--rule); }
-.panel .body { padding: 20px 22px; overflow: auto; }
-.panel .kind { font-family: var(--sans); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--label); }
-.panel h3 { margin: 6px 0 4px; font-size: 27px; font-weight: 600; line-height: 1.1; font-variation-settings: "opsz" 48; }
-.panel .when { font-style: italic; color: var(--ink-2); font-size: 15px; }
-.panel p { font-size: 15.5px; line-height: 1.5; color: var(--ink); margin: 14px 0 0; }
-.panel dl { display: grid; grid-template-columns: 96px 1fr; gap: 6px 16px; margin: 16px 0 0; padding-top: 14px; border-top: 1px solid var(--hair); font-size: 14px; }
-.panel dt { font-family: var(--sans); font-size: 11px; line-height: 1.35; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); padding-top: 2px; }
-.panel dd { margin: 0; }
-.panel .acts { display: flex; gap: 10px; margin-top: 18px; }
-.panel .btn1 { background: var(--ink); color: var(--bg); padding: 10px 16px; font-family: var(--sans); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; text-decoration: none; }
-.panel .btn2 { border: 1px solid var(--rule); padding: 10px 16px; font-family: var(--sans); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink); text-decoration: none; }
-.panel .x { position: absolute; top: 10px; right: 12px; font-family: var(--sans); font-size: 20px; color: var(--ink-3); background: var(--surface); width: 30px; height: 30px; }
-.panel .fine { margin-top: 18px; font-size: 12.5px; font-style: italic; color: var(--ink-3); }
-/* back to the card before, top left; a gold chevron as on the lever (the user, 09/28/2026) */
-.panel .back { display: inline-flex; align-items: center; gap: 7px; margin: -6px 0 12px -2px; padding: 3px 2px; font-family: var(--sans); font-size: 12.5px; color: var(--ink-2); }
-.panel .back:hover { color: var(--gold); }
-.panel .back .chev { position: static; margin-top: 0; width: 7px; height: 11px; }
-/* the card written from the Bible Inventory (09/28/2026): each fact with its verses, each name a link to its own card */
-.panel .desc { margin-top: 10px; font-size: 14.5px; line-height: 1.45; font-style: italic; color: var(--ink-2); }
-.panel dd > div + div { margin-top: 3px; }
-.panel .rf { margin-left: 8px; font-family: var(--sans); font-size: 11px; color: var(--ink-3); }
-.panel .amy { margin-left: 4px; font-family: var(--sans); font-size: 11px; color: var(--ink-3); }
-.panel .bs { margin-left: 1px; position: relative; top: -.45em; vertical-align: baseline; line-height: 0; font-family: var(--sans); font-size: 11px; font-style: normal; color: var(--ink-2); cursor: help; }  /* raised without opening the line */
-.panel .bs:hover { color: var(--gold); }
-.panel .key { margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--hair); font-size: 12.5px; line-height: 1.5; font-style: italic; color: var(--ink-3); }
-.panel .key b { font-family: var(--sans); font-style: normal; font-weight: 400; color: var(--ink-2); margin-right: 3px; }
-.panel .key span { margin: 0 7px; }
-.panel .ctx { font-size: 13px; font-style: italic; color: var(--ink-2); }
-#pbody { flex: 1 1 auto; min-height: 0; overflow: auto; }  /* a long card scrolls inside the panel */
-.panel .alt { font-size: 13px; font-style: italic; color: var(--ink-2); }
-.panel .go { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 3px; cursor: pointer; }
-.panel .go:hover { color: var(--gold); text-decoration-color: var(--gold); }
-.panel .evl { display: grid; grid-template-columns: 68px 1fr; gap: 8px; }
-.panel .evl .yr { font-family: var(--sans); font-size: 11.5px; color: var(--ink-3); padding-top: 2px; }
-/* the way to the interactive map (the owner, 10/06/2026, Decision D038; Study 15's first choice, J6-B, after the NHS
-   website's action links): on the front page a gold arrow in a circle and the map's full title, one link, in the white
-   space under the controls; with a band open the same link, smaller, at the right end of the slim bar. One of the two
-   shows at a time. Tablets such as the iPad show them too (the owner, 10/08/2026, Decision D041); phones (a touch screen
-   under 600 px wide or 500 px high) show neither, as before. */
-.maplink { position: absolute; left: 50%; transform: translateX(-50%); top: calc(var(--pad-top) + 60px + (var(--pad-bot) - 30px) / 2);
-  display: flex; align-items: center; gap: 12px; height: 30px; white-space: nowrap; text-decoration: none; transition: opacity .4s cubic-bezier(.2,.7,.2,1); }
-.maplink .arr, .ctrl .maplink-slim .arr { flex: none; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%;
-  border: 1px solid color-mix(in srgb, var(--gold) 55%, transparent); font-family: var(--sans); color: var(--gold); line-height: 1; }  /* the − and + buttons' own ring */
-.maplink .arr { width: 30px; height: 30px; font-size: 17px; }
-.maplink .w { font-family: var(--serif); font-size: 20px; line-height: 30px; color: var(--ink);
-  text-decoration: underline; text-decoration-color: var(--rule); text-decoration-thickness: 1px; text-underline-offset: 3px; }
-.maplink .w b { font-weight: 600; }
-.maplink:hover .arr, .ctrl .maplink-slim:hover .arr { border-color: var(--gold); }
-.maplink:hover .w { color: var(--gold); text-decoration-color: var(--gold); }
-.maplink:focus-visible, .ctrl a.maplink-slim:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
-body:not(.front) .maplink, .maptight .maplink { opacity: 0; visibility: hidden; pointer-events: none; }
-.ctrl a.maplink-slim { display: none; align-items: center; gap: 6px; margin-left: 8px; padding: 0; color: var(--ink); }
-body:not(.front) .ctrl a.maplink-slim, .maptight .ctrl a.maplink-slim { display: inline-flex; }
-body.mapnoroom .ctrl a.maplink-slim { display: none; }  /* no room for it beside the years (layout(), D041) */
-.ctrl .maplink-slim .arr { width: 22px; height: 22px; font-size: 13px; }
-.ctrl .maplink-slim .w { font-size: 13.5px; color: var(--ink); }
-.ctrl a.maplink-slim:hover .w { color: var(--gold); }
-/* the band of D046 (Study 20, 10/09/2026) */
-.stem.fb-dash { background: none; border-left: 1px dashed var(--ink-2); }
-.stem.fb-alt { background: none; border-left: 1px dotted var(--ink-3); }
-.fb-or { position: absolute; font-size: 9.5px; font-style: italic; color: var(--ink-3); pointer-events: none; }
-.fb-eq { position: absolute; font-family: var(--sans); font-size: 10px; color: var(--ink-3); pointer-events: none; }
-.fb-br { position: absolute; width: 3px; border: 1px solid var(--ink-3); border-right: 0; pointer-events: none; }
-.fb-same { position: absolute; width: 0; border-left: 1px dotted var(--gold); pointer-events: none; }
-.fb-bar { position: absolute; height: 3px; background: var(--bar); pointer-events: none; }
-.fb-bar::before, .fb-bar::after { content: ""; position: absolute; top: -3px; width: 1px; height: 9px; background: inherit; }
-.fb-bar::before { left: 0; } .fb-bar::after { right: 0; }
-.fb-bar.fb-ns::before, .fb-bar.fb-ne::after { display: none; }
-.fb-bar.fb-hol { background: none; border-top: 1px dashed var(--ink-2); }
-.fb-bar.fb-hol::before, .fb-bar.fb-hol::after { background: var(--ink-2); }
-.fb-hair { position: absolute; height: 1px; background: var(--ink-2); pointer-events: none; }
-.fb-hair.fb-in { background: linear-gradient(90deg, transparent, var(--ink-2)); }
-.fb-hair.fb-out { background: linear-gradient(90deg, var(--ink-2), transparent); }
-.fb-dot { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: var(--ink-2); transform: translate(-2px, -1.5px); pointer-events: none; }
-.fb-ring { position: absolute; width: 7px; height: 7px; border: 1px solid var(--ink-2); border-radius: 50%; background: var(--bg); transform: translate(-3px, -2px); pointer-events: none; box-sizing: border-box; }
-.fb-arw { position: absolute; font-family: var(--sans); font-size: 10px; color: var(--ink-3); pointer-events: none; }
-.nm .fb-pc { font-family: var(--sans); font-size: 9.5px; color: var(--ink-3); margin-left: 5px; }
-.nm .fb-od { display: inline-block; width: 6px; height: 6px; border: 1px solid var(--ink-3); border-radius: 50%; margin-right: 4px; vertical-align: 1px; box-sizing: border-box; }
-.nm .fb-of { font-style: italic; font-size: .82em; color: var(--ink-3); margin-left: 5px; }
-.nm .fb-more { font-family: var(--sans); font-size: 9.5px; color: var(--ink-3); margin-left: 6px; }
-.nm .fb-nd { font-style: italic; color: var(--ink-2); }
-.fb-head { position: absolute; font-family: var(--sans); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; }
-.nm.fb-w { background: var(--bg); box-shadow: 0 0 0 2px var(--bg); }  /* a name stands clear of the family lines behind it (D047) */
-/* the name box of D065 (Study 44, J01 Bible text scholar's option, after Wikipedia's search box): the first of the
-   controls, before 'Whole Bible', on the front page and in the slim bar; where it cannot stand clear of the site's name,
-   the words 'Find a name' in its place open it, and the name is never hidden or replaced (D065 point 2) */
-.nbox { flex: none; position: relative; width: 220px; height: 30px; }
-.nbox input { display: block; width: 100%; height: 30px; margin: 0; padding: 0 10px; border: 1px solid var(--rule); border-radius: 0; background: var(--bg); color: var(--ink);
-  font-family: var(--serif); font-size: 14px; outline: none; -webkit-appearance: none; appearance: none; }
-.nbox input::placeholder { font-style: italic; font-size: 13.5px; color: var(--ink-3); opacity: 1; }
-.nbox input:focus { border-color: var(--gold); }
-.ctrl button.nfind { display: none; }
-.ctrl button.nfind:hover, .ctrl button.nfind.on { color: var(--gold); }
-body.nwords .ctrl .nbox { display: none; }
-body.nwords .ctrl button.nfind { display: inline-block; }
-body.nwords .nbox.float { display: block; position: fixed; z-index: 26; box-shadow: var(--shadow); }
-body.ncorner .ctrl .ndiv { display: none; }
-body.ncorner .nbox.float ~ button.nfind { visibility: hidden; }  /* the box it opens stands over the words */
-body.ncorner .ctrl button.nfind { position: fixed; z-index: 4; left: 28px; top: calc(var(--top-h) + 18px); width: 48px; padding: 0 4px 0 0; white-space: normal; text-align: left; line-height: 15px; background: var(--bg); }
-body.nmarkoff .mark { visibility: hidden; }  /* a desktop screen too narrow for the box: the name gives it its place only while it is open */
-.nlist { position: fixed; z-index: 25; width: 440px; display: none; flex-direction: column; background: var(--surface); border: 1px solid var(--rule); box-shadow: var(--shadow); }
-.nlist.on { display: flex; }
-.nlist .nl-sc { flex: 1 1 auto; min-height: 0; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
-.nlist .nl { padding: 8px 12px; border-bottom: 1px solid var(--hair); cursor: pointer; }
-.nlist .nl-n { font-size: 15px; font-weight: 600; line-height: 1.3; color: var(--ink); }
-.nlist .nl-n i { font-weight: 400; }
-.nlist .nl:hover .nl-n, .nlist .nl.gold .nl-n { color: var(--gold); }
-.nlist .nl-w { margin-left: 8px; font-family: var(--sans); font-size: 10.5px; font-weight: 400; color: var(--ink-3); }
-.nlist .nl-w em { font-family: var(--serif); font-size: 12px; margin-right: 5px; }
-.nlist .nl-pre { display: inline-block; width: 6px; height: 6px; border: 1px solid var(--ink-3); border-radius: 50%; margin-right: 5px; vertical-align: 2px; box-sizing: border-box; }
-.nlist .nl-d { margin-top: 2px; font-size: 13px; line-height: 1.4; font-style: italic; color: var(--ink-2); }
-.nlist .nl-none { padding: 10px 12px; font-size: 13.5px; font-style: italic; color: var(--ink-3); }
-.nlist .nl-ct { flex: none; padding: 6px 12px; border-top: 1px solid var(--rule); font-family: var(--sans); font-size: 10.5px; color: var(--ink-3); }
-.nm.picked, .nm.picked .fb-nd { color: var(--gold); }  /* the person chosen in the name box, marked on the band until the card closes; a name with no years too */
-@media (hover: none) and (pointer: coarse) and (max-width: 599px), (hover: none) and (pointer: coarse) and (max-height: 499px) {
-  .maplink, .ctrl a.maplink-slim, .nbox, .ctrl button.nfind, .ctrl .ndiv, .nlist { display: none !important; } }
-@media (max-width: 1180px) { .range span { display: none; } }
+.page { display: flex; flex-direction: column; align-items: center; padding: 150px 28px 60px; }
+.nameplate { margin: 0; font: inherit; }
+/* the name in the LORD convention (the owner, 09/27/2026) */
+.mark { font-family: "EB Garamond", var(--serif); font-size: 64px; font-weight: 400; color: var(--ink); text-decoration: none; line-height: 1; white-space: nowrap; }
+.mark .smc { font-variant-caps: all-small-caps; letter-spacing: .07em; }
+.mark i { font-style: normal; margin: 0 .04em 0 -.03em; }
+.ways { display: flex; flex-wrap: wrap; justify-content: center; gap: 40px 140px; margin-top: 84px; max-width: var(--w); }
+.way { display: flex; align-items: flex-start; gap: 18px; text-decoration: none; }
+.arr { flex: none; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid var(--gold); color: var(--ink); font-family: var(--sans); }
+.way .arr { width: 40px; height: 40px; font-size: 21px; margin-top: 2px; }
+.way .t { display: block; font-size: 36px; font-weight: 600; line-height: 1.15; color: var(--ink); }
+.way .s { display: block; margin-top: 6px; font-size: 19px; font-style: italic; color: var(--ink-2); }
+.way:hover .t { color: var(--gold); }
+.way:focus-visible { outline: 2px solid var(--ink); outline-offset: 6px; }
+.rule { width: var(--w); height: 1px; background: var(--rule); margin: 70px 0 0; }
+.lede { margin-top: 44px; font-size: 20px; font-style: italic; color: var(--ink-2); text-align: center; max-width: var(--w); }
+.wrap { position: relative; width: var(--w); margin-top: 22px; }
+.find { display: block; width: 100%; height: 62px; padding: 0 22px; border: 1px solid var(--rule); background: var(--bg); color: var(--ink);
+  font-family: var(--serif); font-size: 26px; outline: none; border-radius: 0; }
+.find::placeholder { font-style: italic; color: var(--ink-3); opacity: 1; }
+.find:focus { border-color: var(--gold); }
+.list { display: none; position: absolute; left: 0; top: 61px; z-index: 5; width: 100%; background: var(--surface); border: 1px solid var(--rule); box-shadow: var(--shadow); }
+.list.on { display: block; }
+.sc { max-height: min(520px, 60vh); overflow-y: auto; }
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; padding: 14px 22px; border-bottom: 1px solid var(--hair); }
+.row .who { flex: 1 1 320px; min-width: 0; }
+.row .n { font-size: 20px; font-weight: 600; }
+.row .n i { font-weight: 400; color: var(--ink-3); font-size: 16px; margin-left: 8px; }
+.row .d { margin-top: 3px; font-size: 16px; font-style: italic; color: var(--ink-2); }
+.go { display: inline-flex; align-items: center; gap: 8px; font-size: 16px; color: var(--ink); text-decoration: none; white-space: nowrap; }
+.go .arr { width: 24px; height: 24px; font-size: 13px; }
+a.go:hover { color: var(--gold); }
+.go.off { color: var(--ink-3); font-style: italic; }
+.go.off .arr { border-color: var(--rule); color: var(--ink-3); }
+.row.hi .n, .row.hi .go.first { color: var(--gold); }
+.ct { padding: 8px 22px; font-family: var(--sans); font-size: 12px; color: var(--ink-3); }
+.none { padding: 14px 22px; font-size: 17px; font-style: italic; color: var(--ink-2); }
+@media (max-width: 700px) {
+  .page { padding-top: 96px; } .mark { font-size: 46px; } .ways { margin-top: 56px; }
+  .way .t { font-size: 28px; } .way .s { font-size: 17px; } .rule { margin-top: 48px; } .find { font-size: 21px; height: 54px; }
+  .list { top: 53px; } }
 </style>
 </head>
 <body>
-<header class="top">
-  <h1 class="nameplate"><a class="mark" href="#" aria-label="View.Bible">V<span class="smc">iew</span><i>.</i>B<span class="smc">ible</span></a></h1>
-  <nav class="ctrl lft">
-    <span class="nbox" id="nbox"><input id="nq" type="text" autocomplete="off" spellcheck="false" placeholder="Find a person by name" aria-label="Find a person by name" role="combobox" aria-expanded="false" aria-controls="nlist" aria-autocomplete="list"></span><button class="nfind" id="nfind" aria-label="Find a person by name">Find a name</button><span class="div ndiv"></span><button id="fitBible">Whole Bible</button><button id="fitAll">To today</button>
-  </nav>
-  <div class="range"><button class="zb" id="zLess" title="500 fewer years">−</button><div class="width" id="width"></div><button class="zb" id="zMore" title="500 more years">+</button></div>
-  <nav class="ctrl">
-    <button id="theme">Light</button>
-    <span class="div"></span>
-    <a href="library/">Library</a><a href="about/">About</a><span class="hitwrap"><a href="sources/">Sources</a><span class="hits" id="hits" aria-hidden="true"></span></span><a class="maplink-slim" href="canaan-map/"><span class="arr" aria-hidden="true">→</span><span class="w">Canaan Map</span></a>
-  </nav>
-  <a class="maplink" href="canaan-map/"><span class="arr" aria-hidden="true">→</span><span class="w"><b>Canaan Map:</b> Who Lived Where, from Abraham to Joshua</span></a>
-</header>
-
-<noscript><div class="nojs"><p>View.Bible is an interactive timeline of the Bible’s people and events, with free maps and charts to download. The timeline needs JavaScript; the maps and charts do not:</p>
-<!--docs--><ul><li><a href="adam-to-moses-genealogy/">From Adam to Moses</a>: Adam to Moses Genealogy Timeline (Genesis 5 – Exodus 6)</li><li><a href="joshua-allotment-map/">The Allotment of the Land</a>: Map of the Twelve Tribes of Israel (Joshua 13–21)</li><li><a href="exodus-route-map/">The Route of the Exodus</a>: Map of the Route of the Exodus (Exodus 12 – Numbers 33)</li><li><a href="cities-of-refuge-map/">Cities of Refuge and the Levites</a>: Cities of Refuge Map: the Six Cities and 48 Levitical Cities (Joshua 20–21)</li><li><a href="kings-of-israel-and-judah-chart/">The Kings of Israel and Judah</a>: Kings of Israel and Judah Chart (1 Samuel 8 – 2 Kings 25)</li><li><a href="canaan-map/">Who Lived Where, and When</a>: Canaan Map: Who Lived Where, from Abraham to Joshua (Genesis 11 – Joshua 21)</li></ul><!--/docs-->
-<p><a href="library/">The Library</a> · <a href="about/">About</a> · <a href="sources/">Sources</a></p></div></noscript>
-
-<main class="stage" id="stage">
-  <div class="axis" id="axis"></div>
-  <div class="marks" id="marks"></div>
-  <div class="bands" id="bands"></div>
+<nav class="corner" aria-label="Site"><button id="theme" type="button">Dark</button><span class="div"></span><a href="library/">Library</a><a href="about/">About</a><span class="hitwrap"><a href="sources/">Sources</a><span class="hits" id="hits" aria-hidden="true"></span></span></nav>
+<main class="page">
+  <h1 class="nameplate"><a class="mark" href="./" aria-label="View.Bible">V<span class="smc">iew</span><i>.</i>B<span class="smc">ible</span></a></h1>
+  <div class="ways">
+    <a class="way" href="bible-timeline/"><span class="arr" aria-hidden="true">→</span><span><span class="t">On the Timeline</span><span class="s">The Bible’s people, events and books on one scale of years</span></span></a>
+    <a class="way" href="bible-map/"><span class="arr" aria-hidden="true">→</span><span><span class="t">On the Map</span><span class="s">Who lived where, year by year, from Adam to the Gospels</span></span></a>
+  </div>
+  <div class="rule"></div>
+  <p class="lede">Or find anyone in the Bible, then see them on the timeline or on the map.</p>
+  <div class="wrap">
+    <input class="find" id="find" type="text" autocomplete="off" spellcheck="false" placeholder="Find a person by name" aria-label="Find a person by name" role="combobox" aria-expanded="false" aria-controls="list" aria-autocomplete="list">
+    <div class="list" id="list"><div class="sc" id="sc" role="listbox"></div><div class="ct" id="ct"></div></div>
+  </div>
 </main>
-
-<footer class="scrub"><div class="strack" id="strack"></div></footer>
-<div class="tip" id="tip"></div>
-<aside class="panel" id="panel"><div class="grip" id="pgrip" title="Drag to widen"></div><button class="x" id="px" aria-label="Close">×</button><div id="pbody"></div></aside>
-
-<!-- the Bible Inventory's facts, written by Working\Inventory Link\export_inventory.py; the page still works without it -->
-<script src="inventory.js"></script>
-<script src="band.js"></script>
 <script>
-/* ======================= DATA ======================= */
-// Year of the world (AM) is the scale; Ussher: Creation 4004 BC. BC = 4004 - AM; AD = AM - 4003.
-const TODAY = 2026 + 4003;
-const cal = am => am < 4004 ? `${Math.round(4004 - am).toLocaleString()} BC` : `AD ${Math.round(am - 4003).toLocaleString()}`;
-const amS = am => `AM ${Math.round(am).toLocaleString()}`;
-
-const PEOPLE = [ // the Adam to Moses chart (years from Adam), then later lives placed approximately
- ["Adam",0,930,"Genesis 5:3–5"],["Seth",130,1042,"Genesis 5:6–8",0],["Enosh",235,1140,"Genesis 5:9–11",1],["Cainan",325,1235,"Genesis 5:12–14",2],
- ["Mahalalel",395,1290,"Genesis 5:15–17",3],["Jared",460,1422,"Genesis 5:18–20",4],["Enoch",622,987,"Genesis 5:21–24",5],["Methuselah",687,1656,"Genesis 5:25–27",6],
- ["Lamech",874,1651,"Genesis 5:28–31",7],["Noah",1056,2006,"Genesis 5:32; 9:28–29",8],["Shem",1558,2158,"Genesis 11:10–11",9],["Arphaxad",1658,2096,"Genesis 11:12–13",10],
- ["Salah",1693,2126,"Genesis 11:14–15",11],["Eber",1723,2187,"Genesis 11:16–17",12],["Peleg",1757,1996,"Genesis 11:18–19",13],["Reu",1787,2026,"Genesis 11:20–21",14],
- ["Serug",1819,2049,"Genesis 11:22–23",15],["Nahor",1849,1997,"Genesis 11:24–25",16],["Terah",1878,2083,"Genesis 11:26, 32",17],["Abraham",2008,2183,"Genesis 21:5; 25:7",18],
- ["Isaac",2108,2288,"Genesis 25:26; 35:28",19],["Jacob",2168,2315,"Genesis 47:9, 28",20],["Levi",2255,2392,"Exodus 6:16",21,1],["Kohath",2285,2418,"Exodus 6:18",22,1],
- ["Amram",2348,2485,"Exodus 6:20",23,1],["Aaron",2430,2553,"Numbers 33:39",24,1],["Moses",2433,2553,"Deuteronomy 34:7",24],
- ["Joshua",2468,2578,"Joshua 24:29",-1,1],["David",2919,2989,"2 Samuel 5:4",-1,1],["Solomon",2971,3029,"1 Kings 11:42",28,1],["Jesus",4000,4036,"Luke 3:23",-1,1]
-].map(([name,b,d,ref,parent=-1,approx=0],i) => ({id:"p"+i,i,name,b,d,ref,parent,approx:!!approx,kind:"Person"}));
-const KEY_PEOPLE = ["Adam","Noah","Abraham","Moses","David","Jesus"];
-// on the people band, the same six by their Inventory numbers, so that a namesake (Noah the daughter of Zelophehad,
-// PER-00496) is never labelled in their place (11/15/2026)
-const KEY_INV = ["PER-00011", "PER-00035", "PER-00003", "PER-00353", "PER-00661", "PER-03010"];
-// The Bible Inventory (Project Data\Inventory, kept by its own chat) supplies the facts when its export stands beside the
-// page (09/28/2026). Each life the chart shares with it takes its entry and years; every life the Inventory dates from birth
-// to death joins the band; the rows stay in order of birth, each joined to its father.
-const INV = window.INV || null;
-if (INV) {
-  PEOPLE.forEach(p => { const l = INV.lives.filter(l => l.name === p.name).sort((a, b) => Math.abs(a.b - p.b) - Math.abs(b.b - p.b))[0];
-    if (l && Math.abs(l.b - p.b) < 50) { p.inv = l.id; p.b = l.b; if (l.d != null) p.d = l.d; } });
-  const byInv = id => PEOPLE.find(p => p.inv === id);
-  INV.lives.forEach(l => { if (l.d == null || byInv(l.id)) return;
-    PEOPLE.push({ name: l.name, b: l.b, d: l.d, ref: l.ref || "", parent: -1, approx: false, kind: "Person", inv: l.id, fatherInv: l.father }); });
-  const fatherOf = new Map(PEOPLE.map(p => [p, p.fatherInv ? byInv(p.fatherInv) : p.parent >= 0 ? PEOPLE[p.parent] : null]));
-  PEOPLE.sort((a, b) => a.b - b.b);
-  PEOPLE.forEach((p, i) => { p.i = i; p.id = "p" + i; });
-  PEOPLE.forEach(p => { const f = fatherOf.get(p); p.parent = f ? f.i : -1; });
-}
-// The people band of decision D046 (Study 20, 10/09/2026; the biblical genealogist's option): everyone the Inventory joins
-// to another person by kin, as the same person or through a tribe, and everyone a dated event places, from band.js
-// (Working\Inventory Link\family_band.py). Its rows replace the lives above; each person's card stays the Inventory's.
-const BAND = window.BAND || null;
-const UNDATED = [], BYINV = new Map(), BORDER = [];
-const calT = am => am < 3959 ? `${Math.round(3959 - am).toLocaleString()} BC` : `AD ${Math.round(am - 3958).toLocaleString()}`;  // the Teaching Chronology's link (D005)
-if (BAND) {
-  PEOPLE.length = 0;
-  BAND.rows.forEach(r => { if (r.k !== "k" && r.k !== "n") { r.a = r.a ?? r.b; r.b = r.b ?? r.a; }
-    const o = { name: r.n, kind: "Person", inv: r.i, band: r, ref: "", parent: -1, approx: r.k !== "x",
-      b: r.k === "k" ? r.p : (r.a ?? r.b), d: r.k === "k" ? r.p : (r.b ?? r.a) };
-    if (r.k === "n") { o.id = "u" + UNDATED.length; UNDATED.push(o); } else { o.i = PEOPLE.length; o.id = "p" + o.i; PEOPLE.push(o); }
-    BYINV.set(r.i, o); });
-  const all = [...PEOPLE, ...UNDATED];
-  all.forEach(o => { const r = o.band;
-    o.pars = (r.pa || []).filter(x => x[2] !== "o").map(x => ({ q: BYINV.get(x[0]), rel: x[1], st: x[2] })).filter(x => x.q);
-    o.alts = (r.pa || []).filter(x => x[2] === "o").map(x => BYINV.get(x[0])).filter(Boolean);
-    o.sps = (r.sp || []).map(x => ({ q: BYINV.get(x[0]), cc: x[1] === "c" })).filter(x => x.q);
-    o.sibs = (r.sb || []).map(id => BYINV.get(id)).filter(Boolean);
-    o.same = (r.ps || []).map(id => BYINV.get(id)).filter(Boolean);
-    o.kids = []; });
-  all.forEach(o => o.pars.forEach(x => x.q.kids.push(o)));
-  // families as blocks in order of their first year, parents above children, a husband's wives beside him; the lives
-  // joined to no one last
-  const blocks = new Map();
-  PEOPLE.forEach(o => { const k = o.band.t || "\uffff"; if (!blocks.has(k)) blocks.set(k, []); blocks.get(k).push(o); });
-  const seen = new Set();
-  [...blocks.entries()].sort(([ka, a], [kb, b]) => (ka === "\uffff") - (kb === "\uffff") || Math.min(...a.map(o => o.b)) - Math.min(...b.map(o => o.b)))
-    .forEach(([k, g]) => { const inB = new Set(g);
-      const walk = o => { if (seen.has(o)) return; seen.add(o); o.block = k; BORDER.push(o);
-        o.sps.forEach(x => { const s = x.q; if (inB.has(s) && !seen.has(s) && !s.pars.some(y => inB.has(y.q))) { seen.add(s); s.block = k; BORDER.push(s); } });
-        o.kids.filter(c => inB.has(c)).sort((a, b) => a.b - b.b).forEach(walk); };
-      g.filter(o => !o.pars.some(x => inB.has(x.q))).sort((a, b) => a.b - b.b).forEach(walk);
-      g.filter(o => !seen.has(o)).sort((a, b) => a.b - b.b).forEach(walk); });
-}
-
-const EVENTS = [ // [name, start, end|null, summary, reference, major]
- ["Creation",0,null,"God creates the heavens and the earth","Genesis 1–2",1,"EVT-00023"],
- ["Enoch is taken",987,null,"Enoch walks with God, and is not","Genesis 5:24",0,"EVT-00068"],
- ["The Flood",1656,null,"Noah and his house are kept in the ark","Genesis 7–8",1,"EVT-00076"],
- ["The earth divided",1757,null,"In Peleg's days the nations spread","Genesis 10:25; 11"],
- ["Abram leaves Haran",2083,null,"He sets out for Canaan with Sarai and Lot","Genesis 12:4–5",1,"EVT-00009"],
- ["Jacob goes down to Egypt",2298,null,"Seventy persons settle in Goshen","Genesis 46"],
- ["Israel in Egypt",2298,2513,"","Exodus 12:40–41"],
- ["The Exodus",2513,null,"Israel leaves Egypt through the sea","Exodus 12–14",1],
- ["The wilderness",2513,2553,"","Numbers"],
- ["The land divided",2553,2560,"","Joshua 13–21"],
- ["The judges",2560,2909,"","Judges"],
- ["Saul made king",2909,null,"Israel asks for a king","1 Samuel 10"],
- ["The kingdom united",2909,3029,"","1 Samuel – 1 Kings 11"],
- ["The Temple built",2992,null,"Solomon builds the house of the LORD","1 Kings 6",1],
- ["The kingdom divided",3029,3416,"","1 Kings 12 – 2 Kings 25"],
- ["Fall of Samaria",3283,null,"Israel is carried away to Assyria","2 Kings 17"],
- ["Fall of Jerusalem",3416,null,"Judah is carried away to Babylon","2 Kings 25",1],
- ["The exile",3416,3468,"","Jeremiah 29"],
- ["The return",3468,null,"Cyrus lets the exiles go home","Ezra 1"],
- ["Between the Testaments",3600,4000,"","—"],
- ["The birth of Christ",4000,null,"Jesus is born in Bethlehem","Luke 2",1],
- ["The cross and the empty tomb",4036,null,"Christ is crucified and rises","Luke 23–24",1],
- ["Pentecost",4036.2,null,"The Spirit is given; the church begins","Acts 2"],
- ["The Temple destroyed",4073,null,"Jerusalem falls to Rome","foretold in Matthew 24"],
-].map(([name,s,e,sum,ref,major=0,inv],i) => ({id:"e"+i,name,s:inv && INV && INV.events[inv] ? INV.events[inv].y : s,e,sum,ref,major:!!major,kind:"Event",inv}));
-
-const SECTIONS = [
- ["The Law", [["Genesis",2513,2553,"Moses"],["Exodus",2513,2553,"Moses"],["Leviticus",2514,2515,"Moses"],["Numbers",2514,2553,"Moses"],["Deuteronomy",2552,2553,"Moses"]]],
- ["History", [["Joshua",2553,2578,"Joshua"],["Judges",2940,2960,"Samuel"],["Ruth",2940,2960,"Samuel"],["1 Samuel",2950,3000,"Samuel, Nathan, Gad"],["2 Samuel",2980,3000,"Nathan, Gad"],["1 Kings",3416,3444,"Jeremiah"],["2 Kings",3416,3444,"Jeremiah"],["1 Chronicles",3530,3560,"Ezra"],["2 Chronicles",3530,3560,"Ezra"],["Ezra",3547,3554,"Ezra"],["Nehemiah",3559,3574,"Nehemiah"],["Esther",3530,3540,"Unknown"]]],
- ["Poetry", [["Job",2450,2500,"Unknown"],["Psalms",2513,3500,"David and others"],["Proverbs",3000,3304,"Solomon and others"],["Ecclesiastes",3027,3029,"Solomon"],["Song of Solomon",2990,2995,"Solomon"]]],
- ["Major Prophets", [["Isaiah",3244,3306,"Isaiah"],["Jeremiah",3375,3416,"Jeremiah"],["Lamentations",3416,3418,"Jeremiah"],["Ezekiel",3409,3430,"Ezekiel"],["Daniel",3398,3470,"Daniel"]]],
- ["Minor Prophets", [["Hosea",3219,3279,"Hosea"],["Joel",3204,3206,"Joel"],["Amos",3217,3219,"Amos"],["Obadiah",3417,3418,"Obadiah"],["Jonah",3142,3145,"Jonah"],["Micah",3254,3294,"Micah"],["Nahum",3291,3292,"Nahum"],["Habakkuk",3378,3380,"Habakkuk"],["Zephaniah",3374,3376,"Zephaniah"],["Haggai",3484,3485,"Haggai"],["Zechariah",3484,3486,"Zechariah"],["Malachi",3607,3608,"Malachi"]]],
- ["Gospels and Acts", [["Matthew",4053,4063,"Matthew"],["Mark",4058,4068,"Mark"],["Luke",4063,4065,"Luke"],["John",4088,4098,"John"],["Acts",4065,4066,"Luke"]]],
- ["Letters and Revelation", [["Romans",4060,4061,"Paul"],["1 Corinthians",4058,4059,"Paul"],["2 Corinthians",4059,4060,"Paul"],["Galatians",4052,4053,"Paul"],
-  ["Ephesians",4063,4065,"Paul"],["Philippians",4064,4065,"Paul"],["Colossians",4063,4065,"Paul"],["1 Thessalonians",4054,4055,"Paul"],["2 Thessalonians",4054,4055,"Paul"],
-  ["1 Timothy",4065,4067,"Paul"],["2 Timothy",4069,4070,"Paul"],["Titus",4065,4067,"Paul"],["Philemon",4063,4065,"Paul"],["Hebrews",4067,4071,"Unknown"],
-  ["James",4048,4053,"James"],["1 Peter",4065,4067,"Peter"],["2 Peter",4069,4070,"Peter"],["1 John",4088,4098,"John"],["2 John",4088,4098,"John"],["3 John",4088,4098,"John"],
-  ["Jude",4068,4083,"Jude"],["Revelation",4098,4099,"John"]]],
-];
-// the years each book tells (placeholders on Ussher's reckoning); a book not listed tells the years it was written in
-const TOLD = {"Genesis":[0,2369],"Exodus":[2369,2514],"Leviticus":[2514,2515],"Numbers":[2514,2553],"Deuteronomy":[2552,2553],
- "Joshua":[2553,2578],"Judges":[2578,2890],"Ruth":[2680,2690],"1 Samuel":[2833,2949],"2 Samuel":[2949,2989],"1 Kings":[2989,3107],"2 Kings":[3107,3442],
- "1 Chronicles":[2949,2989],"2 Chronicles":[2989,3468],"Ezra":[3468,3547],"Nehemiah":[3559,3574],"Esther":[3521,3531],"Job":[2100,2290],
- "Matthew":[4000,4036],"Mark":[4029,4036],"Luke":[3999,4036],"John":[4029,4036],"Acts":[4036,4065]};
-// once all of a book's chapters are in the Inventory, its years told are the first and last dated events it tells (09/28/2026)
-if (INV && INV.books) Object.entries(INV.books).forEach(([b, v]) => { if (v.told) TOLD[b] = v.told; });
-const BOOKS = []; SECTIONS.forEach(([sec, list], si) => list.forEach(([name,s,e,author]) => { const [ts, te] = TOLD[name] || [s, e];
-  BOOKS.push({id:"k"+BOOKS.length,name,s,e,ts,te,author,sec,si,kind:"Book"}); }));
-
-const DOCS = [
- {id:"d0",name:"From Adam to Moses",sub:"Genealogy timeline chart",s:0,e:2553,img:"img/adam-to-moses-genealogy-timeline-900.jpg",img240:"img/adam-to-moses-genealogy-timeline-240.jpg",pdf:"files/adam-to-moses-genealogy-timeline.pdf",page:"adam-to-moses-genealogy/",size:"1.0 MB",ref:"Genesis 5 – Exodus 6"},
- {id:"d7",name:"Who Lived Where, and When",sub:"Animated map, year by year",s:2008,e:2560,img:"img/canaan-map-900.jpg",img240:"img/canaan-map-240.jpg",page:"canaan-map/",open:"Animated map · free",sheet:"An animated map that plays in the browser: who lived where in Canaan and Egypt, year by year, as the NKJV states it.",ref:"Genesis 11 – Joshua 21"},  /* the Canaan Map, the Inhabitants Slider of Map Assets: no PDF, its page plays it (10/04/2026) */
- {id:"d1",name:"Abraham's Journeys",sub:"Two maps · in progress",s:2083,e:2183,img:"img/abraham.jpg",ref:"Genesis 11–25",status:"In progress"},
- {id:"d2",name:"The Route of the Exodus",sub:"Map of the forty-two stages",s:2513,e:2553,img:"img/exodus-12-numbers-33-route-of-the-exodus-900.jpg",img240:"img/exodus-12-numbers-33-route-of-the-exodus-240.jpg",pdf:"files/exodus-12-numbers-33-route-of-the-exodus.pdf",page:"exodus-route-map/",size:"11.5 MB",sheet:"Two printable pages, 17 × 11 inches.",ref:"Exodus 12 – Numbers 33"},
- {id:"d3",name:"The Allotment of the Land",sub:"Relief map of the tribes",s:2553,e:2560,img:"img/joshua-13-21-tribal-allotment-map-900.jpg",img240:"img/joshua-13-21-tribal-allotment-map-240.jpg",pdf:"files/joshua-13-21-tribal-allotment-map.pdf",page:"joshua-allotment-map/",size:"13.5 MB",ref:"Joshua 13–21"},
- {id:"d4",name:"Cities of Refuge and the Levites",sub:"Map of the forty-eight cities",s:2553,e:2560,img:"img/joshua-20-21-cities-of-refuge-and-the-levites-900.jpg",img240:"img/joshua-20-21-cities-of-refuge-and-the-levites-240.jpg",pdf:"files/joshua-20-21-cities-of-refuge-and-the-levites.pdf",page:"cities-of-refuge-map/",size:"7.1 MB",sheet:"Two printable pages, 17 × 11 inches.",ref:"Joshua 20–21"},
- {id:"d5",name:"The Kings of Israel and Judah",sub:"Reign chart, Saul to Zedekiah",s:2954,e:3418,img:"img/1-samuel-8-2-kings-25-kings-of-israel-and-judah-900.jpg",img240:"img/1-samuel-8-2-kings-25-kings-of-israel-and-judah-240.jpg",pdf:"files/1-samuel-8-2-kings-25-kings-of-israel-and-judah.pdf",page:"kings-of-israel-and-judah-chart/",size:"1.5 MB",ref:"1 Samuel 8 – 2 Kings 25"},
- {id:"d6",name:"Paul's Journeys",sub:"Planned",s:4046,e:4063,ref:"Acts 13–28",status:"Planned",ghost:true},
-].map(d => ({...d,kind:"Graphic"}));
-
-const ERAS = [["Before the Flood",0,1656],["Flood to Abram",1656,2083],["Patriarchs",2083,2298],["Egypt",2298,2513],["Wilderness",2513,2553],
- ["Conquest and Judges",2553,2909],["Kingdom",2909,3029],["Divided Kingdom",3029,3416],["Exile and Return",3416,3600],["Between the Testaments",3600,4000],
- ["Christ",4000,4036],["The Apostles",4036,4100],["The Church",4100,TODAY]];
-
-const BANDS = [
- {key:"people",name:"Descendants of Adam",deck:"Families of Scripture, placed in time"},
- {key:"events",name:"Events",deck:"What happened, in order, with the chapters that tell it"},
- {key:"books",name:"Books of the Bible",deck:"The years each book tells; the box marks when it was written"},
- {key:"docs",name:"Maps and Charts",deck:"Free to download and print, placed over the years they show"},
-];
-const ALL = Object.fromEntries([...PEOPLE,...UNDATED,...EVENTS,...BOOKS,...DOCS].map(o => [o.id,o]));
-
-/* ======================= STATE AND FRAME ======================= */
-const DMIN = -150, DMAX = TODAY + 150;
-let v0 = -80, v1 = 4180, open = null;  // the page opens with every band shut (the user, 09/27/2026)
-const bandsEl = document.getElementById("bands"), axis = document.getElementById("axis");
-BANDS.forEach(b => {
-  const el = document.createElement("section"); el.className = "band"; el.dataset.key = b.key;
-  el.innerHTML = `<div class="bhead"><h2>${b.name}</h2><span class="deck">${b.deck}</span><span class="open"></span></div><div class="track"></div>`;
-  el.querySelector(".bhead").addEventListener("click", () => { open = open === b.key ? null : b.key; layout(); });
-  bandsEl.append(el); b.el = el; b.track = el.querySelector(".track");
-});
-// the people band draws only the rows in sight, so it is drawn again as the bands scroll (D047)
-const peopleTrack = () => BANDS.find(b => b.key === "people").track;
-let scrollTick = 0;
-bandsEl.addEventListener("scroll", () => { if (open !== "people" || scrollTick) return;
-  scrollTick = requestAnimationFrame(() => { scrollTick = 0; const t = peopleTrack(); t.innerHTML = drawPeople(W(), t.clientHeight, false); markPick(); }); }, { passive: true });
-// the person chosen in the name box (D065): their row stays marked, the rest of the band stepped back and the name in
-// gold, until the card closes or something else is picked
-let picked = null;
-function markPick() {
-  const t = peopleTrack(); if (hushed) return;  // while the pointer rests on a row, that row is marked instead
-  t.querySelectorAll(".picked").forEach(n => n.classList.remove("picked", "lit"));
-  const h = picked && open === "people" ? t.querySelector(`.hit[data-id="${picked}"]`) : null;
-  t.classList.toggle("hush", !!h); if (!h) return;
-  for (let n = h; n && (n === h || !n.dataset.id); n = n.nextElementSibling) n.classList.add("lit", "picked");
-}
-
-let laidOut = { open: undefined, w: 0 };  // what layout() last laid out
-function layout() {
-  // With no band open (the page as it first loads) the years and the shut bands sit at the foot, over the lever, and the
-  // masthead takes all the room above: the name large, a hairline and the row of controls, spaced generously and set a
-  // little above the middle. Opening any band returns it to the slim bar (the user, 09/27/2026).
-  const AX = 66, root = document.documentElement.style, TOP = topH();
-  if (!open) { const big = TOP >= 300, fs = big ? 66 : 52, g1 = big ? 40 : 12, g2 = big ? 22 : 0;  // name size; name to rule; rule to controls
-    const t0 = big ? Math.round((TOP - (fs + g1 + 1 + g2 + 60)) * .44) : 18;
-    root.setProperty("--mark-fs", fs + "px"); root.setProperty("--mark-top", t0 + "px");
-    root.setProperty("--rule-top", (t0 + fs + g1) + "px"); root.setProperty("--pad-top", (t0 + fs + g1 + 1 + g2) + "px");
-    root.setProperty("--pad-bot", Math.max(0, TOP - (t0 + fs + g1 + 1 + g2) - 60) + "px"); }
-  root.setProperty("--top-h", TOP + "px"); document.body.classList.toggle("front", !open);
-  // the line to the map takes its slim form when the white space under the controls is too low for it (D038, 10/06/2026)
-  document.body.classList.toggle("maptight", !open && parseFloat(root.getPropertyValue("--pad-bot")) < 40);
-  // and the slim form stays hidden where the controls on the right have no room for it beside the years (a band open on
-  // a narrow screen, such as an iPad held upright; the line returns when the band closes) (D041, 10/08/2026)
-  const slim = document.querySelector(".ctrl a.maplink-slim"); document.body.classList.remove("mapnoroom");
-  if (getComputedStyle(slim).display !== "none") document.body.classList.toggle("mapnoroom",
-    slim.parentElement.firstElementChild.getBoundingClientRect().left < document.querySelector(".range").getBoundingClientRect().right + 12);
-  fitNameBox();  // the name box, or where it has no room the words 'Find a name' (D065)
-  // the bands go back to the top when a band opens or shuts or the width changes, not when only the height does (a tablet's
-  // keyboard, a window made taller) (11/15/2026)
-  stage.style.setProperty("--axis-h", AX + "px"); if (laidOut.open !== open || laidOut.w !== innerWidth) bandsEl.scrollTop = 0;
-  laidOut = { open, w: innerWidth };
-  sizeBands(); settle();
-}
-const SHUT_H = 76;  // a shut band, with room for the rule beneath it
-const topH = () => open ? 60 : Math.max(136, innerHeight - 46 - 66 - SHUT_H * BANDS.length);
-const settle = () => { const t0 = performance.now(); (function f(now) { render(); if (now - t0 < 450) requestAnimationFrame(f); })(t0); };
-let livesSized = -1;
-function sizeBands() {
-  const SHUT = SHUT_H, H = innerHeight - topH() - 46 - 66; livesSized = livesInView();
-  const DOCS_MIN = open === "books" ? SHUT : Math.round(Math.min(196, Math.max(140, H * .27)));
-  const hs = {};
-  // an open band is as tall as its content needs to be read; when that is more than the screen holds, the bands scroll
-  // between the years at the top and the lever at the foot, which stay in place (the user, 09/27/2026)
-  const NEED = { people: livesSized * BAND_ROW + 12 + 38, books: BOOKS.length * 12.5 + 10 + 6 * (SECTIONS.length - 1) + 38 };
-  if (open) {
-    BANDS.forEach(b => hs[b.key] = b.key === open ? 0 : (b.key === "docs" ? DOCS_MIN : SHUT));
-    hs[open] = Math.max(H - Object.values(hs).reduce((a, c) => a + c, 0), NEED[open] || 0);
-  } else BANDS.forEach(b => hs[b.key] = SHUT);
-  BANDS.forEach(b => { b.el.style.height = hs[b.key] + "px"; const shut = b.key !== open && hs[b.key] <= SHUT;
-    b.el.classList.toggle("shut", shut); b.el.querySelector(".open").textContent = b.key === open ? "Close" : "Open"; });
-}
-
-const W = () => axis.clientWidth;
-const X = am => (am - v0) / (v1 - v0) * W();
-const tw = (s, px = 13, k = .5) => s.length * px * k + 2;
-const MC = document.createElement("canvas").getContext("2d"), SANS = getComputedStyle(document.documentElement).getPropertyValue("--sans").trim();
-const mw = (s, font) => { MC.font = font; return MC.measureText(s).width; };
-// an invisible strip the height of the row, from the line's start to the end of its words, laid inside the line
-const hitStrip = (l, r, rowH) => `<i class="hb" style="left:${l}px;width:${r - l}px;top:${1 - rowH / 2}px;height:${rowH}px"></i>`;
-function step(raw) { return [1,2,5,10,20,25,50,100,200,250,500,1000,2000].find(s => s >= raw) || 5000; }
-
-/* ======================= AXIS ======================= */
-function drawAxis() {
-  const w = W(), off = Math.max(0, axis.clientHeight - 66); let s = "";  // off: how far the years have dropped down
-  // where the words 'Find a name' stand in the corner under the bar (a tablet with a band open, D065), the years start past them
-  const nf = document.body.classList.contains("ncorner") ? document.getElementById("nfind").getBoundingClientRect() : null;
-  const cut = nf ? nf.right - axis.getBoundingClientRect().left + 6 : -1e9;
-  const clear = (x, t, font) => x - mw(t, font) / 2 >= cut;
-  ERAS.forEach(e => { const a = X(e[1]), b = X(e[2]); if (a > 0 && a < w) s += `<div class="erasep" style="left:${a}px;height:${14 + off}px"></div>`;
-    const l = Math.max(0, a, cut - 7), r = Math.min(w, b); if (r - l > 50) s += `<div class="era" style="left:${l}px;width:${r - l}px">${e[0]}</div>`; });
-  const st = step((v1 - v0) / w * 110);
-  for (let t = Math.ceil(v0 / st) * st; t <= v1; t += st) if (t >= 0 && clear(X(t), (t + 0).toLocaleString(), "13px Newsreader")) s += `<div class="am num" style="left:${X(t)}px;top:${28 + off}px">${(t + 0).toLocaleString()}</div>`;
-  for (let n = st; n <= 4200; n += st) { const am = 4004 - n; if (am >= v0 && am <= v1 && X(am) > 34) s += `${clear(X(am), n.toLocaleString() + " BC", "italic 12.5px Newsreader") ? `<div class="cal num" style="left:${X(am)}px;top:${45 + off}px">${n.toLocaleString()} BC</div>` : ""}<div class="tk" style="left:${X(am)}px"></div>`; }
-  for (let n = st; n <= 2100; n += st) { const am = n + 4003; if (am >= v0 && am <= v1) s += `${clear(X(am), "AD " + n.toLocaleString(), "italic 12.5px Newsreader") ? `<div class="cal num" style="left:${X(am)}px;top:${45 + off}px">AD ${n.toLocaleString()}</div>` : ""}<div class="tk" style="left:${X(am)}px"></div>`; }
-  // a small tick at every hundred years, BC and AD, where they stand far enough apart (the user, 09/27/2026)
-  if (100 * w / (v1 - v0) >= 6) { for (let n = 100; n <= 4100; n += 100) { const am = 4004 - n; if (am >= v0 && am <= v1 && n % st) s += `<div class="tk mi" style="left:${X(am)}px"></div>`; }
-    for (let n = 100; n <= 2100; n += 100) { const am = n + 4003; if (am >= v0 && am <= v1 && n % st) s += `<div class="tk mi" style="left:${X(am)}px"></div>`; } }
-  const td = X(TODAY); if (td > 0 && td < w) s += `<div class="today" style="left:${td}px"></div>`;
-  axis.innerHTML = s;
-}
-
-/* ======================= WORDS OVER A BASELINE ======================= */
-// Events and Maps and Charts. Each item's words stand on the highest level free of the words to its left, below every level
-// still running at its place, so no stem crosses words. Where no level is free, the item joins the group before it and the
-// group shares one stem, its words stacked up the stem: full blocks where they fit, slim ones where they do not (the user,
-// 09/27/2026). Items come sorted by x, each {x, w}; the result is groups of items, each with its level (lv) and slim flag,
-// or lv null when even alone it cannot be shown.
-function stackPlace(items, levels, blockH, slimH) {
-  let units = items.map(it => [it]);
-  for (let pass = 0; pass < 400; pass++) {
-    const ends = Array(levels).fill(-1e9); let bad = -1;
-    for (let i = 0; i < units.length; i++) {
-      const u = units[i], x = u[0].x, k = u.length, wd = Math.max(...u.map(it => it.w)) + (k > 1 ? 9 : 0);
-      let occ = -1; for (let l = 0; l < levels; l++) if (ends[l] + 14 > x) occ = l;
-      const lv = occ + 1; u.slim = k > 1 && lv + k > levels; const need = u.slim ? Math.ceil(k * slimH / blockH) : k;
-      if (lv + need > levels) { bad = i; break; }
-      u.lv = lv; for (let l = lv; l < lv + need; l++) ends[l] = x + wd;
-    }
-    if (bad < 0) return units;
-    if (bad === 0) { units[0].lv = null; return [units[0], ...stackPlace(units.slice(1).flat(), levels, blockH, slimH)]; }
-    units.splice(bad - 1, 2, units[bad - 1].concat(units[bad]));
-  }
-  return units;
-}
-
-/* ======================= DESCENDANTS OF ADAM ======================= */
-const rowAt = {}; let rowTick = 0;  // each life's row as drawn, eased toward its place
-const livesInView = () => BAND ? bandRows().vis.length : PEOPLE.filter(p => p.d >= v0 && p.b <= v1).length;
-function drawPeople(w, h, shut) {
-  if (BAND) return drawBand(w, h, shut);
-  let s = "";
-  if (shut) { // one line: every birth a tick, the chief names written
-    for (const id in rowAt) delete rowAt[id];
-    const y = 20; s += `<div class="base" style="top:${y}px;opacity:.5"></div>`;
-    let last = -1e9;
-    PEOPLE.forEach(p => { const x = X(p.b); s += `<div class="hit" data-id="${p.id}" style="left:${x - 3}px;top:${y - 5}px;width:7px;height:11px"></div><div class="tk" style="left:${x}px;top:${y - 3}px;height:7px;background:var(--ink-2)"></div>`;
-      if (KEY_PEOPLE.includes(p.name) && x > last) { s += `<div class="lab" style="left:${x + 5}px;top:${y - 17}px">${p.name}</div>`; last = x + tw(p.name) + 14; } });
-    return s;
-  }
-  // Only the lives in the window take rows, so they spread down the band, up to twice the old spacing and the type a size
-  // larger; the rows slide to their new places as lives come and go (the user, 09/27/2026).
-  const vis = PEOPLE.filter(p => p.d >= v0 && p.b <= v1), top = 6, rowH = Math.min(22, (h - 12) / Math.max(1, vis.length));
-  let moving = false;
-  vis.forEach((p, k) => { const goal = top + k * rowH + rowH / 2, cur = rowAt[p.id];
-    const y = cur == null || Math.abs(cur - goal) < .6 ? goal : cur + (goal - cur) * .3; if (y !== goal) moving = true; rowAt[p.id] = y; });
-  Object.keys(rowAt).forEach(id => { if (!vis.some(p => p.id === id)) delete rowAt[id]; });
-  if (moving && !rowTick) rowTick = requestAnimationFrame(() => { rowTick = 0; render(); });
-  vis.forEach(p => { const q = p.parent >= 0 ? PEOPLE[p.parent] : null; if (q && rowAt[q.id] != null) { const x = X(p.b), y0 = rowAt[q.id], y1 = rowAt[p.id];
-    s += `<div class="stem" style="left:${x}px;top:${y0}px;height:${y1 - y0}px"></div><div class="joint" style="left:${x}px;top:${y0 + 1}px"></div>`; } });
-  const fs = rowH >= 18 ? 14 : rowH >= 13 ? 13 : rowH >= 10 ? 11.5 : rowH >= 7.5 ? 10.5 : 0;
-  // Every row reads the same (the user, 09/27/2026): the name and the year of birth before the line, the year of death and
-  // the years lived after it. Words never stand in for a line at the screen's edge: an end off the screen takes its words
-  // with it, and when the start is off, the name moves to the words after the line. Each line answers the pointer across
-  // the height of its row and along its words, so it is easy to pick.
-  const nameW = t => mw(t, `${fs}px Newsreader`) * 1.03 + 1, dateW = t => mw(t, `10.5px ${SANS}`) * 1.03 + 1;
-  vis.forEach(p => { const a = X(p.b), b = X(p.d), y = rowAt[p.id] - 1, wd = Math.max(2, b - a), c = p.approx ? "c. " : "";
-    let h0 = 0, h1 = wd, words = "";
-    if (fs) {
-      const born = c + cal(p.b), died = `${c}${cal(p.d)} · ${p.d - p.b} years`, lw = nameW(p.name) + 6 + dateW(born), top = y - fs / 2 + 1, on = a - 9 - lw >= 0;
-      if (on) { words += `<div class="nm fb-w" style="left:${a - 9 - lw}px;top:${top}px;font-size:${fs}px">${p.name}<small class="num">${born}</small></div>`; h0 = -9 - lw; }
-      words += `<div class="nm" style="left:${b + 9}px;top:${top}px;font-size:${fs}px">${on ? "" : p.name}<small class="num"${on ? ' style="margin-left:0"' : ""}>${died}</small></div>`;
-      h1 = b + 9 + (on ? 0 : nameW(p.name) + 6) + dateW(died) - a; }
-    s += `<div class="life ${p.approx ? "approx" : ""}" data-id="${p.id}" style="left:${a}px;width:${wd}px;top:${y}px">${hitStrip(h0 - 4, h1 + 4, rowH)}</div>${words}`; });
-  return s;
-}
-
-/* The band of D047. Every name takes its own row at every width, never folded, and the band scrolls (the owner,
-   10/09/2026): every placed life in view, and each person with no years in a row under the relative that places them
-   in view, the name only, set at that relative's start, with no line or date; families in which no one has years at the
-   foot, under 'Families with no years given', at the left of the screen. Only the rows in sight are drawn, again
-   as the band scrolls. A life's own years: its bar, an end known only
-   within a window fading across it; a life known by its events: a hairline over their years, a dot at each; one limit
-   only: a ring and an arrow; a life placed by its kin: a hollow ring, no years. The lines: a parent's stem at the
-   child's start, dashed where generations may be missing (Green, 1890) or the link is graded possible or doubtful, dotted
-   and marked 'or' for another reading; husband and wife side by side with '=' between ('-' for a concubine); brothers
-   and sisters with no parent drawn, a bracket; two entries that may be one person, a dotted gold tie; a life joined only
-   through its tribe, 'of Levi'. The figure, discreet: 75% or 30% small and grey after the name; 'possible' a small open
-   circle before it. Dates are written only for a life's own years. */
-let bandCache = null;
-const bandKin = o => [...o.pars.map(x => x.q), ...o.kids, ...o.sps.map(x => x.q), ...o.sibs];
-function bandRows() {
-  const key = v0 + "," + v1; if (bandCache && bandCache.key === key) return bandCache;
-  const inView = o => { const r = o.band; return Math.max(o.b, o.d) >= v0 && Math.min(o.b, o.d) <= v1; };
-  const placed = BORDER.filter(inView), on = new Set(placed), under = new Map();
-  // each person with no years goes under a relative in view, or under one placed so, until no more are found (however
-  // long the line: Luke's list from Nathan to Heli runs more than twelve generations with no years, 11/15/2026)
-  let left = UNDATED;
-  for (let pass = 0; pass <= UNDATED.length && left.length; pass++) {
-    const rest = [];
-    left.forEach(u => { const k = bandKin(u).find(q => on.has(q)) || (u.band.ln && on.has(BYINV.get(u.band.ln)) ? BYINV.get(u.band.ln) : null);
-      if (!k) { rest.push(u); return; } if (!under.has(k)) under.set(k, []); under.get(k).push(u); });
-    if (rest.length === left.length) break;
-    under.forEach(list => list.forEach(u => on.add(u))); left = rest;
-  }
-  const vis = [], put = o => { vis.push(o); (under.get(o) || []).forEach(u => { u.b = u.d = o.b; put(u); }); };
-  placed.forEach(put);
-  // and last, under a heading, the families in which no one has years, at the left of the screen in every window; a
-  // person with no years whose family has years, none of them in view, is out of view like them (D047, 11/15/2026)
-  left = left.filter(o => NOYEARS_FAMILY.has(o));
-  if (left.length) { const at = v0 + 12 / W() * (v1 - v0), done = new Set(), rest = left.slice().sort((p, q) => (p.band.t || "\uffff").localeCompare(q.band.t || "\uffff"));
-    vis.push(NOYEARS_HEAD);
-    const tie = o => { if (done.has(o)) return; done.add(o); o.b = o.d = at; vis.push(o); bandKin(o).filter(q => rest.includes(q) && !done.has(q)).forEach(tie); };
-    rest.forEach(tie); }
-  bandCache = { key, vis }; return bandCache;
-}
-const NOYEARS_HEAD = { head: true, name: "Families with no years given" };
-// the people with no years whose whole family, through every kin link and tribe line the band draws, has no one with years
-const NOYEARS_FAMILY = new Set();
-if (BAND) { const done = new Set(), un = new Set(UNDATED);
-  UNDATED.forEach(u => { if (done.has(u)) return; const fam = new Set([u]), st = [u]; let dated = false;
-    while (st.length) { const x = st.pop(); done.add(x); if (!un.has(x)) { dated = true; continue; }
-      [...bandKin(x), ...(x.band.ln && BYINV.get(x.band.ln) ? [BYINV.get(x.band.ln)] : [])].forEach(q => { if (!fam.has(q)) { fam.add(q); st.push(q); } }); }
-    if (!dated) fam.forEach(q => NOYEARS_FAMILY.add(q)); }); }
-const BAND_ROW = BAND ? 14 : 11;  // the least height of a row: names large enough to read, however many
-function drawBand(w, h, shut) {
-  let s = "";
-  if (shut) {
-    const y = 20; s += `<div class="base" style="top:${y}px;opacity:.5"></div>`; let last = -1e9;
-    BORDER.slice().sort((a, b) => a.b - b.b).forEach(p => { const x = X(p.b); if (x < -10 || x > w + 10) return;
-      s += `<div class="hit" data-id="${p.id}" style="left:${x - 3}px;top:${y - 5}px;width:7px;height:11px"></div><div class="tk" style="left:${x}px;top:${y - 3}px;height:7px;background:var(--ink-2);opacity:${p.band.k === "x" || p.band.k === "w" ? 1 : .4}"></div>`;
-      if (KEY_INV.includes(p.inv) && x > last) { s += `<div class="lab" style="left:${x + 5}px;top:${y - 17}px">${p.name}</div>`; last = x + tw(p.name) + 14; } });
-    return s;
-  }
-  const { vis } = bandRows(), top = 6, rowH = Math.min(22, Math.max(BAND_ROW, (h - 12) / Math.max(1, vis.length)));
-  const yOf = new Map(); vis.forEach((p, k) => yOf.set(p, top + k * rowH + rowH / 2));
-  const fs = rowH >= 18 ? 14 : 13;
-  // only what is in sight of the scrolling bands, with a margin
-  const tr = peopleTrack().getBoundingClientRect(), br = bandsEl.getBoundingClientRect(), lo = br.top - tr.top - 300, hi = br.bottom - tr.top + 300;
-  const seen = (y0, y1) => Math.max(y0, y1) >= lo && Math.min(y0, y1) <= hi;
-  // the lines first, so that the marks and words lie over them
-  vis.forEach(p => { if (p.head) return; const y1 = yOf.get(p), x = X(p.b);
-    p.pars.forEach(l => { const y0 = yOf.get(l.q); if (y0 == null || !seen(y0, y1)) return;
-      s += `<div class="stem ${l.st === "d" ? "fb-dash" : ""}" style="left:${x}px;top:${Math.min(y0, y1)}px;height:${Math.abs(y1 - y0)}px"></div><div class="joint" style="left:${x}px;top:${y0 + 1}px"></div>`; });
-    p.alts.forEach(q => { const y0 = yOf.get(q); if (y0 == null || !seen(y0, y1)) return;
-      s += `<div class="stem fb-alt" style="left:${x - 5}px;top:${Math.min(y0, y1)}px;height:${Math.abs(y1 - y0)}px"></div><div class="fb-or" style="left:${x - 18}px;top:${(y0 + y1) / 2 - 6}px">or</div>`; });
-    p.sps.forEach(l => { const y0 = yOf.get(l.q); if (y0 == null || y0 >= y1 || !seen(y0, y1)) return;
-      s += `<div class="fb-eq" style="left:${Math.min(x, X(l.q.b)) - 13}px;top:${(y0 + y1) / 2 - 7}px">${l.cc ? "-" : "="}</div>`; });
-    if (!p.pars.some(l => yOf.has(l.q))) p.sibs.forEach(q => { const y0 = yOf.get(q); if (y0 == null || y0 >= y1 || !seen(y0, y1)) return;
-      s += `<div class="fb-br" style="left:${Math.max(2, Math.min(x, X(q.b)) - 6)}px;top:${y0}px;height:${y1 - y0}px"></div>`; });
-    p.same.forEach(q => { const y0 = yOf.get(q); if (y0 == null || y0 >= y1 || !seen(y0, y1)) return;
-      s += `<div class="fb-same" style="left:${Math.min(x, X(q.b)) - 9}px;top:${y0}px;height:${y1 - y0}px"></div>`; }); });
-  const nameW = t => mw(t, `${fs}px Newsreader`) * 1.03 + 1, dateW = t => mw(t, `10.5px ${SANS}`) * 1.03 + 1;
-  vis.forEach(p => { if (!seen(yOf.get(p), yOf.get(p))) return;
-    if (p.head) { s += `<div class="fb-head" style="left:12px;top:${yOf.get(p) - 6}px">${p.name}</div>`; return; }
-    const r = p.band, y = yOf.get(p) - 1, c = r.tc ? calT : cal, low = r.f === 30 || r.pos;
-    let a = X(p.b), b = X(p.d), mark = "", born = "", died = "";
-    if (r.k === "x") { mark = `<div class="fb-bar ${low ? "fb-hol" : ""}" style="left:${a}px;width:${Math.max(2, b - a)}px;top:${y}px"></div>`;
-      born = c(r.a); died = `${c(r.b)} · ${r.b - r.a} years`; }
-    else if (r.k === "w") {
-      const s0 = X(Math.min(r.b, Math.max(r.a, r.bw ? r.bw[1] : r.a))), s1 = X(Math.max(r.a, Math.min(r.b, r.dw ? r.dw[0] : r.b)));
-      mark = (s0 > a ? `<div class="fb-hair fb-in" style="left:${a}px;width:${s0 - a}px;top:${y + 1}px"></div>` : "") +
-        (s1 - s0 >= 2 ? `<div class="fb-bar ${low ? "fb-hol" : ""} ${s0 > a ? "fb-ns" : ""} ${b > s1 ? "fb-ne" : ""}" style="left:${s0}px;width:${s1 - s0}px;top:${y}px"></div>` : "") +
-        (b > s1 ? `<div class="fb-hair fb-out" style="left:${s1}px;width:${b - s1}px;top:${y + 1}px"></div>` : "");
-      born = "c. " + c(r.a); died = `c. ${c(r.b)}`; }
-    else if (r.k === "e") { mark = `<div class="fb-hair" style="left:${a}px;width:${Math.max(1, b - a)}px;top:${y + 1}px"></div>` +
-        (r.ev || [r.a, r.b]).filter(e => e >= r.a && e <= r.b).map(e => `<div class="fb-dot" style="left:${X(e)}px;top:${y + 1}px"></div>`).join(""); }
-    else if (r.k === "e1") { const at = X(r.a ?? r.b); a = b = at;
-      mark = `<div class="fb-ring" style="left:${at}px;top:${y}px"></div><div class="fb-arw" style="left:${r.one === "from" ? at + 6 : at - 16}px;top:${y - 6}px">${r.one === "from" ? "\u2192" : "\u2190"}</div>`; }
-    else if (r.k === "k") { mark = `<div class="fb-ring" style="left:${a}px;top:${y}px"></div>`; }
-    const fig = r.f ? `<span class="fb-pc">${r.f}%</span>` : "", od = r.pos ? `<span class="fb-od"></span>` : "";
-    const tag = r.lnn ? `<span class="fb-of">of ${r.lnn}</span>` : "";
-   const lw = nameW(p.name) + (born ? 6 + dateW(born) : 0) + (od ? 10 : 0), tp = y - fs / 2 + 1, on = a - 9 - lw >= 0 && r.k !== "k" && r.k !== "e1" && r.k !== "n";
-    let words = "", h0 = 0, h1 = Math.max(2, b - a);
-    if (on) { words += `<div class="nm fb-w" style="left:${a - 9 - lw}px;top:${tp}px;font-size:${fs}px">${od}${p.name}${born ? `<small class="num">${born}</small>` : ""}</div>`; h0 = -9 - lw; }
-    const after = `${on ? "" : od + (r.k === "n" ? `<span class="fb-nd">${p.name}</span>` : p.name)}${died ? `<small class="num"${on ? ' style="margin-left:0"' : ""}>${died}</small>` : ""}${fig}${tag}`;
-    words += `<div class="nm fb-w" style="left:${b + 9}px;top:${tp}px;font-size:${fs}px">${after}</div>`;
-    h1 = b + 9 + nameW(p.name) + 60 - a;
-    s += `<div class="hit" data-id="${p.id}" style="left:${a + h0 - 4}px;width:${h1 - h0 + 8}px;top:${y + 1 - rowH / 2}px;height:${rowH}px"></div>${mark}${words}`; });
-  return s;
-}
-
-/* ======================= EVENTS ======================= */
-function drawEvents(w, h, shut) {
-  let s = "";
-  const points = EVENTS.filter(e => e.e == null), spans = EVENTS.filter(e => e.e != null);
-  if (shut) {
-    const y = 20; s += `<div class="base" style="top:${y}px"></div>`; let last = -1e9;
-    points.forEach(e => { const x = X(e.s); s += `<div class="pin ev" data-id="${e.id}" style="left:${x}px;top:${y}px"></div>`;
-      if (e.major && x > last) { s += `<div class="lab" style="left:${x + 7}px;top:${y - 18}px">${e.name}</div>`; last = x + tw(e.name) + 18; } });
-    return s;
-  }
-  // A single line of time; each event stands on it, its words raised on one of a few fixed levels; where too many crowd
-  // for the levels they share one stem: a short range line over their pins, one stem rising from it, the words stacked up
-  // it on short ticks (the user, 09/27/2026). Spans hang beneath the line.
-  const baseY = h - 80, blockH = 64, SLIM = 34, levels = Math.max(1, Math.floor((baseY - 8) / blockH));
-  s += `<div class="base" style="top:${baseY}px"></div>`;
-  const items = points.map(e => ({ e, x: X(e.s), w: Math.max(tw(e.name, 15, .52), tw(e.sum, 13, .46), tw(e.ref, 10.5, .55)) + 10 })).filter(it => it.x >= 0 && it.x <= w + 10);  // an event whose pin is off the screen takes its words with it
-  stackPlace(items, levels, blockH, SLIM).forEach(u => {
-    u.forEach(it => s += `<div class="pin" style="left:${it.x}px;top:${baseY}px"></div>`);
-    if (u.lv == null) { u.forEach(it => s += `<div class="hit" data-id="${it.e.id}" style="left:${it.x - 5}px;top:${baseY - 6}px;width:11px;height:12px"></div>`); return; }
-    const x = u[0].x, top0 = 8 + u.lv * blockH, bh = u.slim ? SLIM : blockH;
-    if (u.length === 1) { const e = u[0].e;
-      s += `<div class="stem" style="left:${x}px;top:${top0 + 4}px;height:${baseY - top0 - 4}px"></div>`;
-      s += `<div class="ev" data-id="${e.id}" style="left:${x + 7}px;top:${top0}px"><div class="d num">${cal(e.s)}</div><div class="h">${e.name}</div><div class="s">${e.sum}</div><div class="r">${e.ref}</div></div>`;
-      return; }
-    const xb = u[u.length - 1].x, ry = baseY - 12;
-    s += `<div class="stem" style="left:${x}px;top:${top0 + 7}px;height:${ry - top0 - 7}px"></div><div class="lead" style="left:${x}px;top:${ry}px;width:${xb - x + 1}px;height:1px"></div>`;
-    u.forEach((it, j) => { const e = it.e, tt = top0 + j * bh;
-      s += `<div class="lead" style="left:${it.x}px;top:${ry}px;width:1px;height:${baseY - ry - 3}px"></div><div class="lead" style="left:${x}px;top:${tt + 7}px;width:6px;height:1px"></div>`;
-      s += `<div class="ev" data-id="${e.id}" style="left:${x + 9}px;top:${tt}px"><div class="d num">${cal(e.s)}</div><div class="h">${e.name}</div>${u.slim ? "" : `<div class="s">${e.sum}</div><div class="r">${e.ref}</div>`}</div>`; });
-  });
-  const sEnds = [-1e9, -1e9, -1e9];
-  // each span a bracket hanging from the line, its name set just beneath the bracket on a patch of the page's own colour,
-  // so no bracket or tick runs through the words (the user, 09/27/2026)
-  spans.forEach(e => { const a = X(e.s), b = X(e.e); if (b < 0 || a > w) return;
-    const lw = mw(e.name, "italic 12.5px Newsreader") + 14, row = sEnds.findIndex(v => v + 10 <= a); const r = row < 0 ? sEnds.indexOf(Math.min(...sEnds)) : row; sEnds[r] = Math.max(b, a + lw);
-    const y = baseY + 5 + r * 24; s += `<div class="span" data-id="${e.id}" style="left:${a}px;width:${Math.max(3, b - a)}px;top:${y}px"></div>${row < 0 ? "" : `<div class="spl" style="left:${a + 2}px;top:${y + 8}px">${e.name}</div>`}`; });
-  return s;
-}
-
-/* ======================= BOOKS OF THE BIBLE ======================= */
-// Trial of 09/27/2026, at the user's request: the Books band drawn in the style of the Descendants of Adam band.
-// Each book a fine rule over the years it was written, ticked at both ends, its name at the end; dashed where the date is
-// uncertain (as approximate lives are). Sections in Bible order (form 3 of the options), books by date within each, so
-// every section reads as a staircase. Closed, one line with a tick where each book was written and the chief books named.
-const KEY_BOOKS = ["Genesis", "Psalms", "Isaiah", "Malachi", "Matthew", "Revelation"];
-const APPROX_BOOKS = ["Job", "Joel", "Obadiah"];
-function span(a, b) {
-  if (b - a < 3) return cal(a);
-  if (b < 4004) return `${Math.round(4004 - a).toLocaleString()}–${Math.round(4004 - b).toLocaleString()} BC`;
-  if (a >= 4004) return `AD ${Math.round(a - 4003)}–${Math.round(b - 4003)}`;
-  return `${cal(a)} – ${cal(b)}`;
-}
-const written = k => span(k.s, k.e);
-// the dates beside a book: the years it tells, then when it was written where that differs
-const bookDates = k => k.ts === k.s && k.te === k.e ? written(k) : `${span(k.ts, k.te)} · written ${written(k)}`;
-function drawBooks(w, h, shut) {
-  let s = "";
-  if (shut) {
-    const y = 20; s += `<div class="base" style="top:${y}px;opacity:.5"></div>`;
-    let last = -1e9;
-    BOOKS.slice().sort((a, b) => a.s - b.s).forEach(k => { const x = X(k.s);
-      s += `<div class="hit" data-id="${k.id}" style="left:${x - 3}px;top:${y - 5}px;width:7px;height:11px"></div><div class="tk" style="left:${x}px;top:${y - 3}px;height:7px;background:var(--ink-2)"></div>`;
-      const nm = k.name;
-      if (KEY_BOOKS.includes(k.name) && x > last) { s += `<div class="lab" style="left:${x + 5}px;top:${y - 17}px">${nm}</div>`; last = x + tw(nm) + 14; } });
-    return s;
-  }
-  // Open, as refined by the user 09/27/2026: one line per book for the years it tells, an open box where it was written; a
-  // touch of space between the rows; each section held by a thin grey bracket, its name joined to the middle of it; each
-  // section's dates in one column beyond all its names, a fine leader running from each name to the column (Job, far
-  // earlier than the rest of its section, keeps its dates beside it). Nothing changes side or regroups as the page pans:
-  // the words travel with their lines, as in the Descendants. A long line also carries its name on the line itself.
-  const groups = SECTIONS.map(([sec], si) => ({ sec, books: BOOKS.filter(k => k.si === si).sort((a, b) => a.ts - b.ts || a.te - b.te) }));
-  const gap = 6, n = BOOKS.length, rowH = (h - 10 - gap * (groups.length - 1)) / n;
-  const fs = Math.min(13, Math.floor((rowH - 1.2) / .96 * 2) / 2), show = fs >= 8.5, ds = Math.min(10.5, fs - .5);
-  const PAD = 9, LEAD = 14, NICK = 3, DPAD = 5, CONN = 10;  // line to name; shortest leader; leader short of the column; column to date; stroke to the section name
-  const nameW = t => mw(t, `${fs}px Newsreader`) * 1.04 + 1, dateW = t => mw(t, `${ds}px ${SANS}`) * 1.04 + 1;
-  let y = 5;
-  groups.forEach((g, gi) => {
-    if (gi) y += gap;
-    const rows = g.books.map(k => { const r = { k, a: X(Math.min(k.ts, k.s)), b: X(Math.max(k.te, k.e)), yc: y + rowH / 2 - 1, d: bookDates(k) }; y += rowH;
-      if (show) { r.nw = nameW(k.name); r.dw = dateW(r.d); r.lx = r.b + PAD; }
-      return r; });
-    // One date column per section; a section whose books end more than 700 years apart splits its column in two where the
-    // rows stand furthest apart in time, so the leaders stay short (the user, 09/27/2026; today only History).
-    const colRows = rows.filter(r => r.k.name !== "Job"), endYr = r => Math.max(r.k.te, r.k.e);
-    let parts = [colRows];
-    if (colRows.length >= 4 && Math.max(...colRows.map(endYr)) - Math.min(...colRows.map(endYr)) > 700) {
-      let at = 2; for (let i = 3; i <= colRows.length - 2; i++) if (endYr(colRows[i]) - endYr(colRows[i - 1]) > endYr(colRows[at]) - endYr(colRows[at - 1])) at = i;
-      parts = [colRows.slice(0, at), colRows.slice(at)]; }
-    if (show) parts.forEach(p => { if (p.length < 2) return;
-      const col = Math.round(Math.max(...p.map(r => r.lx + r.nw)) + 4 + LEAD + NICK), y0 = p[0].yc + 1 - rowH * .42, y1 = p[p.length - 1].yc + 1 + rowH * .42;
-      p.forEach(r => r.col = col);
-      s += `<div class="bl" style="left:${col}px;top:${y0}px;width:1px;height:${y1 - y0}px"></div>`; });
-    // the section's name, joined to a bracket the height of its books, just before the earliest of them
-    const first = rows[0], last = rows[rows.length - 1], L = Math.round(Math.min(...rows.map(r => r.a)));
-    if (rows.length > 1) { const bx = L - 10, y0 = first.yc + 1 - rowH * .42, y1 = last.yc + 1 + rowH * .42, ym = Math.round((y0 + y1) / 2);
-      s += `<div class="bl" style="left:${bx}px;top:${y0}px;width:1px;height:${y1 - y0}px"></div><div class="bl" style="left:${bx - CONN}px;top:${ym}px;width:${CONN}px;height:1px"></div>`;
-      s += `<div class="sect" style="left:auto;right:${w - bx + CONN + 5}px;top:${ym - 6}px">${g.sec}</div>`; }
-    else s += `<div class="sect" style="left:auto;right:${w - L + 12}px;top:${first.yc - 5}px">${g.sec}</div>`;
-    // the line: the years the book tells; the box, drawn open around it: the years it was written (the user, 09/27/2026)
-    rows.forEach(r => { const k = r.k, ta = X(k.ts), tb = X(k.te), wd = Math.max(2, tb - ta), wa = X(k.s), wb = X(k.e), ww = Math.max(5, wb - wa);
-      const ap = APPROX_BOOKS.includes(k.name) ? "approx" : "", end = !show ? r.b : r.col != null ? r.col + DPAD + r.dw : r.lx + r.nw + 6 + r.dw;
-      s += `<div class="wr ${ap}" style="left:${(wa + wb - ww) / 2}px;width:${ww}px;top:${r.yc - 3}px"></div>`;
-      if (tb < (wa + wb - ww) / 2 - 2) s += `<div class="wc" style="left:${tb + 2}px;width:${(wa + wb - ww) / 2 - tb - 4}px;top:${r.yc + 1}px"></div>`;
-      else if ((wa + wb + ww) / 2 < ta - 2) s += `<div class="wc" style="left:${(wa + wb + ww) / 2 + 2}px;width:${ta - (wa + wb + ww) / 2 - 4}px;top:${r.yc + 1}px"></div>`;
-      s += `<div class="life ${ap}" data-id="${k.id}" style="left:${ta}px;width:${wd}px;top:${r.yc}px">${hitStrip(r.a - ta - 4, end - ta + 4, rowH)}</div>`;
-      if (!show) return;
-      const top = r.yc - fs / 2 + 1;
-      if (r.col == null) s += `<div class="nm" style="left:${r.lx}px;top:${top}px;font-size:${fs}px">${k.name}<small class="num" style="font-size:${ds}px">${r.d}</small></div>`;
-      else { s += `<div class="nm" style="left:${r.lx}px;top:${top}px;font-size:${fs}px">${k.name}</div>`;
-        const l0 = Math.round(r.lx + r.nw + 4), l1 = r.col - NICK;
-        if (l1 > l0) s += `<div class="bl" style="left:${l0}px;top:${Math.round(r.yc + 1)}px;width:${l1 - l0}px;height:1px"></div>`;
-        s += `<div class="bd num" style="left:${r.col + DPAD}px;top:${r.yc - ds / 2 + 1.5}px;font-size:${ds}px">${r.d}</div>`; }
-      // a long line carries its name on the line too, near the start of the part in view (the user, 09/27/2026)
-      const va = Math.max(ta, 0), vb = Math.min(tb, w);
-      if (vb - va > r.nw + 140) s += `<div class="onl" style="left:${va + 24}px;top:${r.yc + 1.5 - fs / 2}px;font-size:${fs}px">${k.name}</div>`; });
-  });
-  return s;
-}
-
-/* ======================= MAPS AND CHARTS ======================= */
-function drawDocs(w, h, shut) {
-  let s = "";
-  const INVIEW = DOCS.filter(d => d.e >= v0 && d.s <= v1);  // only the sheets whose years are in the window (the user, 09/27/2026)
-  if (shut) { let last = -1e9; INVIEW.map(d => ({ d, m: X((d.s + d.e) / 2) })).sort((u, v) => u.m - v.m).forEach(({ d, m }) => { const cw = 34; let x = Math.max(m - cw / 2, last + 6); last = x + cw;
-      const box = d.img ? `<img class="card" data-id="${d.id}" src="${d.img}"${d.page ? ` alt="${d.name}"` : ""} style="left:${x}px;top:2px;width:${cw}px;height:22px;object-fit:cover;object-position:top">` : `<div class="card ghost" data-id="${d.id}" style="left:${x}px;top:2px;width:${cw}px;height:22px"></div>`;
-      s += d.page ? `<a class="dlink" href="${d.page}">${box}</a>` : box; }); return s; }  // a real link for a finished sheet, invisible: Google's crawler needs the href (09/30/2026)
-  // Open (the user, 09/27/2026): a thin scale of years along the foot; each sheet a label (its title, its years, and its
-  // download or its state) on a stem over the bracket of its years, placed as the Events are, crowded sheets sharing one
-  // stem; the picture appears, enlarged, when the pointer rests on the label.
-  const baseY = h - 30, CH = 58, blockH = CH + 8, SLIM = 30, CW = 232, levels = Math.max(1, Math.floor((baseY - 16) / blockH));
-  s += `<div class="dscale" style="top:${baseY + 8}px"></div>`;
-  const st = step((v1 - v0) / w * 110), marks = [];
-  for (let n = st; n <= 4200; n += st) marks.push([4004 - n, `${n.toLocaleString()} BC`]);
-  for (let n = st; n <= 2100; n += st) marks.push([n + 4003, `AD ${n.toLocaleString()}`]);
-  marks.forEach(([am, lab]) => { const x = X(am); if (x > 20 && x < w - 20) s += `<div class="dtk" style="left:${x}px;top:${baseY + 4}px"></div><div class="dyr num" style="left:${x}px;top:${baseY + 12}px">${lab}</div>`; });
-  INVIEW.forEach(d => { const a = X(d.s), b = X(d.e); s += `<div class="brk" style="left:${a}px;width:${Math.max(3, b - a)}px;top:${baseY - 6}px;opacity:${d.ghost ? .5 : 1}"></div>`; });
-  // each sheet's stem stands on the visible part of its bracket, as near its middle as the label's room allows
-  const items = INVIEW.map(d => { const a = Math.max(X(d.s), 6), b = Math.min(X(d.e), w - 6), land = Math.min(Math.max(X((d.s + d.e) / 2), a), b);
-    return { d, land, x: Math.min(land, w - CW - 16), w: CW }; }).sort((p, q) => p.x - q.x);
-  // the labels sit down near the scale, so their stems stay short
-  const units = stackPlace(items, levels, blockH, SLIM), used = Math.max(0, ...units.filter(u => u.lv != null).map(u => u.lv + (u.slim ? Math.ceil(u.length * SLIM / blockH) : u.length)));
-  const drop = (levels - used) * blockH;
-  // a sheet that stands alone, with room above its label, shows its picture there; the others show theirs on hover, so the
-  // one picture tells the reader to look (the user, 09/27/2026)
-  const TH = Math.round(CW / 1.546), boxes = [];
-  units.forEach(u => { if (u.lv == null) return; const x = u[0].x, top0 = 6 + drop + u.lv * blockH;
-    boxes.push({ u, q: [x + 9, top0, x + 9 + CW, top0 + (u.length - 1) * (u.slim ? SLIM : blockH) + (u.slim ? 24 : CH)] }); });
-  const clash = (q, u) => boxes.some(b => b.u !== u && q[0] < b.q[2] + 6 && q[2] > b.q[0] - 6 && q[1] < b.q[3] + 6 && q[3] > b.q[1] - 6);
-  units.forEach(u => { if (u.lv == null || u.length > 1 || !u[0].d.img) return; const d = u[0].d;
-    const x = u[0].x, top0 = 6 + drop + u.lv * blockH, q = [x + 9, top0 - TH - 4, x + 9 + CW, top0 - 4];
-    if (q[1] >= 4 && !clash(q, u)) { boxes.push({ u: null, q });
-      const img = `<img class="dthumb" data-id="${d.id}" src="${d.img}"${d.img240 ? ` srcset="${d.img240} 240w, ${d.img} 900w" sizes="${CW}px"` : ""} alt="${d.page ? `${d.name}, ${d.sub.toLowerCase()}` : ""}" style="left:${q[0]}px;top:${q[1]}px;width:${CW}px;height:${TH}px">`;
-      s += d.page ? `<a class="dlink" href="${d.page}">${img}</a>` : img; } });
-  units.forEach(u => {
-    if (u.lv == null) return;
-    const x = u[0].x, top0 = 6 + drop + u.lv * blockH, bh = u.slim ? SLIM : blockH, ry = baseY - 14;
-    const lo = Math.min(x, ...u.map(it => it.land)), hi = Math.max(x, ...u.map(it => it.land));
-    s += `<div class="lead" style="left:${x}px;top:${top0 + 12}px;width:1px;height:${ry - top0 - 12}px"></div>`;
-    if (hi > lo) s += `<div class="lead" style="left:${lo}px;top:${ry}px;width:${hi - lo + 1}px;height:1px"></div>`;
-    u.forEach((it, j) => { const d = it.d, tt = top0 + j * bh;
-      s += `<div class="lead" style="left:${it.land}px;top:${ry}px;width:1px;height:8px"></div><div class="lead" style="left:${x}px;top:${tt + 12}px;width:9px;height:1px"></div>`;
-      const card = `<div class="dc ${d.ghost ? "ghost" : ""} ${u.slim ? "slim" : ""}" data-id="${d.id}" style="left:${x + 9}px;top:${tt}px;width:${CW}px"><div class="t">${d.name}</div>`
-        + (u.slim ? "" : `<div class="u num">${cal(d.s)} – ${cal(d.e)} · ${d.ref}</div><div class="k">${d.pdf ? `Download PDF · ${d.size}` : d.open || d.status}</div>`) + `</div>`;
-      s += d.page ? `<a class="dlink" href="${d.page}">${card}</a>` : card; });  // the label too becomes a real link when the sheet is finished (09/30/2026)
-  });
-  return s;
-}
-
-/* ======================= THE SINGLE WHITE BAR ======================= */
-const strack = document.getElementById("strack");
-// the lever's travel: from just after the word "Creation" to just before "Today", so at either end it meets the word
-const SENDS = () => [mw("Creation", "italic 12px Newsreader") + 28, strack.clientWidth - mw("Today", "italic 12px Newsreader") - 28];  // room for the chevrons
-const SX = am => { const [x0, x1] = SENDS(); return x0 + am / TODAY * (x1 - x0); };
-const SAM = px => { const [x0, x1] = SENDS(); return (px - x0) / (x1 - x0) * TODAY; };
-function drawScrub() {
-  const c = leverAt(), x = SX(c), w = strack.clientWidth;
-  const label = `${cal(c)}<span class="num">${amS(c)}</span>`, lw = 190;
-  strack.innerHTML = `<div class="sline"></div><div class="send" style="left:-8px">Creation</div><div class="send" style="right:-8px">Today</div>
-    <div class="slab num" style="left:${x + lw + 28 < w - 60 ? x + 22 : x - lw - 24}px">${label}</div><div class="chev" style="left:${x - 15}px"></div><div class="chev r" style="left:${x + 7}px"></div><div class="sbar" id="sbar" style="left:${x}px"></div>`;
-}
-
-/* ======================= RENDER ======================= */
-const widthEl = document.getElementById("width");
-// the landmarks: the Flood (year of the world 1,656) and the turn from 1 BC to AD 1
-const MARKS = [[1656, "The Flood"], [4004, "BC | AD"]], marksEl = document.getElementById("marks");
-function drawMarks(w) { marksEl.innerHTML = MARKS.map(([am, lab]) => { const x = X(am); return x < -60 || x > w + 60 ? "" : `<div class="mk" style="left:${x}px"></div><div class="mkl" style="left:${x}px">${lab}</div>`; }).join(""); }
-function render() {
-  if (open === "people" && livesInView() !== livesSized) { sizeBands(); settle(); return; }  // more or fewer lives: resize the band
-  axis.style.right = marksEl.style.right = (bandsEl.offsetWidth - bandsEl.clientWidth) + "px";
-  drawAxis(); const w = W(); drawMarks(w);
-  BANDS.forEach(b => { const h = b.track.clientHeight, shut = b.el.classList.contains("shut");
-    if (hushed && hushed.track === b.track) unhush();
-    b.track.innerHTML = b.key === "people" ? drawPeople(w, h, shut) : b.key === "events" ? drawEvents(w, h, shut) : b.key === "books" ? drawBooks(w, h, shut) : drawDocs(w, h, shut); });
-  drawScrub(); markPick();
-  // the width in years, and under it the dates the window spans (the years of the world on wide screens)
-  widthEl.innerHTML = `<b class="num">${Math.round(v1 - v0).toLocaleString()} <em>years</em></b><small class="num">${cal(Math.max(0, v0))} – ${cal(Math.min(TODAY, v1))}<span> · ${amS(Math.max(0, v0))} – ${amS(Math.min(TODAY, v1))}</span></small>`;
-}
-
-/* ======================= INTERACTION ======================= */
-// The view keeps between Creation and today, with a small margin. The lever at the foot works as a scroll bar: where it stands
-// along its line, its year stands across the screen, so at Creation the page begins with Adam and at the far end it closes
-// on today (the user, 09/27/2026).
-// the earliest and latest year the view may begin at: room before Creation for the first row's words, a little after today
-const limits = span => { const y = span / W(); return [-110 * y, TODAY + 20 * y - span]; };
-function setView(a, b) { const span = Math.min(Math.max(b - a, 12), DMAX - DMIN), [lo, hi] = limits(span);
-  v0 = Math.min(Math.max(a, Math.min(lo, hi)), Math.max(lo, hi)); v1 = v0 + span; render(); }
-const leverAt = () => { const [lo, hi] = limits(v1 - v0); return Math.abs(hi - lo) < 1e-6 ? TODAY / 2 : Math.min(1, Math.max(0, (v0 - lo) / (hi - lo))) * TODAY; };
-function toLever(c) { const span = v1 - v0, [lo, hi] = limits(span), a = lo + Math.min(1, Math.max(0, c / TODAY)) * (hi - lo); setView(a, a + span); }
-function animateTo(a, b, ms = 520) { const s0 = v0, s1 = v1, t0 = performance.now();
-  (function f(now) { const t = Math.min(1, (now - t0) / ms), k = 1 - Math.pow(1 - t, 3); setView(s0 + (a - s0) * k, s1 + (b - s1) * k); if (t < 1) requestAnimationFrame(f); })(t0); }
-const stage = document.getElementById("stage");
-// the wheel only scrolls the bands up and down; it never pans or zooms, which made scrolling down move the timeline
-// (the user, 09/27/2026). Ctrl + wheel and a trackpad pinch still zoom; the buttons, a drag and the lever do the rest.
-let wheelSum = 0;
-stage.addEventListener("wheel", e => {
-  if (e.ctrlKey) { e.preventDefault(); wheelSum += e.deltaY; if (Math.abs(wheelSum) < 80) return;
-    const r = axis.getBoundingClientRect(); stepWidth(wheelSum > 0 ? 1 : -1, v0 + (e.clientX - r.left) / r.width * (v1 - v0)); wheelSum = 0; return; }
-  if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) e.preventDefault(); }, { passive: false });
-let drag = null;
-stage.addEventListener("pointerdown", e => { if (e.target.closest(".bhead") || e.target === bandsEl) return; drag = { x: e.clientX, v0, v1, moved: 0 }; stage.setPointerCapture(e.pointerId); });
-stage.addEventListener("pointermove", e => { if (!drag) { hover(e); return; } const dx = e.clientX - drag.x; drag.moved = Math.max(drag.moved, Math.abs(dx));
-  if (drag.moved > 3) { stage.classList.add("drag"); hideTip(); const d = dx / W() * (drag.v1 - drag.v0); setView(drag.v0 - d, drag.v1 - d); } });
-stage.addEventListener("pointercancel", () => { drag = null; stage.classList.remove("drag"); });
-stage.addEventListener("pointerup", e => { if (!drag) return; stage.classList.remove("drag");
-  if (drag.moved <= 3) { const t = document.elementFromPoint(e.clientX, e.clientY), hit = t && t.closest("[data-id]"); if (hit) openPanel(hit.dataset.id); } drag = null; });
-// a finished document's thumbnail and label are real links now (M029, 09/30/2026): a mouse or touch click already opens
-// the card above, by pointer position; this stops the link's own navigation, and opens the card only for a keyboard click
-stage.addEventListener("click", e => { const t = e.target.closest("[data-id]"); if (t && t.closest("a.dlink")) { e.preventDefault(); if (e.detail === 0) openPanel(t.dataset.id); } });
-let sdrag = null;
-strack.addEventListener("pointerdown", e => { e.preventDefault(); toLever(SAM(e.clientX - strack.getBoundingClientRect().left)); sdrag = true; strack.setPointerCapture(e.pointerId); });
-strack.addEventListener("pointermove", e => { if (sdrag) toLever(SAM(e.clientX - strack.getBoundingClientRect().left)); });
-strack.addEventListener("pointerup", () => sdrag = null);
-// The window's width comes in steps of 500 years: + shows the next wider, − the next narrower (the user, 09/27/2026).
-const WIDTHS = []; for (let y = 500; y <= DMAX - DMIN; y += 500) WIDTHS.push(y);
-let aim = { span: 0, until: 0 };  // the width being moved to, so quick presses each take a step
-function stepWidth(dir, at) {
-  const now = performance.now(), span = now < aim.until ? aim.span : v1 - v0;
-  const p = dir > 0 ? (WIDTHS.find(y => y > span + 1) || WIDTHS[WIDTHS.length - 1]) : ([...WIDTHS].reverse().find(y => y < span - 1) || WIDTHS[0]);
-  if (Math.abs(p - (v1 - v0)) < 1) return; aim = { span: p, until: now + 320 };
-  // about the pointer (Ctrl + wheel, pinch), or else keeping the lever where it stands, so at Creation the page still begins there
-  if (at != null) { const k = (at - v0) / (v1 - v0); animateTo(at - k * p, at - k * p + p, 300); return; }
-  const f = leverAt() / TODAY, [lo, hi] = limits(p), a = lo + f * (hi - lo); animateTo(a, a + p, 300); }
-document.getElementById("zMore").onclick = () => stepWidth(1);
-document.getElementById("zLess").onclick = () => stepWidth(-1);
-document.getElementById("fitBible").onclick = () => { const w = W(), s = 4180 * w / (w - 110); animateTo(-110 * s / w, 4180); };  // Creation to AD 177
-document.getElementById("fitAll").onclick = () => animateTo(DMIN, DMAX);
 const themeBtn = document.getElementById("theme");
-const setTheme = (m, keep) => { document.documentElement.dataset.theme = m; themeBtn.textContent = m === "dark" ? "Light" : "Dark";
-  if (keep) try { localStorage.setItem("vb-theme", m); } catch (e) {} render(); };
 themeBtn.textContent = document.documentElement.dataset.theme === "dark" ? "Light" : "Dark";
-themeBtn.onclick = () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark", true);
-matchMedia("(prefers-color-scheme: dark)").addEventListener("change", q => { let t = null; try { t = localStorage.getItem("vb-theme"); } catch (e) {} if (!t) setTheme(q.matches ? "dark" : "light"); });
-addEventListener("keydown", e => { if (e.target && e.target.closest && e.target.closest("#nbox")) return;  // typing in the name box moves nothing else
-  if (e.key === "Escape") closePanel(); if (e.key === "Backspace" && panel.classList.contains("open") && cardHist.length) { e.preventDefault(); cardGoBack(); } if (e.key === "+" || e.key === "=") stepWidth(1); if (e.key === "-") stepWidth(-1);
-  const p = (v1 - v0) * .15; if (e.key === "ArrowLeft") animateTo(v0 - p, v1 - p, 200); if (e.key === "ArrowRight") animateTo(v0 + p, v1 + p, 200); });
+themeBtn.onclick = () => { const m = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+  document.documentElement.dataset.theme = m; themeBtn.textContent = m === "dark" ? "Light" : "Dark"; try { localStorage.setItem("vb-theme", m); } catch (e) {} };
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", q => { let t = null; try { t = localStorage.getItem("vb-theme"); } catch (e) {}
+  if (!t) { document.documentElement.dataset.theme = q.matches ? "dark" : "light"; themeBtn.textContent = q.matches ? "Light" : "Dark"; } });
 
-/* tooltip and card */
-const tip = document.getElementById("tip");
-function when(o) { const s = o.s ?? o.b, e = o.e ?? o.d; return e == null ? cal(s) : `${cal(s)} – ${cal(e)}`; }
-function describe(o) {
-  if (o.band) { const r = o.band, c = r.tc ? calT : cal;
-    const how = { x: `Lived ${r.b - r.a} years`, w: "Born and died within the years shown", e: "Known by the events Scripture places", e1: r.one === "from" ? "Known from this year on" : "Known by this year",
-      k: "Placed by the family; no years given", n: "Named in the family; no years given" }[r.k];
-    const yrs = r.k === "x" ? `${c(r.a)} – ${c(r.b)}` : r.k === "w" ? `c. ${c(r.a)} – c. ${c(r.b)}` : r.k === "e" ? (r.b > r.a ? `${c(r.a)} – ${c(r.b)}` : c(r.a)) : r.k === "e1" ? c(r.a ?? r.b) : "";
-    return `<b>${o.name}</b><i>${how}${r.f ? ` · ${r.f}%` : ""}${r.pos ? " · possible" : ""}</i>${yrs ? `<span class="num">${yrs}</span>` : ""}`; }
-  if (o.kind === "Person") return `<b>${o.name}</b><i>Lived ${o.d - o.b} years${o.approx ? ", placed approximately" : ""}</i><span class="num">${when(o)} · ${o.ref}</span>`;
-  if (o.kind === "Event") return `<b>${o.name}</b>${o.sum ? `<i>${o.sum}</i>` : ""}<span class="num">${when(o)} · ${o.ref}</span>`;
-  if (o.kind === "Book") return `<b>${o.name}</b><i>${o.author}</i><span class="num">${o.ts === o.s && o.te === o.e ? "" : `Tells ${span(o.ts, o.te)} · `}Written ${when(o)}</span>`;
-  return `${o.img ? `<img src="${o.img}" alt="">` : ""}<b>${o.name}</b><i>${o.sub}</i><span class="num">${when(o)} · ${o.ref}</span>`;
-}
-function hover(e) { const t = e.target.closest("[data-id]"); if (!t) { hideTip(); return; } hush(t);
-  const ho = ALL[t.dataset.id]; if (ho && ho.inv && INV) needCard(ho.inv);
-  if (tip.dataset.id !== t.dataset.id) { tip.innerHTML = describe(ALL[t.dataset.id]); tip.dataset.id = t.dataset.id; } tip.style.opacity = 1;
-  const tw0 = tip.offsetWidth, th0 = tip.offsetHeight;  // kept on the screen, above the pointer when there is no room below
-  tip.style.left = Math.max(8, Math.min(innerWidth - tw0 - 8, e.clientX + 16)) + "px";
-  tip.style.top = (e.clientY + 18 + th0 > innerHeight - 8 ? Math.max(8, e.clientY - th0 - 12) : e.clientY + 18) + "px"; }
-function hideTip() { tip.style.opacity = 0; tip.dataset.id = ""; unhush(); }
-// the thing under the pointer and its own words stay; everything else in the band fades a little
-let hushed = null;
-function unhush() { if (!hushed) return; hushed.track.classList.remove("hush"); hushed.lit.forEach(n => n.classList.remove("lit")); hushed = null; markPick(); }
-function hush(t) {
-  if (hushed && hushed.el === t && t.isConnected) return; unhush();
-  const track = t.closest(".track"); if (!track || track.closest(".band").classList.contains("shut")) return;
-  track.querySelectorAll(".picked").forEach(n => n.classList.remove("picked", "lit"));  // the name box's mark gives way while the pointer rests here
-  const lit = [t], stop = n => !n || n.dataset.id || n.classList.contains("wr") || n.classList.contains("life");
-  for (let n = t.nextElementSibling; !stop(n); n = n.nextElementSibling) lit.push(n);                       // its words after it
-  for (let n = t.previousElementSibling; n && (n.classList.contains("wr") || n.classList.contains("wc")); n = n.previousElementSibling) lit.push(n);  // a book's written box
-  lit.forEach(n => n.classList.add("lit")); track.classList.add("hush"); hushed = { el: t, track, lit }; }
-stage.addEventListener("pointerleave", hideTip);
-const panel = document.getElementById("panel"), pbody = document.getElementById("pbody");
-function openPanel(id) { const o = ALL[id]; if (o.inv && waiting(o.inv)) { afterLoad(o.inv, () => openPanel(id)); return; }
-  if (!picking && picked) { picked = null; markPick(); }  // something else picked: the name box's mark goes
-  hideTip(); noteCard("t:" + id); let h = "";
-  if (o.kind === "Graphic") h = `${o.img ? `<img src="${o.img}"${o.page ? ` alt="${o.name}, ${o.sub.toLowerCase()}"` : ""}>` : ""}<div class="body"><div class="kind">${o.pdf ? "Map or chart · free" : o.open || o.status}</div><h3>${o.name}</h3><div class="when num">${o.ref} · ${when(o)}</div>
-    <p>${o.pdf ? (o.sheet || "One printable sheet, 17 × 11 inches.") + " Its own page carries the full-size view, the notes and the sources." : o.open ? o.sheet : "This sheet is " + o.status.toLowerCase() + ". It will take its place over these years when it is finished."}</p>
-    ${o.pdf ? `<div class="acts"><a class="btn1" href="${o.pdf}" download>Download PDF · ${o.size}</a>${o.page ? `<a class="btn2" href="${o.page}">Open the page</a>` : ""}</div>` : o.open && o.page ? `<div class="acts"><a class="btn1" href="${o.page}">Open the map</a></div>` : ""}</div>`;
-  else if (o.inv && CARDS[o.inv]) { h = invCard(o.inv, o.kind === "Person" ? "Descendants of Adam" : "Events", o); }
-  else if (o.kind === "Person") { const sons = PEOPLE.filter(p => p.parent === o.i).map(p => p.name);
-    h = `<div class="body"><div class="kind">Descendants of Adam</div><h3>${o.name}</h3><div class="when num">${when(o)}</div>
-    <dl><dt>Lived</dt><dd class="num">${o.d - o.b} years</dd><dt>World years</dt><dd class="num">${amS(o.b)} – ${amS(o.d)}</dd><dt>Father</dt><dd>${o.parent >= 0 ? PEOPLE[o.parent].name : "—"}</dd><dt>Son</dt><dd>${sons.join(", ") || "—"}</dd><dt>Scripture</dt><dd>${o.ref}</dd></dl>
-    <p>${o.approx ? "Placed approximately; Scripture does not give every year of this life." : "Every year here is arithmetic from the ages Scripture gives."}</p>
-    <div class="acts"><a class="btn2" href="#" onclick="openPanel('d0');return false">See it on From Adam to Moses</a></div></div>`; }
-  else if (o.kind === "Event") h = `<div class="body"><div class="kind">Events</div><h3>${o.name}</h3><div class="when num">${when(o)}</div>${o.sum ? `<p>${o.sum}.</p>` : ""}<dl><dt>Scripture</dt><dd>${o.ref}</dd><dt>World years</dt><dd class="num">${o.e == null ? amS(o.s) : amS(o.s) + " – " + amS(o.e)}</dd></dl><div class="fine">Placeholder dates and text.</div></div>`;
-  else h = `<div class="body"><div class="kind">Books of the Bible · ${o.sec}</div><h3>${o.name}</h3><div class="when num">Written ${when(o)}</div><dl><dt>Writer</dt><dd>${o.author}</dd><dt>World years</dt><dd class="num">${amS(o.s)} – ${amS(o.e)}</dd></dl><div class="fine">Placeholder dates.</div></div>`;
-  pbody.innerHTML = h; finishCard(); }
-function closePanel() { panel.classList.remove("open"); if (picked) { picked = null; markPick(); } }
-
-/* ---------- a card written from the Bible Inventory: every line approved against the NKJV, with its verses ---------- */
-// Everything that names an entry is a link to that entry's own card, so the facts lead from one to the next (09/28/2026).
-// The Inventory's cards come in files of 200 entries (inv\per0.js holds PER-00000 to PER-00199), each fetched the first time
-// one of its cards is wanted, so the page stays small however large the Inventory grows (09/28/2026).
-const CARDS = {}, LOADING = {}, LOADED = {};
-window.VBI = group => Object.assign(CARDS, group);
-const chunkOf = id => id.slice(0, 3).toLowerCase() + Math.floor(+id.slice(4) / ((INV && INV.chunk) || 200));
-function needCard(id) { if (CARDS[id]) return Promise.resolve(); const k = chunkOf(id);
-  return LOADING[k] || (LOADING[k] = new Promise(res => { const s = document.createElement("script"); s.src = "inv/" + k + ".js";
-    s.onload = s.onerror = () => { LOADED[k] = true; res(); }; document.head.appendChild(s); })); }
-const waiting = id => INV && !CARDS[id] && !LOADED[chunkOf(id)];
-function afterLoad(id, then) { const nav = cardNav, back = cardBack; needCard(id).then(() => { cardNav = nav; cardBack = back; then(); cardNav = false; }); }
-let NM = {};  // the names the card being written links to
-const LABEL = { "name": "Names", "father": "Father", "mother": "Mother", "spouse": "Married", "concubine": "Concubine", "sibling": "Brother or sister",
-  "lifespan": "Lived", "meaning of name": "Name means", "reason for name": "Why the name", "lived at": "Lived at", "burial place": "Buried",
-  "occupation": "Work", "place": "Where", "participant": "Who", "part of": "Part of", "led by": "Led by", "destination": "To",
-  "birth of": "Birth of", "death of": "Death of", "creation of": "Creation of", "located in": "In", "place type": "Kind of place" };
-const FIRST = ["name", "birth of", "death of", "creation of", "father", "mother", "spouse", "concubine", "sibling", "lifespan", "age", "meaning of name", "reason for name",
-  "place", "participant", "led by", "part of", "destination", "place type", "located in", "lived at", "burial place"];
-const HIDE = new Set(["date", "earliest date", "latest date", "occurred before", "designation"]);
-const go = id => { const n = NM[id] || (CARDS[id] && CARDS[id].n); return n ? `<a class="go" data-go="${id}">${n}</a>` : ""; };
-const yearOf = id => { const y = INV.events[id]; return !y ? null : y.y != null ? y.y : y.lo; };
-const yearText = (y, mark = "") => y.y != null ? `${cal(y.y)}${mark} <span class="amy num">AM ${Math.round(y.y).toLocaleString()}</span>` : `between ${cal(y.lo)} and ${cal(y.hi)}${mark}`;
-const tipText = s => (s || "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
-const how = f => f.b === "calculated" ? `<sup class="bs" title="Reckoned: ${tipText(f.w)}">†</sup>` : f.b === "inferred" ? `<sup class="bs" title="Inferred: ${tipText(f.w)}">*</sup>` : "";
-const val = f => f.e ? go(f.e) : f.y != null ? `${cal(f.y)} <span class="amy num">AM ${Math.round(f.y).toLocaleString()}</span>` : (f.v || "");
-const ctx = f => f.at ? ` <span class="ctx">at ${go(f.at)}</span>` : f.from || f.to ? ` <span class="ctx">${f.from ? `from ${go(f.from)}` : ""}${f.to ? ` until ${go(f.to)}` : ""}</span>` : "";
-const line = f => `<div>${val(f)}${how(f)}${ctx(f)}${f.r ? `<span class="rf">${f.r}</span>` : ""}</div>`;
-function invCard(id, band, o) {
-  const en = CARDS[id], fs = en.f || [], rv = en.rv || {}; NM = en.nm || {}; const kind = { person: "Person", event: "Event", place: "Place", group: "People", object: "Thing", deity: "God", spirit: "Spirit" }[en.k] || en.k;
-  const rows = [], byProp = {};
-  fs.forEach(f => (byProp[f.p] = byProp[f.p] || []).push(f));
-  const row = (label, html) => { if (html) rows.push(`<dt>${label}</dt><dd>${html}</dd>`); };
-  const cell = list => list.filter(f => !f.s).map(line).join("") + list.filter(f => f.s).map(f => `<div class="alt">Also read: ${val(f)}${f.r ? `<span class="rf">${f.r}</span>` : ""}${f.w ? ` — ${f.w}` : ""}</div>`).join("");
-  let when = "";
-  if (en.k === "person") {
-    const bd = en.bd || {}, born = bd.born || bd.made, died = bd.died, first = x => x.y != null ? x.y : x.lo;
-    if (born || died) when = `${born ? cal(first(born)) : "?"} – ${died ? cal(first(died)) : "?"}`;
-    const dateLine = x => `<div>${yearText(x, how(x))}${x.r ? `<span class="rf">${x.r}</span>` : ""}</div>`;
-    if (born) row(bd.born ? "Born" : "Made", dateLine(born));
-    if (died) row("Died", dateLine(died));
-  } else if (en.k === "event" && INV.events[id]) {
-    const y = INV.events[id], d = fs.find(f => (f.p === "date" || f.p === "earliest date") && !f.s) || {};
-    when = y.y != null ? cal(y.y) : `${cal(y.lo)} – ${cal(y.hi)}`;
-    row("When", `<div>${yearText(y, how(d))}${d.r ? `<span class="rf">${d.r}</span>` : ""}</div>`);
-  }
-  const order = [...FIRST.filter(p => byProp[p]), ...Object.keys(byProp).filter(p => !FIRST.includes(p) && !HIDE.has(p)).sort()];
-  order.forEach(p => { if (p === "name" && byProp.name.length === 1 && byProp.name[0].v === en.n) return; row(LABEL[p] || p[0].toUpperCase() + p.slice(1), cell(byProp[p])); });
-  // what the rest of the Inventory says of this entry: children, and the events it belongs to
-  row("Children", (rv.kids || []).map(k => `<div>${go(k)}</div>`).join(""));
-  if (en.k !== "event") row("Events", (rv.evs || []).map(e => `<div class="evl">${yearOf(e) != null ? `<span class="num yr">${cal(yearOf(e))}</span>` : `<span class="yr"></span>`}${go(e)}</div>`).join(""));
-  else row("Includes", (rv.inc || []).map(e => `<div>${go(e)}</div>`).join(""));
-  const onChart = o && o.kind === "Person" && o.b <= 2553 && !o.approx;
-  return `<div class="body"><div class="kind">${band || kind}</div><h3>${en.n}</h3>${when ? `<div class="when num">${when}</div>` : ""}<div class="desc">${en.d}</div>
-    <dl>${rows.join("")}</dl>${rows.join("").includes('class="bs"') ? `<div class="key"><b>†</b> reckoned from the years and ages Scripture gives<span>·</span><b>*</b> inferred from Scripture<span>·</span>rest the pointer on a mark to see the working</div>` : ""}${onChart ? `<div class="acts"><a class="btn2" href="#" onclick="openPanel('d0');return false">See it on From Adam to Moses</a></div>` : ""}
-    <div class="fine">From the Bible Inventory, ${id}. Every line is approved against the New King James Version; the Inventory now reaches ${INV.through}.</div></div>`;
-}
-function openEntry(id) { const o = Object.values(ALL).find(o => o.inv === id); if (o) { openPanel(o.id); return; }
-  if (waiting(id)) { afterLoad(id, () => openEntry(id)); return; } if (!CARDS[id]) return;
-  if (!picking && picked) { picked = null; markPick(); }
-  hideTip(); noteCard("e:" + id); pbody.innerHTML = invCard(id); finishCard(); }
-const cardHist = []; let cardNow = null, cardNav = false, cardBack = false;
-function noteCard(key) {  // a card opened from a card is a step forward; one opened from the timeline starts afresh
-  if (cardBack) cardBack = false;
-  else if (cardNav && cardNow && cardNow !== key && panel.classList.contains("open")) cardHist.push(cardNow);
-  else if (!cardNav) cardHist.length = 0;
-  cardNow = key; }
-const cardName = key => { const id = key.slice(2); return key[0] === "t" ? ALL[id].name : (CARDS[id] || {}).n || id; };
-function finishCard() {
-  const b = pbody.querySelector(".body");
-  if (b && cardHist.length) b.insertAdjacentHTML("afterbegin", `<button class="back" id="pback"><i class="chev"></i>${cardName(cardHist[cardHist.length - 1])}</button>`);
-  pbody.scrollTop = 0; panel.classList.add("open"); }
-function cardGoBack() { const key = cardHist.pop(); if (!key) return; cardBack = true;
-  if (key[0] === "t") openPanel(key.slice(2)); else { hideTip(); cardNow = key; cardBack = false; pbody.innerHTML = invCard(key.slice(2)); finishCard(); } }
-pbody.addEventListener("click", e => { if (e.target.closest("#pback")) { e.stopImmediatePropagation(); cardGoBack(); return; }
-  cardNav = true; setTimeout(() => cardNav = false); }, true);
-pbody.addEventListener("click", e => { const a = e.target.closest("[data-go]"); if (a) { e.preventDefault(); openEntry(a.dataset.go); } });
-document.getElementById("px").onclick = closePanel;
-// the card's width: 460 to start, then as the reader drags it, kept for their next visit
-const pgrip = document.getElementById("pgrip");
-let pw = 460; try { pw = +localStorage.getItem("vb-card-width") || 460; } catch (e) {}
-const setPW = w => { pw = Math.round(Math.min(Math.max(w, 380), Math.max(380, innerWidth - 120))); panel.style.setProperty("--pw", pw + "px"); };
-setPW(pw); addEventListener("resize", () => setPW(pw));
-pgrip.addEventListener("pointerdown", e => { e.preventDefault(); pgrip.setPointerCapture(e.pointerId); panel.classList.add("sizing"); });
-pgrip.addEventListener("pointermove", e => { if (panel.classList.contains("sizing")) setPW(panel.getBoundingClientRect().right - e.clientX); });
-const endSize = () => { if (!panel.classList.contains("sizing")) return; panel.classList.remove("sizing"); try { localStorage.setItem("vb-card-width", pw); } catch (e) {} };
-pgrip.addEventListener("pointerup", endSize); pgrip.addEventListener("pointercancel", endSize);
-
-/* ======================= THE NAME BOX (D065) ======================= */
-// Study 44, J01 Bible text scholar's option, after Wikipedia's search box (decision D065, 11/15/2026): a box beside the
-// site's name, the first of the controls; from the first letter every match drops below it, the list scrolling, each line
-// the card's name, what the band itself writes of that life, and under it the card's own description line word for word,
-// which is what tells apart the 28 Zechariahs. It searches every person the cards hold, from names.js, which
-// Working\Inventory Link\export_inventory.py writes beside inventory.js; it is fetched the first time the box is used.
-const nq = document.getElementById("nq"), nbox = document.getElementById("nbox"), nfind = document.getElementById("nfind"), markEl = document.querySelector(".mark");
-const nlist = document.createElement("div"); nlist.className = "nlist"; nlist.id = "nlist"; nlist.setAttribute("role", "listbox");
-nlist.innerHTML = `<div class="nl-sc" id="nlsc"></div><div class="nl-ct" id="nlct"></div>`; document.body.append(nlist);
-const nlsc = document.getElementById("nlsc"), nlct = document.getElementById("nlct");
-let NAMES = null, namesWait = null, nHits = [], nGold = -1, picking = false;
+// The box to find a person (decision D065's box, from the timeline): every person the Bible Inventory's cards hold, from
+// names.js; the years of those on the timeline's band, from band.js. Both are fetched the first time the box is used.
+const box = document.getElementById("find"), list = document.getElementById("list"), sc = document.getElementById("sc"), ct = document.getElementById("ct");
+let NAMES = null, PEOPLE = null, wait = null, hits = [], gold = -1;
 window.VBNAMES = d => { NAMES = d; };
-function needNames() { if (NAMES) return Promise.resolve(); return namesWait || (namesWait = new Promise(res => { const s = document.createElement("script");
-  s.src = "names.js"; s.onload = s.onerror = () => res(); document.head.appendChild(s); })); }
-// capitals and marks ignored; a hyphen counts as a space, so 'Edom' finds Obed-Edom
+const load = src => new Promise(res => { const s = document.createElement("script"); s.src = src; s.onload = s.onerror = () => res(); document.head.appendChild(s); });
+function need() { return wait || (wait = Promise.all([load("names.js"), load("band.js")])); }
+// capitals and marks ignored; a hyphen counts as a space, so 'Edom' finds Obed-Edom (as on the timeline)
 const fold = s => (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[‘’'`]/g, "").replace(/[\s\-‐-―]+/g, " ").trim();
 const esc = s => (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-let NPEOPLE = null;  // every person the box can find: {id, n, d, vc, alts, same, keys}
-function namesReady() {
-  if (NPEOPLE) return NPEOPLE;
-  const src = NAMES ? NAMES.people : BAND ? BAND.rows.map(r => [r.i, r.n, (CARDS[r.i] || {}).d || "", r.vc || 0, r.al || []]) : [];  // without names.js, the band's people
-  NPEOPLE = src.map(([id, n, d, vc, alts = [], same = []]) => ({ id, n, d, vc, alts, same, keys: [fold(n), ...alts.map(fold)] }));
-  const byId = new Map(NPEOPLE.map(p => [p.id, p]));
+function people() {
+  if (PEOPLE) return PEOPLE;
+  const rows = new Map(((window.BAND || {}).rows || []).map(r => [r.i, r]));
+  PEOPLE = ((NAMES || {}).people || []).map(([id, n, d, vc, alts = [], same = []]) => ({ id, n, d, vc, alts, same, keys: [fold(n), ...alts.map(fold)] }));
+  const byId = new Map(PEOPLE.map(p => [p.id, p]));
   // the band row a person is drawn on: their own, or that of an entry the Inventory holds to be the same person
-  NPEOPLE.forEach(p => { if (BYINV.has(p.id)) { p.row = BYINV.get(p.id); return; }
+  PEOPLE.forEach(p => { if (rows.has(p.id)) { p.row = rows.get(p.id); return; }
     const seen = new Set([p.id]), st = [...p.same];
-    while (st.length) { const q = st.shift(); if (seen.has(q)) continue; seen.add(q); if (BYINV.has(q)) { p.row = BYINV.get(q); return; } st.push(...((byId.get(q) || {}).same || [])); } });
-  return NPEOPLE;
+    while (st.length) { const q = st.shift(); if (seen.has(q)) continue; seen.add(q); if (rows.has(q)) { p.row = rows.get(q); return; } st.push(...((byId.get(q) || {}).same || [])); } });
+  return PEOPLE;
 }
-// how well a name matches what is typed: 0 the name itself, 1 it begins the name, 2 it begins a later word of it
+// 0 the name itself, 1 it begins the name, 2 it begins a later word of it
 const fit = (k, q) => k === q ? 0 : k.startsWith(q) ? 1 : (" " + k).includes(" " + q) ? 2 : 9;
 function search(raw) {
   const q = fold(raw); if (!q) return [];
-  const hits = [];
-  namesReady().forEach(p => { let best = 9, alt = null;
-    p.keys.forEach((k, i) => { const t = fit(k, q); if (t < best) { best = t; alt = i ? p.alts[i - 1] : null; } });
-    if (best < 9) hits.push({ p, t: best, alt }); });
-  // the names exactly as typed, then names that begin with it, then the rest; within each, the person the Inventory ties
-  // to the most verses first, then by Inventory number
-  return hits.sort((a, b) => a.t - b.t || b.p.vc - a.p.vc || (a.p.id < b.p.id ? -1 : 1));
+  const out = [];
+  people().forEach(p => { let best = 9; p.keys.forEach(k => { best = Math.min(best, fit(k, q)); }); if (best < 9) out.push({ p, t: best }); });
+  return out.sort((a, b) => a.t - b.t || b.p.vc - a.p.vc || (a.p.id < b.p.id ? -1 : 1));
 }
-// only what the band itself writes for that life: its own years in the band's words, 'of Levi', the figure or open circle
-function bandWords(o) {
-  if (!o) return { pre: "", post: "not on the timeline" };
-  const r = o.band, c = r.tc ? calT : cal; let yrs = "";
-  if (r.k === "x") yrs = `${c(r.a)} – ${c(r.b)} · ${r.b - r.a} years`;
-  else if (r.k === "w") yrs = `c. ${c(r.a)} – c. ${c(r.b)}`;
-  return { pre: r.pos ? `<span class="nl-pre" title="possible"></span>` : "",
-    post: [yrs ? `<span class="num">${yrs}</span>` : "", r.lnn ? `<em>of ${esc(r.lnn)}</em>` : "", r.f ? `${r.f}%` : ""].filter(Boolean).join(" ") };
+function show() {
+  const raw = box.value; if (!fold(raw)) { hide(); return; }
+  hits = search(raw); gold = -1;
+  sc.innerHTML = hits.length ? hits.map((h, i) => { const p = h.p, id = encodeURIComponent(p.id);
+      const map = p.row ? `<a class="go" href="bible-map/index.html#y=${p.row.a}"><span class="arr" aria-hidden="true">→</span>On the Map, in those years</a>`
+        : `<span class="go off"><span class="arr" aria-hidden="true">→</span>No years given for the map</span>`;
+      return `<div class="row" role="option" id="r${i}"><div class="who"><div class="n">${esc(p.n)}${p.alts.length ? `<i>also ${esc(p.alts.join(", "))}</i>` : ""}</div>${p.d ? `<div class="d">${esc(p.d)}</div>` : ""}</div>`
+        + `<a class="go first" href="bible-timeline/index.html#${id}"><span class="arr" aria-hidden="true">→</span>On the Timeline</a>${map}</div>`; }).join("")
+    : `<div class="none">No one of that name in the Bible Inventory, which does not yet reach every book.</div>`;
+  ct.textContent = hits.length === 1 ? "1 person" : `${hits.length.toLocaleString()} people`; ct.style.display = hits.length ? "" : "none";
+  list.classList.add("on"); sc.scrollTop = 0; box.setAttribute("aria-expanded", "true"); box.removeAttribute("aria-activedescendant");
 }
-function showList() {
-  const raw = nq.value; if (!fold(raw)) { hideList(); return; }
-  nHits = search(raw); nGold = -1;
-  nlsc.innerHTML = nHits.length ? nHits.map((h, i) => { const w = bandWords(h.p.row);
-      return `<div class="nl" role="option" id="nl${i}" data-i="${i}"><div class="nl-n">${w.pre}${esc(h.p.n)}${h.alt ? ` <i>(${esc(h.alt)})</i>` : ""}${w.post ? `<span class="nl-w">${w.post}</span>` : ""}</div>${h.p.d ? `<div class="nl-d">${esc(h.p.d)}</div>` : ""}</div>`; }).join("")
-    : `<div class="nl-none">No one of that name in the Bible Inventory, which does not yet reach every book.</div>`;
-  nlct.textContent = nHits.length === 1 ? "1 person" : `${nHits.length.toLocaleString()} people`; nlct.style.display = nHits.length ? "" : "none";
-  placeList(); nlist.classList.add("on"); nlsc.scrollTop = 0; nq.setAttribute("aria-expanded", "true"); nq.removeAttribute("aria-activedescendant");
-}
-function placeList() {  // from the box's lower edge, its left on the box's, down to 14 px above the white bar at the foot
-  const r = nq.getBoundingClientRect(), top = r.bottom + 2, left = Math.max(8, Math.min(r.left, innerWidth - 440 - 8));
-  nlist.style.left = left + "px"; nlist.style.top = top + "px"; nlist.style.maxHeight = Math.max(120, Math.min(480, innerHeight - 46 - 14 - top)) + "px";
-}
-function hideList() { nlist.classList.remove("on"); nq.setAttribute("aria-expanded", "false"); nGold = -1; }
+function hide() { list.classList.remove("on"); box.setAttribute("aria-expanded", "false"); gold = -1; }
 function goldTo(i) {
-  const lines = nlsc.querySelectorAll(".nl"); if (!lines.length) return;
-  if (nGold >= 0 && lines[nGold]) lines[nGold].classList.remove("gold");
-  nGold = Math.max(0, Math.min(lines.length - 1, i)); lines[nGold].classList.add("gold"); lines[nGold].scrollIntoView({ block: "nearest" });
-  nq.setAttribute("aria-activedescendant", "nl" + nGold);
+  const rows = sc.querySelectorAll(".row"); if (!rows.length) return;
+  if (gold >= 0 && rows[gold]) rows[gold].classList.remove("hi");
+  gold = Math.max(0, Math.min(rows.length - 1, i)); rows[gold].classList.add("hi"); rows[gold].scrollIntoView({ block: "nearest" });
+  box.setAttribute("aria-activedescendant", "r" + gold);
 }
-nq.addEventListener("focus", () => needNames().then(() => { if (document.activeElement === nq && fold(nq.value)) showList(); }));
-nq.addEventListener("click", () => { if (fold(nq.value) && !nlist.classList.contains("on")) needNames().then(showList); });
-nq.addEventListener("input", () => needNames().then(showList));
-nq.addEventListener("keydown", e => {
-  if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); if (!nlist.classList.contains("on")) { if (fold(nq.value)) needNames().then(showList); return; }
-    goldTo(nGold < 0 ? (e.key === "ArrowDown" ? 0 : nHits.length - 1) : nGold + (e.key === "ArrowDown" ? 1 : -1)); }
-  else if (e.key === "Enter") { e.preventDefault(); needNames().then(() => { if (!nlist.classList.contains("on")) showList(); if (nHits.length) choose(nHits[Math.max(0, nGold)].p); }); }
-  else if (e.key === "Escape") { e.preventDefault(); if (nlist.classList.contains("on")) hideList(); else closeFloat(); }
+box.addEventListener("focus", () => need().then(() => { if (document.activeElement === box && fold(box.value)) show(); }));
+box.addEventListener("input", () => need().then(show));
+box.addEventListener("keydown", e => {
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); if (!list.classList.contains("on")) { if (fold(box.value)) need().then(show); return; }
+    goldTo(gold < 0 ? (e.key === "ArrowDown" ? 0 : hits.length - 1) : gold + (e.key === "ArrowDown" ? 1 : -1)); }
+  else if (e.key === "Enter") { e.preventDefault(); need().then(() => { if (!list.classList.contains("on")) show(); const r = sc.querySelectorAll(".row")[Math.max(0, gold)];
+    const a = r && r.querySelector("a.go.first"); if (a) location.href = a.href; }); }
+  else if (e.key === "Escape") { e.preventDefault(); hide(); }
 });
-nlsc.addEventListener("pointerdown", e => e.preventDefault());  // the box keeps the keyboard while a line is clicked
-nlsc.addEventListener("click", e => { const l = e.target.closest(".nl"); if (l) choose(nHits[+l.dataset.i].p); });
-document.addEventListener("pointerdown", e => { if (e.target.closest("#nbox, #nlist, #nfind")) return; hideList(); closeFloat(); }, true);
-// Where the box cannot stand clear of the site's name, the words 'Find a name' stand in its place and open it. On a desktop
-// screen, as the option is written: over the bar at the name's place, 28 px in, the name hidden only while the box is
-// open. On a tablet the name stays (D065 point 2): the box opens below the words, and with a band open just under the bar.
-const tablet = () => matchMedia("(hover: none) and (pointer: coarse)").matches;
-function placeFloat() {
-  const r = nfind.getBoundingClientRect(), cl = document.body.classList; let top, left;
-  if (tablet()) { top = open ? document.querySelector(".top").getBoundingClientRect().bottom + 8 : r.bottom + 6; left = Math.max(14, Math.min(r.left, innerWidth - 220 - 14)); }
-  else { left = 28; top = open ? (60 - 30) / 2 : r.top + r.height / 2 - 15; }
-  cl.toggle("nmarkoff", !tablet() && !!open);  // the slim bar's name gives the box its place while it is open
-  nbox.style.top = top + "px"; nbox.style.left = left + "px"; if (nlist.classList.contains("on")) placeList();
-}
-function openFloat() { nbox.classList.add("float"); nfind.classList.add("on"); placeFloat(); nq.focus(); }
-function closeFloat() { if (!nbox.classList.contains("float")) return; nbox.classList.remove("float"); nbox.style.top = nbox.style.left = ""; nfind.classList.remove("on");
-  document.body.classList.remove("nmarkoff"); hideList(); if (document.activeElement === nq) nq.blur(); }
-nfind.addEventListener("pointerdown", e => e.preventDefault());  // the words take no keyboard, so a second click closes the box
-nfind.addEventListener("click", () => nbox.classList.contains("float") ? closeFloat() : openFloat());
-nq.addEventListener("blur", () => setTimeout(() => { if (document.activeElement !== nq) closeFloat(); }, 0));  // the name comes back when the box closes
-function fitNameBox() {  // called by layout(): does the box stand 16 px clear of the site's name (or of the page's margin)?
-  const cl = document.body.classList, state = () => [cl.contains("nwords"), cl.contains("ncorner"), !!open, tablet()].join();
-  const was = state(), floating = nbox.classList.contains("float");
-  cl.remove("nwords", "ncorner", "nmarkoff");  // the box back in its place to be measured (it stays shown, so it keeps the keyboard)
-  nbox.style.top = nbox.style.left = "";
-  if (getComputedStyle(nbox).display !== "none") {  // on a phone neither shows
-    // the name's own right edge once it has settled: in the slim bar 28 px in at 30 px; on the front page it stands above
-    const mr = markEl.getBoundingClientRect(), limit = open ? 28 + mr.width * 30 / parseFloat(getComputedStyle(markEl).fontSize) + 16 : 28;
-    if (nbox.getBoundingClientRect().left < limit) { cl.add("nwords");
-      // no room in the bar even for the words (a tablet with a band open, where every control is in use): they stand just
-      // under the bar, in the empty corner at its left where the years begin, so the name stays and nothing is covered
-      if (nfind.getBoundingClientRect().left < limit) cl.add("ncorner"); }
-  }
-  // a resize that leaves the box where it was keeps it open (the keyboard of a tablet changes the height); any other closes it
-  if (floating) { if (state() === was && cl.contains("nwords")) placeFloat(); else closeFloat(); }
-  else if (nlist.classList.contains("on")) placeList();
-}
-// choosing a person: one on the band opens the band, moves the years and the scroll to their row, marks it and opens the
-// card; one off the band opens their card alone
-function choose(p) {
-  hideList(); closeFloat(); nq.blur();
-  if (INV) Promise.all([needCard(p.id), p.row ? needCard(p.row.inv) : null]).then(() => place(p)); else place(p);  // the cards first, so they open at once
-}
-function place(p) {
-  const o = p.row;
-  if (!o) { picking = true; if (picked) { picked = null; markPick(); } openEntry(p.id); picking = false; return; }
-  const wasOpen = open === "people", band = BANDS.find(b => b.key === "people");
-  // the window keeps its width; it moves only if the row's start is not already in the part the card leaves uncovered
-  // (with room after it for the name, which a life with no years of its own writes after its start)
-  const pw0 = Math.min(Math.max(pw, 380), Math.max(380, innerWidth - 120)), free = Math.max(120, Math.min(W(), innerWidth - 14 - pw0 - axis.getBoundingClientRect().left - 24));
-  const inSight = am => X(am) >= 8 && X(am) <= free - 160;
-  let at = null;
-  if (!NOYEARS_FAMILY.has(o)) {
-    if (BORDER.includes(o)) at = o.b;
-    else { // a person with no years: the start of the relative they are set under, found through their kin
-      const now = bandRows().vis.includes(o) ? o.b : null;
-      if (now == null || !inSight(now)) { const seen = new Set([o]), st = [o]; let rel = null;
-        while (st.length && !rel) { const x = st.shift(); for (const q of [...bandKin(x), ...(x.band.ln && BYINV.get(x.band.ln) ? [BYINV.get(x.band.ln)] : [])]) {
-          if (seen.has(q)) continue; seen.add(q); if (BORDER.includes(q)) { rel = q; break; } st.push(q); } }
-        at = rel ? rel.b : null; } }
-    if (at != null && !inSight(at)) { const span = v1 - v0; setView(at - free / 2 / W() * span, at - free / 2 / W() * span + span); }
-  }
-  band.el.style.transition = "none";  // the band takes its height at once, so the scroll can be set
-  if (!wasOpen) { open = "people"; layout(); } else { bandCache = null; sizeBands(); render(); }
-  const { vis } = bandRows(), k = vis.indexOf(o), track = band.track;
-  const rowH = Math.min(22, Math.max(BAND_ROW, (track.clientHeight - 12) / Math.max(1, vis.length)));
-  const y = band.el.offsetTop + 38 + 6 + k * rowH + rowH / 2, seenH = innerHeight - topH() - 46 - 66;
-  if (k >= 0) bandsEl.scrollTop = Math.max(0, y - seenH / 2);
-  requestAnimationFrame(() => { band.el.style.transition = ""; });
-  picked = o.id; picking = true;
-  if (p.id === o.inv) openPanel(o.id); else { cardNav = false; openEntry(p.id); }  // a second entry of one person: their own card
-  picking = false; markPick(); settle();
-}
-document.fonts.ready.then(() => layout());
-if (new URLSearchParams(location.search).get("sep")) document.body.classList.add("sep-" + new URLSearchParams(location.search).get("sep"));
-layout();
-addEventListener("resize", () => layout());
-setView(-1e6, -1e6 + 2000); toLever(3004);
-// a link from another page opens the timeline at one thing: index.html#d3 (a map or chart), index.html#EVT-00076 (an
-// entry in the Bible Inventory); the view keeps its width and centres on the thing's years, and its card opens (09/29/2026)
-function openHash() { const id = decodeURIComponent(location.hash.slice(1)); if (!id) return;
-  const o = ALL[id] || Object.values(ALL).find(x => x.inv === id);
-  if (!o) { if (INV && /^[A-Z]{3}-\d{5}$/.test(id)) openEntry(id); return; }
-  const s = o.s ?? o.b, e = o.e ?? o.d ?? s, span = v1 - v0, mid = (s + e) / 2;
-  setView(mid - span / 2, mid + span / 2); openPanel(o.id); }
-openHash(); addEventListener("hashchange", openHash);
-requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.remove("still")));
-document.body.dataset.lives = PEOPLE.length;  // read by Working\Inventory Link\update_site.py to know the page ran  // the page opens on 2,000 years, the lever on 1,000 BC (the user, 09/27/2026)
-if (document.fonts) document.fonts.ready.then(() => render());
+document.addEventListener("pointerdown", e => { if (!e.target.closest(".wrap")) hide(); }, true);
+document.body.dataset.ready = "1";
 </script>
-<script>/* the visit counter (the owner, 09/30/2026): the small number over "Sources" counts visits. Abacus
-   (abacus.jasoncameron.dev), a free counting service that needs no account, keeps the number. A visit is counted when a
-   reader comes in from outside the site; moving between pages, reloading or going back does not count again. Robots, the
-   copies on the maker's computer and any browser once opened at view.bible/?not-counted are never counted
-   (view.bible/?counted undoes it). If the service does not answer, no number shows.
-   Two more counts, kept but not shown (the owner, 10/03/2026; update_site.py writes them into the Update Log): "browsers",
-   each browser the first time it is counted (it remembers that in its own storage, with no cookie; a private window or
-   cleared storage counts again), and "dl-<file name>", each click on a Download link (a click, not a finished download;
-   a file opened straight from a search or a shared link is not seen). The same script is in pages.py (COUNT_JS). */
+<script>/* the visit counter, as on every page (the owner, 09/30/2026 and 10/03/2026; pages.py COUNT_JS) */
 (function () { const A = "https://abacus.jasoncameron.dev/", N = "view.bible/";
   let me = false;
   try { const q = location.search;
