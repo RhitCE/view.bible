@@ -339,7 +339,8 @@ pcard.addEventListener("click", e => { const a = e.target.closest("[data-go]"); 
 sc.addEventListener("mouseover", e => { const r = e.target.closest(".row"); if (r && +r.dataset.i !== gold) goldTo(+r.dataset.i); });
 
 box.addEventListener("focus", () => { endDemo(); need().then(() => { if (document.activeElement === box && fold(box.value)) show(); }); });
-box.addEventListener("input", () => need().then(() => show()));
+box.addEventListener("pointerdown", endDemo);
+box.addEventListener("input", () => { if (demo) { demo = false; box.classList.remove("demo"); } need().then(() => show()); });
 box.addEventListener("keydown", e => {
   if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); if (!list.classList.contains("on")) { if (fold(box.value)) need().then(() => show()); return; }
     goldTo(gold < 0 ? (e.key === "ArrowDown" ? 0 : hits.length - 1) : gold + (e.key === "ArrowDown" ? 1 : -1)); }
