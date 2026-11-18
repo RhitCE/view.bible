@@ -5,9 +5,7 @@
 <link rel="preload" href="fonts/newsreader-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/eb-garamond-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>(function () { let t = null; try { t = localStorage.getItem("vb-theme"); } catch (e) {}
-  if (t !== "light") t = "dark";  /* dark unless the reader has chosen light (the owner, 11/17/2026) */
-  document.documentElement.dataset.theme = t; })();</script>
+<script>document.documentElement.dataset.theme = "dark";  /* always dark on opening (the owner, 11/18/2026) */</script>
 <title>View.Bible: Interactive Bible Timeline, Free Maps and Charts</title>
 <meta name="description" content="Scroll through the Bible’s people and events on one timeline, with the verses for each, and download free maps and charts as printable PDFs.">
 <meta name="robots" content="max-image-preview:large">
@@ -83,8 +81,10 @@
    (Working\Home Choice Options\option-c-two-changes.html). The site's name; The Bible Map and The Bible Timeline stacked,
    each name set like the site's name with its description in italic beneath; a hairline; the line and the box to find a
    person, with the results below and the person's card to the right. On opening, the page types "Jacob" in gray, shows
-   the results and the card faintly, then leaves the faded "Jacob" in the box and The Bible Map glows for a second.
-   Dark unless the reader has chosen light (the owner, 11/17/2026: "The default for the page is dark."). */
+   the results and the card faintly, then leaves the faded "Jacob" in the box and The Bible Map glows for a second; then
+   the actual Bible Map from "Israel camps in the Valley of Zered" plays in a window to the right of the links
+   (map-glimpse.js, made by Working\Map Glimpse\build_glimpse4.py; the owner, 11/18/2026: "That works. Please post this").
+   It always opens dark; Light turns it light until the page is opened again (the owner, 11/18/2026). */
 @font-face { font-family: "Newsreader"; font-style: normal; font-weight: 200 800; font-display: block; src: url(fonts/newsreader-latin-opsz-normal.woff2) format("woff2"); }
 @font-face { font-family: "EB Garamond"; font-style: normal; font-weight: 400; font-display: block; src: url(fonts/eb-garamond-latin-400-normal.woff2) format("woff2"); }
 @font-face { font-family: "Newsreader"; font-style: italic; font-weight: 200 800; font-display: block; src: url(fonts/newsreader-latin-opsz-italic.woff2) format("woff2"); }
@@ -369,7 +369,8 @@ function finish() {
   if (!demo) return;
   list.classList.remove("on", "faint"); hideCard();
   const m = document.getElementById("maplink");
-  setTimeout(() => { m.classList.add("glow"); setTimeout(() => m.classList.remove("glow"), 1000); }, 750);
+  setTimeout(() => { m.classList.add("glow"); setTimeout(() => { m.classList.remove("glow");
+    if (window.vbGlimpse4) vbGlimpse4(); }, 1000); }, 750);  // then the map glimpse (the owner, 11/18/2026)
 }
 setTimeout(() => typeOut(1), 1125);
 document.body.dataset.ready = "1";
@@ -398,3 +399,4 @@ document.body.dataset.ready = "1";
   fetch(A + (hit ? "hit/" : "get/") + N + "visits")
     .then(r => r.ok ? r.json() : null).then(j => { if (j && j.value > 0) el.textContent = j.value.toLocaleString("en-US"); }).catch(() => {});
 })();</script>
+<script src="map-glimpse.js" defer></script>
