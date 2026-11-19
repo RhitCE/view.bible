@@ -57,7 +57,7 @@
    "@type": "WebPage",
    "@id": "https://view.bible/#webpage",
    "url": "https://view.bible/",
-   "dateModified": "2026-11-18",
+   "dateModified": "2026-11-19",
    "name": "View.Bible: Interactive Bible Timeline, Free Maps and Charts",
    "description": "Scroll through the Bible’s people and events on one timeline, with the verses for each, and download free maps and charts as printable PDFs.",
    "isPartOf": {
@@ -363,7 +363,7 @@ function typeOut(i) {
   box.value = WORD.slice(0, i);
   if (i < WORD.length) { setTimeout(() => typeOut(i + 1), 213); return; }
   need().then(() => setTimeout(() => { if (!demo) return; show(true);
-    setTimeout(() => { if (!demo || !hits.length) return; showCard(hits[0].p.id, false); setTimeout(finish, 625 + 2000); }, 438); }, 375));
+    setTimeout(() => { if (!demo || !hits.length) return; showCard(hits[0].p.id, false); setTimeout(finish, 625 + 2000); }, 438 + 500); }, 375));  // the card half a second later (the owner, 11/19/2026)
 }
 function finish() {
   if (!demo) return;
