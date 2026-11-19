@@ -108,6 +108,9 @@ header .vb-mark .smc { font-variant-caps: all-small-caps; letter-spacing: .07em;
 header .vb-mark i { font-style: normal; margin: 0 .04em 0 -.03em; }
 @media (max-width:839px) { header .vb-mark { font-size: 16px; padding-right: 12px; } }
 header#site .vb-mark { font-size: 16px; padding-right: 0; border-right: 0; }
+/* the Slider v78 (the owner, 11/19/2026: "I want to move the View.Bible to the right to center on the screen"): the name in the middle of the header */
+header#site { position: relative; }
+header#site .vb-mark { position: absolute; left: 50%; transform: translateX(-50%); }
 @media (max-width:359px) { header .vb-mark { display: none; } }
 </style>
 <style>
@@ -144,6 +147,9 @@ main { display:grid; grid-template-columns:minmax(0,1fr) 430px; min-height:0; po
 #left h2.fold[aria-expanded="true"]::before { content:"− "; }
 #left h2.fold[aria-expanded="false"] + div { display:none; }
 #left h2.selh, #left #detail { display:none; }   /* v77: what is clicked on the map opens its card there (#gcard) */
+/* v78 (the owner, 11/19/2026, of Others on the map and Elsewhere: "I want to remove this"; of Israel's part: "Israel needs to
+   be labeled", named on the map as the peoples are): on a laptop no lists' column; what is clicked on the map opens its card */
+#left { display:none; }
 #col { border-left:1px solid var(--rule); display:flex; flex-direction:column; min-height:0; padding:10px 0 0 14px; font-size:13.5px; background:var(--paper); }
 #col .top { flex:none; max-height:50%; overflow:auto; padding-right:12px; }
 #col .top:empty { display:none; }
@@ -234,8 +240,12 @@ body.lessmotion #mapPulse.on { animation:none; opacity:.5; }
 #gcard .x:hover { color:#222; }
 /* v77 (the owner, 11/19/2026: "when the map first loads, can we have the 'play' button have a white or yellowish pulse behind
    it"; "Like the front page would be great."): the front page's gold glow pulsing behind Play until it is first pressed */
-@keyframes playcall { 0%, 100% { box-shadow:0 0 0 0 rgba(201,164,74,0); } 50% { box-shadow:0 0 14px 3px rgba(201,164,74,.85); } }
-#play.invite { animation:playcall 1.6s ease-in-out infinite; }
+/* v78 (the owner, 11/19/2026: "The pulsing Play button needs to stop after three times. It needs to be a little more intense
+   with a slightly more white hue due to the background color on this page."): three pulses, then still; at its height a
+   near-white ring at the button's edge inside a fuller glow, the gold taken a third of the way to white */
+@keyframes playcall { 0%, 100% { box-shadow:0 0 0 0 rgba(255,250,232,0), 0 0 0 0 rgba(220,192,120,0); }
+  50% { box-shadow:0 0 0 2px rgba(255,250,232,1), 0 0 20px 6px rgba(220,192,120,1); } }
+#play.invite { animation:playcall 1.6s ease-in-out 3; }
 footer.time { border-top:1px solid var(--rule); padding:6px 18px 10px; display:grid; grid-template-columns:1fr; gap:2px; position:relative; background:var(--paper); z-index:9; }
 /* the controls under About this map, Settings beside 'all · this map'; on a phone, or with the panel folded, in the bar
    over the time line (the owner, 10/06/2026) */
@@ -264,6 +274,10 @@ footer.time { border-top:1px solid var(--rule); padding:6px 18px 10px; display:g
 #rulers { position:absolute; left:8px; font-size:12px; line-height:1.3; max-width:260px; pointer-events:none; }
 #year { position:absolute; top:8px; left:8px; font-size:18px; white-space:nowrap; font-variant-numeric:tabular-nums;
   padding:1px 7px 2px; pointer-events:none; }   /* just under the key, at the map's top left (the owner, 10/07/2026) */   /* text alone (the owner, 10/06/2026) */   /* the year alone, at the map's top (the owner, 10/06/2026) */
+/* v78 (the owner, 11/19/2026: "I want to change the Years to the same style as View.Bible"; "Please keep the year as you
+   revised it"): the year in the site's name's own letter, EB Garamond in small capitals, at its size (the page's own serif
+   where the font is not loaded, opened from the disk) */
+#year { font-family:"EB Garamond", var(--serif); font-size:16px; font-variant-caps:small-caps; letter-spacing:.07em; }
 #track { position:relative; }
 #slider { width:100%; accent-color:var(--accent); margin:0; }
 #stops { position:relative; height:0; }
@@ -448,13 +462,13 @@ details.credit { font-size:10px; color:var(--soft); padding:0 12px 4px 0; line-h
    <svg class="s" width="12" height="12" viewBox="0 0 12 12" role="img" aria-label="An open dot"><circle cx="6" cy="6" r="2.5" fill="#f4ecda" stroke="#1f160d" stroke-width="1.3"/></svg><span>Site, OpenBible 0-70%</span>
    <span class="s star">*</span><span>Site does not fit the text</span>
    <span class="s">%</span><span>OpenBible.info's confidence</span>
-  </div>A trial (v77). From Adam (World Year 0). Before the Flood (1656), as Study 19's option ranked first (J4-A) gives them on this map: Eden at OpenBible.info's three located readings, in Armenia (18%), at Babylon (13%) and at Tell el Muqayyar by Ur (10%), with Havilah (25%) at Babylon; the Euphrates and the Tigris (Hiddekel), the Nile lettered Gihon (14%), and the Pishon (11%) on Wadi Baysh in south-west Arabia; the land of Cush (38%) on Babylonia's plain and Assyria (an area under 70% has its outline pulse softly, its place less sure); Eve's creation at Eden's dots, and the other events of those years listed with no mark on the map. The mountains of Ararat from the ark's rest (1656), drawn from the land about Lake Van and the upper Aras, with the ark's events there at OpenBible.info's point for Ararat. From the Flood, the places of that option in its first two parts, each at OpenBible.info's site and from the year that option gives: Nimrod's cities, Babel, Erech, Accad and Calneh in the land of Shinar and Nineveh, Rehoboth Ir, Calah and Resen in Assyria (from 1657, by the verses that name them; Babel from 1757, its name's year); and, from the scattering from Babel (placed 1948), the Canaanites' places of Genesis 10:18-19, Arvad, Sidon, Gerar, Gaza, Sodom, Gomorrah, Admah, Zeboiim and Lasha. Its peoples whose lands lie on this map, in its years, each area drawn from the land itself: Nimrod's kingdom (from 1657) and the sons of men in the plain of Shinar (1741 to the confusion at Babel); and from the confusion (placed 1948) to World Year 2000 Asshur, Arphaxad, Elam, Madai, Aram, Riphath, the Hamathites, the Arvadites, the Arkites, Sinites and Zemarites, Sidon, the Canaanites, Mizraim with the Naphtuhim and the Pathrusim (the valley carried on up the Nile to Syene), Kittim and Elishah, the Dodanim and Uz; and, on the Base Map's window for the Table of Nations, Gomer, Magog, Javan, Tubal, Meshech, Tiras, Ashkenaz, Togarmah, Tarshish, Cush, Put, Seba, Havilah, Raamah, Sheba, Dedan, the Ludim, the Anamim, the Lehabim, the Casluhim, the Caphtorim and the Philistines at Caphtor (Crete), Lud, and the sons of Joktan with Sheba, Ophir, Havilah and Uzal; where that window's edge cuts a land, or the option says its edges are not known, or the window has no heights (Armenia and the edges of its neighbours), the area fades out with no line; those of them the option says run on past 2000, having no row of their own in Study 17's option (Nimrod's kingdom, Asshur, Arphaxad, Madai, Riphath, the Hamathites, the Arvadites, the Arkites, Sinites and Zemarites, the Naphtuhim and the Pathrusim, Kittim and Elishah, the Dodanim and Uz, and the peoples of the wider window) run on to the end of this map, Aram until the Syrians begin (2145), the Caphtorim at Caphtor to 2552 and the Philistines there until their own row begins (2107); a figure such as 26% after a people's name is that option's confidence in its tie to the land, where under 70%. Its events at the places it gives them. Until the year after the ark's rest (1658) the map stands back to hold Eden's readings, the Euphrates and the Tigris, and Ararat; then it keeps to Shinar; from the scattering to World Year 2000 it holds the nations' lands on the wider window; then the whole of the land's map. The areas of all 43 rows of Study 17's option ranked first (J6-A), each people's area and years as that option sets them, every limit drawn from the land itself (the Base Map's water, rivers, heights and watersheds; between the places the text names, the way the land runs), darkest along the edge and fading inward, in place of the same peoples' statements in those years; every other statement drawn from the land the same way (a town's own hill and the heads of its valleys, or the land it names: the Sharon, Shinar), each area cut where another lies in it in the same years; eight of them, which began at World Year 2000 only because the map did (the Perizzites, Rephaim, Emim, Zamzummim, Horites, Avim, Geshurites and Chaldeans), from the scattering from Babel (placed 1948). The facts: the Bible Inventory's approved statements (from the New King James Version) of who dwelt in, held or ruled each place, each shown in the years the Inventory gives it and no others; a fact the Inventory gives from an event, with no end, runs on. Places: where OpenBible.info puts them (its leading site, joined to the Inventory as the Base Map joins them); every area drawn from the land, none from OpenBible's outlines alone (the Gospel years' regions follow them, their edges moved onto the land). The peoples the verse places only on the ground (Numbers 13:29), in the mountains and by the sea, are drawn on the hill country west of the Jordan and on the coastal plain, from the Base Map's heights, the darker line only where the land itself sets the limit: general locations (D014), for this map only; any other use needs the owner's approval. Israel and its fathers: one colour at each place the Inventory states, journeying to the next along the places Scripture names on the way; nothing is drawn in the years between. Israel's lands in one colour, each appearing as the camp reaches it (Goshen, the land east of the Jordan at Heshbon, the land west of it at Shiloh), the tribes told apart by their names and borders (the towns of each lot, and the Levites' cities, in the lists); the cities Israel took and did not burn in Israel's colour from the taking until the land is divided (Jericho, Ai and Hazor were burned: Joshua 6:24; 8:28; 11:11-13). The tribes' borders: straight dotted lines between the points the Inventory lists for each lot, in the text's order; between named points, the course not given by the text. The colour stops at the sea and the lakes. The other peoples' colours are provisional. The events listed are those whose place blinks on the map in view, and every turn of Israel's way, each as its journey starts. The map follows Israel: when the next stop lies off the screen it zooms out to show both, the line runs, and it zooms in to the new stop. The Exodus stations are at OpenBible's leading sites; other routes are proposed. The Gospel years: from about ten years before Jesus' birth to the cross and His appearing after it, the Inventory's Gospel events in Scripture's order, each at the year that order places it between four years of the Teaching Chronology (His birth, c. 6–4 BC; Herod's death, c. 4 BC; the word of God coming to John, AD 28/29; the cross, AD 30 or AD 33, with AD 33 by R. C. Young beside it), each set at the middle of its years, and the boy Jesus in the temple at His age there, twelve; the years between them spread evenly; an event at a place OpenBible.info locates blinks there, and the towns the Base Map does not letter (Nazareth, Cana, Capernaum and others) have dots of their own from their first event. The map follows Jesus: one dashed crimson line from each located place of an event He takes part in to the next, the six latest moves kept, the newest light and each older one half as strong, down to a faint trace; a land, a river or a place the map cannot show (the temple, a house) is no stop, and His disc fades until He moves on. Close views of Galilee and Jerusalem; a fine bar for these years under the main one, shown from the start, its two buttons stepping one of His moves at a time. The rulers the Gospels name are shown under the year in the years the Inventory gives them. The Old Testament's lands, towns and tribes are shown in the years the Inventory gives them, and where it gives no end, until the Gospel years. From World Year 3944, about ten years before His birth, the map starts afresh (Study 42): the tribes' lands, borders and towns, the Levites' cities, the Old Testament peoples, the regions the New Testament does not name, the heights and the dots of towns the map names nowhere stop showing; only the places the Gospels name stay lettered, with the Great Sea and the Salt Sea. The regions of those years, Galilee, the province of Judea, Decapolis, Idumea, Iturea, Trachonitis, Abilene and the land of Gennesaret, are drawn as the other lands, from OpenBible.info's outlines with their edges moved onto the land, never across the Jordan, the lakes or the sea; the region of Samaria is named at OpenBible's site. The list at the left gives the nine regions, north to south, each with the verse that names it. In the close views of Galilee and Jerusalem in these years the map's names keep one size on the screen (Study 43): a town at the size of Jesus' stops, Jerusalem a little larger, the waters as the map letters them elsewhere, the regions as before; they are placed in order, the call-outs, Jesus' stops and the names of the places in His wake first, then the regions, the waters, Jerusalem and the other towns; a name that would meet one placed before it, or the map's edge, is moved where it may (a water's name onto the part of its water in view, a town's beside its dot) and is left out only where no clear spot is left, its dot kept; a town the map sets on a leader is set there as the call-outs are, a short line at 45 or 60 degrees from just past its dot and a landing level with its name, and a region's name stands clear of its own outline and of Jesus' line. From World Year 3944 the lake is lettered by the name the Gospels use, the Sea of Galilee.
+  </div>A trial (v78). From Adam (World Year 0). Before the Flood (1656), as Study 19's option ranked first (J4-A) gives them on this map: Eden at OpenBible.info's three located readings, in Armenia (18%), at Babylon (13%) and at Tell el Muqayyar by Ur (10%), with Havilah (25%) at Babylon; the Euphrates and the Tigris (Hiddekel), the Nile lettered Gihon (14%), and the Pishon (11%) on Wadi Baysh in south-west Arabia; the land of Cush (38%) on Babylonia's plain and Assyria (an area under 70% has its outline pulse softly, its place less sure); Eve's creation at Eden's dots, and the other events of those years listed with no mark on the map. The mountains of Ararat from the ark's rest (1656), drawn from the land about Lake Van and the upper Aras, with the ark's events there at OpenBible.info's point for Ararat. From the Flood, the places of that option in its first two parts, each at OpenBible.info's site and from the year that option gives: Nimrod's cities, Babel, Erech, Accad and Calneh in the land of Shinar and Nineveh, Rehoboth Ir, Calah and Resen in Assyria (from 1657, by the verses that name them; Babel from 1757, its name's year); and, from the scattering from Babel (placed 1948), the Canaanites' places of Genesis 10:18-19, Arvad, Sidon, Gerar, Gaza, Sodom, Gomorrah, Admah, Zeboiim and Lasha. Its peoples whose lands lie on this map, in its years, each area drawn from the land itself: Nimrod's kingdom (from 1657) and the sons of men in the plain of Shinar (1741 to the confusion at Babel); and from the confusion (placed 1948) to World Year 2000 Asshur, Arphaxad, Elam, Madai, Aram, Riphath, the Hamathites, the Arvadites, the Arkites, Sinites and Zemarites, Sidon, the Canaanites, Mizraim with the Naphtuhim and the Pathrusim (the valley carried on up the Nile to Syene), Kittim and Elishah, the Dodanim and Uz; and, on the Base Map's window for the Table of Nations, Gomer, Magog, Javan, Tubal, Meshech, Tiras, Ashkenaz, Togarmah, Tarshish, Cush, Put, Seba, Havilah, Raamah, Sheba, Dedan, the Ludim, the Anamim, the Lehabim, the Casluhim, the Caphtorim and the Philistines at Caphtor (Crete), Lud, and the sons of Joktan with Sheba, Ophir, Havilah and Uzal; where that window's edge cuts a land, or the option says its edges are not known, or the window has no heights (Armenia and the edges of its neighbours), the area fades out with no line; those of them the option says run on past 2000, having no row of their own in Study 17's option (Nimrod's kingdom, Asshur, Arphaxad, Madai, Riphath, the Hamathites, the Arvadites, the Arkites, Sinites and Zemarites, the Naphtuhim and the Pathrusim, Kittim and Elishah, the Dodanim and Uz, and the peoples of the wider window) run on to the end of this map, Aram until the Syrians begin (2145), the Caphtorim at Caphtor to 2552 and the Philistines there until their own row begins (2107); a figure such as 26% after a people's name is that option's confidence in its tie to the land, where under 70%. Its events at the places it gives them. Until the year after the ark's rest (1658) the map stands back to hold Eden's readings, the Euphrates and the Tigris, and Ararat; then it keeps to Shinar; from the scattering to World Year 2000 it holds the nations' lands on the wider window; then the whole of the land's map. The areas of all 43 rows of Study 17's option ranked first (J6-A), each people's area and years as that option sets them, every limit drawn from the land itself (the Base Map's water, rivers, heights and watersheds; between the places the text names, the way the land runs), darkest along the edge and fading inward, in place of the same peoples' statements in those years; every other statement drawn from the land the same way (a town's own hill and the heads of its valleys, or the land it names: the Sharon, Shinar), each area cut where another lies in it in the same years; eight of them, which began at World Year 2000 only because the map did (the Perizzites, Rephaim, Emim, Zamzummim, Horites, Avim, Geshurites and Chaldeans), from the scattering from Babel (placed 1948). The facts: the Bible Inventory's approved statements (from the New King James Version) of who dwelt in, held or ruled each place, each shown in the years the Inventory gives it and no others; a fact the Inventory gives from an event, with no end, runs on. Places: where OpenBible.info puts them (its leading site, joined to the Inventory as the Base Map joins them); every area drawn from the land, none from OpenBible's outlines alone (the Gospel years' regions follow them, their edges moved onto the land). The peoples the verse places only on the ground (Numbers 13:29), in the mountains and by the sea, are drawn on the hill country west of the Jordan and on the coastal plain, from the Base Map's heights, the darker line only where the land itself sets the limit: general locations (D014), for this map only; any other use needs the owner's approval. Israel and its fathers: one colour at each place the Inventory states, journeying to the next along the places Scripture names on the way; nothing is drawn in the years between. Israel's lands in one colour, each appearing as the camp reaches it (Goshen, the land east of the Jordan at Heshbon, the land west of it at Shiloh), the tribes told apart by their names and borders (the towns of each lot, and the Levites' cities, in the lists); the cities Israel took and did not burn in Israel's colour from the taking until the land is divided (Jericho, Ai and Hazor were burned: Joshua 6:24; 8:28; 11:11-13). The tribes' borders: straight dotted lines between the points the Inventory lists for each lot, in the text's order; between named points, the course not given by the text. The colour stops at the sea and the lakes. The other peoples' colours are provisional. The events listed are those whose place blinks on the map in view, and every turn of Israel's way, each as its journey starts. The map follows Israel: when the next stop lies off the screen it zooms out to show both, the line runs, and it zooms in to the new stop. The Exodus stations are at OpenBible's leading sites; other routes are proposed. The Gospel years: from about ten years before Jesus' birth to the cross and His appearing after it, the Inventory's Gospel events in Scripture's order, each at the year that order places it between four years of the Teaching Chronology (His birth, c. 6–4 BC; Herod's death, c. 4 BC; the word of God coming to John, AD 28/29; the cross, AD 30 or AD 33, with AD 33 by R. C. Young beside it), each set at the middle of its years, and the boy Jesus in the temple at His age there, twelve; the years between them spread evenly; an event at a place OpenBible.info locates blinks there, and the towns the Base Map does not letter (Nazareth, Cana, Capernaum and others) have dots of their own from their first event. The map follows Jesus: one dashed crimson line from each located place of an event He takes part in to the next, the six latest moves kept, the newest light and each older one half as strong, down to a faint trace; a land, a river or a place the map cannot show (the temple, a house) is no stop, and His disc fades until He moves on. Close views of Galilee and Jerusalem; a fine bar for these years under the main one, shown from the start, its two buttons stepping one of His moves at a time. The rulers the Gospels name are shown under the year in the years the Inventory gives them. The Old Testament's lands, towns and tribes are shown in the years the Inventory gives them, and where it gives no end, until the Gospel years. From World Year 3944, about ten years before His birth, the map starts afresh (Study 42): the tribes' lands, borders and towns, the Levites' cities, the Old Testament peoples, the regions the New Testament does not name, the heights and the dots of towns the map names nowhere stop showing; only the places the Gospels name stay lettered, with the Great Sea and the Salt Sea. The regions of those years, Galilee, the province of Judea, Decapolis, Idumea, Iturea, Trachonitis, Abilene and the land of Gennesaret, are drawn as the other lands, from OpenBible.info's outlines with their edges moved onto the land, never across the Jordan, the lakes or the sea; the region of Samaria is named at OpenBible's site. The list at the left gives the nine regions, north to south, each with the verse that names it. In the close views of Galilee and Jerusalem in these years the map's names keep one size on the screen (Study 43): a town at the size of Jesus' stops, Jerusalem a little larger, the waters as the map letters them elsewhere, the regions as before; they are placed in order, the call-outs, Jesus' stops and the names of the places in His wake first, then the regions, the waters, Jerusalem and the other towns; a name that would meet one placed before it, or the map's edge, is moved where it may (a water's name onto the part of its water in view, a town's beside its dot) and is left out only where no clear spot is left, its dot kept; a town the map sets on a leader is set there as the call-outs are, a short line at 45 or 60 degrees from just past its dot and a landing level with its name, and a region's name stands clear of its own outline and of Jesus' line. From World Year 3944 the lake is lettered by the name the Gospels use, the Sea of Galilee.
  Names: the Base Map's lettering as data (its windows of 10/05/2026: B-3 f1 to C-4 c1 and A-2 e1 to B-3 c2 at 1:1,000,000, A-1 a1 to C-4 f4 at 1:2,500,000, A-1 a1 to G-6 f4 at 1:5,000,000; and its window for the Table of Nations at 1:10,000,000, on bare earth; Rameses, a place later than c. 2000 BC, set by the Base Map for this map alone), each shown from the event Scripture names it at, or from the place's first mention, until it is renamed. A town with no room for its name carries a number; pointing at the number gives its name. An asterisk after a name marks a site that does not fit what the text says of it, its figure shown; a place with two sites as likely as each other is at both, the second lettered 'or'. Years from the Bible Inventory. Names called out as Play runs: the place as the verse names it, the name of the time under it.
  A figure such as 55% under a name is OpenBible.info's confidence for that site: how far the reference works it cites agree (its data of 10/31/2021, the time-weighted score). Compare it with the other candidate sites; it is not the chance that the site is right. It is printed, with an open dot, where it is under 70%, and beside a name with an asterisk; the place's card gives it always. In the close views of the Gospel years it is not printed on the map: the open dot stays, and a click on a name, its dot or one of Jesus' stops gives the figure in its card.
  <b>About our dates.</b> Years from Adam. These are counted from the numbers the Bible gives (New King James Version): the ages in Genesis, the 430 years of Exodus 12:40, the 480th year of 1 Kings 6:1 and the years of the kings. The count assumes that the genealogies of Genesis 5 and 11 run without gaps. Where the numbers allow more than one year, we keep each one. A year from Adam runs from autumn to autumn, so it covers parts of two years BC; where the month is not known we give the later one.<br>Years BC and AD. The Bible itself gives none. The notes of the New King James Version give a few, and we show them wherever they speak (circa 605 to circa 536 B.C. at Jeremiah 25:12; Xerxes I, 485-464 B.C., at Esther 1:1). Every other year BC or AD comes from a named source outside the Bible, read first-hand, and is kept apart from the count from Adam. A plain year (853 BC) is fixed by a dated record. &#x27;c.&#x27; (about) marks a year worked out by reckoning, which may be a year or more off. A range (c. 912-871 BC) means somewhere within it. A slash (931/930 BC) means one year that ran across the turn of two.<br>Our year first. Where readers&#x27; Bibles print another year, it follows ours in brackets, with where it is printed: c. 1446 BC (1445 in the MacArthur Study Bible).<br>The link. The two counts are joined at one point: Solomon&#x27;s fourth year, when the temple was begun (1 Kings 6:1), is the spring of 967 BC. That puts the Exodus c. 1446 BC and the crossing of the Jordan c. 1406 BC. Study Bibles that use 966 give the years before Solomon one year later than ours.<br>The earliest years. We give no year BC for the Creation, the Flood or Babel, nor for anything before Abram&#x27;s birth. Before the Exodus we give two years, because the 430 years of Exodus 12:40 can be counted from Abram&#x27;s call or spent wholly in Egypt: Abram was born c. 1951 BC, or c. 2166 BC if the 430 years were spent in Egypt.<br>Where the records and the count part. From Jotham to Josiah, the kings&#x27; years that the Assyrian and Babylonian records fix run up to eight years apart from the count of the Bible&#x27;s own numbers with the fewest shared reigns, because the records need reigns to overlap where the Bible does not say so. There the year BC is shown beside the count as a comparison, not in its place.<br>Why the old margin dates differ. Older Bibles printed in their margins the years of Archbishop James Ussher (1650), which run about 45 years earlier than ours from the kings back. He left out reigns that overlapped, though Scripture shows them (one is the New King James Version&#x27;s own note at 2 Kings 8:16), and so needed years when Israel had no king, which 2 Kings 14:29 and 15:30 do not allow.<br>Our sources and their uses.<br>The New King James Version, its text and notes (Thomas Nelson, 1982): the years from Adam, and the notes&#x27; own years.<br>Rodger C. Young, articles in the Journal of the Evangelical Theological Society (2003, 2004 and 2005): the years of the kings of Judah and Israel, Solomon&#x27;s fourth year and the falls of Jerusalem; checked against Leslie McFall, Bibliotheca Sacra (1991), and Edwin R. Thiele, The Mysterious Numbers of the Hebrew Kings (1983).<br>The Assyrian royal inscriptions of Shalmaneser III and Sennacherib: 853, 841 and 701 BC.<br>The Babylonian Chronicles: 609, 605, 597 and 539 BC.<br>R. A. Parker and W. H. Dubberstein, Babylonian Chronology 626 B.C.-A.D. 45 (1942): the years of the kings of Babylon and Persia; checked against the astronomical tablet VAT 4956, as J. Neuffer reports it (1979).<br>Josephus, Antiquities, and Suetonius, Life of Augustus: Herod&#x27;s death (c. 4 BC), so the birth of Jesus c. 6-4 BC, and the fifteenth year of Tiberius (AD 28/29), so the cross in AD 30 or 33; Rodger C. Young, Bible and Spade (2013), for the other reading (Herod&#x27;s death in 1 BC, the birth c. 3/2 BC, the cross in AD 33).<br>The NKJV Study Bible and the MacArthur Study Bible: only to check our years and for the years in brackets.
  Scripture taken from the New King James Version®. Copyright © 1982 by Thomas Nelson. Used by permission. All rights reserved.
  Site positions from the OpenBible.info Bible Geocoding data (CC BY 4.0), the copy committed 10/31/2021, at OpenBible.info's leading sites.
- Ground: the Base Map, the same four windows and the window for the Table of Nations, its waters as c. 2000 BC (the Delta's branches, coast and lakes as the Base Map judges them for the time); relief from the Copernicus GLO-90 digital elevation model (ESA, 2021), produced using Copernicus WorldDEM™-90 © DLR e.V. 2010–2014 and © Airbus Defence and Space GmbH 2014–2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. Rivers guided by OpenStreetMap (© OpenStreetMap contributors, ODbL; openstreetmap.org/copyright). The window for the Table of Nations: relief from FABDEM V1-2, the Copernicus GLO-30 elevation model with buildings and forests taken off (Hawker et al. 2022, Environmental Research Letters 17, 024016; University of Bristol, doi:10.5523/bris.s5hqmjcdj8yo2ibzi9b4ew3sn; CC BY-NC-SA 4.0), made from the Copernicus GLO-30 digital elevation model (European Space Agency, 2021); produced using Copernicus WorldDEM™-30 © DLR e.V. 2010–2014 and © Airbus Defence and Space GmbH 2014–2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; today's reservoirs not drawn as water, the heights under them their water surface. Because that ground is drawn from FABDEM, this map is shared under the same licence, CC BY-NC-SA 4.0 (creativecommons.org/licenses/by-nc-sa/4.0). Where Palatino is not on the device, the lettering is in Domitian, a free Palatino by Daniel Benjamin Miller after Hermann Zapf's design (© 2014, 2015 (URW)++ Design &amp; Development; © 2019, 2020 Daniel Benjamin Miller), under the SIL Open Font License 1.1. A proof of concept, v77, 11/19/2026.</div></details>
+ Ground: the Base Map, the same four windows and the window for the Table of Nations, its waters as c. 2000 BC (the Delta's branches, coast and lakes as the Base Map judges them for the time); relief from the Copernicus GLO-90 digital elevation model (ESA, 2021), produced using Copernicus WorldDEM™-90 © DLR e.V. 2010–2014 and © Airbus Defence and Space GmbH 2014–2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. Rivers guided by OpenStreetMap (© OpenStreetMap contributors, ODbL; openstreetmap.org/copyright). The window for the Table of Nations: relief from FABDEM V1-2, the Copernicus GLO-30 elevation model with buildings and forests taken off (Hawker et al. 2022, Environmental Research Letters 17, 024016; University of Bristol, doi:10.5523/bris.s5hqmjcdj8yo2ibzi9b4ew3sn; CC BY-NC-SA 4.0), made from the Copernicus GLO-30 digital elevation model (European Space Agency, 2021); produced using Copernicus WorldDEM™-30 © DLR e.V. 2010–2014 and © Airbus Defence and Space GmbH 2014–2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; today's reservoirs not drawn as water, the heights under them their water surface. Because that ground is drawn from FABDEM, this map is shared under the same licence, CC BY-NC-SA 4.0 (creativecommons.org/licenses/by-nc-sa/4.0). Where Palatino is not on the device, the lettering is in Domitian, a free Palatino by Daniel Benjamin Miller after Hermann Zapf's design (© 2014, 2015 (URW)++ Design &amp; Development; © 2019, 2020 Daniel Benjamin Miller), under the SIL Open Font License 1.1. A proof of concept, v78, 11/19/2026.</div></details>
   <div id="controls"><button id="back" aria-label="Back a stop">‹</button><button id="play" class="invite" aria-pressed="false">Play</button><button id="next" aria-label="Next stop">›</button><span class="speedbox"><button id="slower" aria-label="Slower">‹</button><span id="speedchip">Normal</span><button id="faster" aria-label="Faster">›</button></span></div>
  </aside>
 </main>
@@ -713,10 +727,19 @@ const TAKEN = PLAN.taken || [], takenG = el("g", {"data-tribe": "israel", filter
 TAKEN.forEach((t, i) => { t.node = el("circle", {cx: t.x, cy: t.y, r: TW.radius_px, fill: ISRAEL_LAND, "data-taken": i, display: "none"}, takenG); });
 const takenOn = (t, y) => y >= t.a && y < endOf(t.b) && (Math.floor(y) > Math.floor(t.a) || t.seen);   // in its year, once its event is in the list
 function drawTaken() { const y = +slider.value; for (const t of TAKEN) t.node.setAttribute("display", takenOn(t, y) && !fresh(y) ? "inline" : "none"); }
+// v78 (the owner, 11/19/2026: "It needs to be consistent and Israel needs to be labeled and its cities, etc."): the tribes
+// the Inventory gives towns and no border (Simeon, Dan, Reuben, the half-tribe east) named as the other tribes are, at the
+// middle of the towns of their first lot (the median of their sites), from the year of their first town; no border drawn
+for (const t of TW.tribes) if (!TW.allotment.some(a => a.tribe === t.key)) {
+  const all = TW.towns.filter(x => x.tribe === t.key && x.a != null); if (!all.length) continue;
+  const a0 = Math.min(...all.map(x => x.a)), first = all.filter(x => x.a < a0 + 1);
+  const med = v => { const s = [...v].sort((p, q) => p - q), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+  TW.allotment.push({tribe: t.key, a: a0, lx: med(first.map(x => x.x)), ly: med(first.map(x => x.y)), d: null, townsOnly: true});
+}
 for (const a of TW.allotment) {   // the tribe's name at one size on the screen at every zoom, so it can be read (the user)
   const c = mix(ISRAEL_LAND, "#000000", .2), g = el("g", {display: "none"}, allotLayer);   // the borders: straight dotted lines between
   // the named points (D023: the editor's, grade C; between named points, the course not given by the text)
-  el("path", {d: a.d, fill: "none", stroke: c, "stroke-width": 1.1, "stroke-dasharray": "0.1 2.6", "stroke-linecap": "round", "stroke-opacity": .85}, g);
+  if (a.d) el("path", {d: a.d, fill: "none", stroke: c, "stroke-width": 1.1, "stroke-dasharray": "0.1 2.6", "stroke-linecap": "round", "stroke-opacity": .85}, g);
   a.lbl = el("g", {class: "tribelbl", transform: `translate(${a.lx},${a.ly}) scale(1)`}, g);
   // Israel's blue, darker, on the peoples' names' parchment halo (the owner, 10/07/2026: "the white outline of the text is hard to see")
   const t = el("text", {x: 0, y: 4, "text-anchor": "middle", fill: mix(ISRAEL_LAND, "#000000", .4)}, a.lbl); t.textContent = TRIBE[a.tribe].name.replace(" (east)", "").replace("Half-tribe of ", "");
@@ -826,13 +849,19 @@ function nearLines(b, L, m) {
   for (const r of L) for (let k = 1; k < r.length; k++) if (segBox([r[k - 1][0], r[k - 1][1], r[k][0], r[k][1]], b, m)) return true;
   return false;
 }
+let campKey = "";                     // v78: the stop and state the camp's name was last placed for
 function staticTrack(y) {
   const i = idxAt(y);
+  if (i < 0) { trk = null; paint(null); }
+  else { const k = K[i], between = y >= k.e;   // between two stated places nothing is drawn (no inferred years, 10/04/2026)
+    trk = {k, i, st: between ? "between" : "stated", next: K[i + 1]};
+    paint(between ? null : k.pts, tintOf(k), false); }
+  // v78: the lands, the lists and the names drawn once the camp stands as it now does (until v78 before it), so its name
+  // is placed by it; and placed again when it comes or goes at the same stop
+  const same = i === landedK, key = trk ? trk.i + trk.st : "";
   setLanded(i);
-  if (i < 0) { trk = null; paint(null); return; }
-  const k = K[i], between = y >= k.e;   // between two stated places nothing is drawn (no inferred years, 10/04/2026)
-  trk = {k, i, st: between ? "between" : "stated", next: K[i + 1]};
-  paint(between ? null : k.pts, tintOf(k), false);
+  if (same && key !== campKey && cam && !camAnim) peoplesNames();
+  campKey = key;
 }
 // a journey (the owner's line): the shape draws in, the dot travels Scripture's route, the shape opens out. The departing
 // stop's name stays while the dot travels and goes with the dotted line (L071, D21); the arriving name lands as the shape
@@ -1299,7 +1328,7 @@ function detail(id) {
       <div><span class="k">From:</span> ${t.start != null ? Math.floor(t.start) + ", the year the Inventory gives the tribe its lot" : "—"}</div>
       <div><span class="k">Towns shown (${held.length}):</span> ${esc(held.map(x => x.name).join(", "))}</div>
       ${out.length ? `<div><span class="k">Not driven out:</span> ${esc(out.map(x => x.name + " — " + x.note).join("; "))}</div>` : ""}
-      <div><span class="k">Borders:</span> ${(() => { const a = TW.allotment.find(x => x.tribe === t.key); return a ? "straight dotted lines between the points the Inventory lists, in the text's order (" + esc(a.points.join(", ")) + "): between named points, the course not given by the text" : "the Inventory lists too few points OpenBible places to draw them"; })()}</div>`;
+      <div><span class="k">Borders:</span> ${(() => { const a = TW.allotment.find(x => x.tribe === t.key && x.d); return a ? "straight dotted lines between the points the Inventory lists, in the text's order (" + esc(a.points.join(", ")) + "): between named points, the course not given by the text" : "the Inventory lists too few points OpenBible places to draw them"; })()}</div>`;
     drawLists(y); return; }
   const f = DATA.find(x => x.id === id);
   if (f.node) f.node.style.filter = "drop-shadow(0 0 1.5px #000)";
@@ -2057,7 +2086,8 @@ function setAnchors() {
     const same = LABELS.filter(l => norm(l.text) === norm(c.text) || (c.pid && l.pid === c.pid));
     const own = same.flatMap(l => [...l.node.querySelectorAll("text")].map(boxOf)).filter(b => b[2] > b[0]);
     const obs = obstacles(null, true).boxes.filter(o => !own.some(q => Math.abs(q[0] - o[0]) < 1 && Math.abs(q[1] - o[1]) < 1));
-    const ink = wet && !river ? "#3d4c4d" : INK, size = town ? S.anchor : fsz, lh = size * 1.15;   // a river's name on land, in the ink (D36)
+    const sea = /^the great sea$/i.test(c.text);   // v78: The Great Sea a fifth larger (below)
+    const ink = wet && !river ? "#3d4c4d" : INK, size = town ? S.anchor : sea ? fsz * 1.2 : fsz, lh = size * 1.15;   // a river's name on land, in the ink (D36)
     const base = town ? [c.text] : linesOf(c).filter(s => !/^\(/.test(s)).map(s => wet ? titled(s) : s.toUpperCase()), tries = [base];   // Scripture's name alone (the user)
     if (wet && base.length === 1 && base[0].includes(" ")) { const w = base[0].split(" "), h = Math.ceil(w.length / 2), two = [w.slice(0, h).join(" "), w.slice(h).join(" ")];
       if (/^salt sea$/i.test(base[0])) tries.splice(0, 1, two); else tries.push(two); }   // a narrow water on two lines, centred: the Salt Sea always (the user)
@@ -2071,10 +2101,21 @@ function setAnchors() {
     if (river && riv.length) { const Ps = toScreen(P[0], P[1]), d = q => Math.hypot(q[0] - Ps[0], q[1] - Ps[1]);   // a river's name: beside its
       const line = riv.reduce((a, r) => Math.min(...r.map(d)) < Math.min(...a.map(d)) ? r : a);                          // own line, the map's spot first
       offs = line.filter(q => d(q) < 200).sort((p, q) => d(p) - d(q)).flatMap(q => [[q[0] - Ps[0] + 10, q[1] - Ps[1], "start"], [q[0] - Ps[0] - 10, q[1] - Ps[1], "end"]]); }
+    // v78 (the owner, 11/19/2026, of The Great Sea: "I think the text could be slightly bigger, and not so close to this one
+    // area. It is strangely close to the Canaan label. Can we relocate that slightly more out to sea?"): first at the spots
+    // nearest the Base Map's own where it stands 48 px clear of every shore, then as before
+    if (sea) { t.textContent = ""; el("tspan", {x: 0, dy: 0}, t).textContent = tries[0][0]; t.setAttribute("text-anchor", "middle"); t.setAttribute("y", (size * .35).toFixed(2));
+      const b0 = boxOf(t), near = [];
+      for (let dx = -420; dx <= 420; dx += 28) for (let dy = -308; dy <= 308; dy += 28) {
+        const b = [b0[0] + dx, b0[1] + dy, b0[2] + dx, b0[3] + dy];
+        if (b[0] >= M.left + 10 && b[2] <= M.right - 10 && b[1] >= M.top + 10 && b[3] <= M.bottom - 10) near.push([dx, dy, Math.hypot(dx, dy), b]); }
+      near.sort((p, q) => p[2] - q[2]);
+      const clear = []; for (const o of near) { if (clear.length >= 24) break; if (allWater(o[3], 48)) clear.push([o[0], o[1], "middle", 48]); }
+      offs = clear.concat(offs); }
     let ok = false;
     for (const L of tries) {
       t.textContent = ""; L.forEach((s, i) => { const ts = el("tspan", {x: 0, dy: i ? lh.toFixed(2) : 0}, t); ts.textContent = s; });
-      for (const [dx, dy, an] of offs) {
+      for (const [dx, dy, an, shoreM = 3] of offs) {
         t.setAttribute("text-anchor", an); t.setAttribute("y", (size * .35 - (L.length - 1) * lh / 2 + dy).toFixed(2));
         for (const ts of t.children) ts.setAttribute("x", dx);
         const b = boxOf(t), tr = r => { if (window.__why) { const w = (window.__why["a:" + want] ??= {}); w[r] = (w[r] || 0) + 1; } };
@@ -2085,7 +2126,7 @@ function setAnchors() {
         if (trkShown && [[b[0], b[1]], [b[2], b[1]], [b[0], b[3]], [b[2], b[3]], [(b[0] + b[2]) / 2, (b[1] + b[3]) / 2]].some(q => insidePoly(toMap(...q), trkShown))) { tr("israel"); continue; }
         const gr = boxGround(b);
         if (wet && !river ? gr.water < .999 : gr.water > .05) { tr("ground"); continue; }
-        if (wet && !river && !allWater(b, 3)) { tr("shore"); continue; }          // wholly on its water, clear of the shore
+        if (wet && !river && !allWater(b, shoreM)) { tr("shore"); continue; }          // wholly on its water, clear of the shore
         if (contrastOn(gr.dark, ink) < 4.5) { tr("contrast"); continue; }   // an anchor too must read: the darkest tenth at 4.5:1 (D36)
         ok = true; break;
       }
@@ -2212,7 +2253,7 @@ function peoplesNames() {
     const shownS = LABELS.filter(v => v.sym && v.node.getAttribute("display") === "inline" && v.node.style.visibility !== "hidden"
       && (v.node.style.opacity !== "0" || (v.d64cut && !v.small)) && v.set.node.getAttribute("display") !== "none" && +v.set.node.getAttribute("opacity") >= .3).map(v => v.sym).join();
     return JSON.stringify([mode, fsz, mapCTM().a, mapCTM().e, mapCTM().f, M, z, zRef(), on, shownS, r1(taken), r1(calls), r1(segs),
-      r1(lines), r1(riv), r1(ob0.syms.map(d => d.b)), trkShown ? r1(trkShown) : 0, [...CALL.values()].filter(c => c.Ps).map(c => r1(c.Ps)), r1(jB), r1(jL)]);
+      r1(lines), r1(riv), r1(ob0.syms.map(d => d.b)), trkShown ? r1(trkShown) : 0, anim ? 1 : 0, trk ? trk.k.who + "|" + trk.st : "", [...CALL.values()].filter(c => c.Ps).map(c => r1(c.Ps)), r1(jB), r1(jL)]);
   })();
   const memo = PEOPLEMEMO.get(SIG);
   if (memo) { for (const m of memo) { const g = m.node.cloneNode(true); if (m.boxes) g._boxes = m.boxes; if (m.fixed) g._fixed = m.fixed;
@@ -2331,7 +2372,7 @@ function peoplesNames() {
     }
     return false;
   };
-  const leader = (f0, names, tag) => {  // beside its area on a leader, the dot inside it
+  const leader = (f0, names, tag, far) => {  // beside its area on a leader, the dot inside it (v78, far: Israel's camp, a little further)
     const why = x => pwhy(tag + " " + names.join("/") + " (leader)", x);
     const all = room(f0).filter(p => p[2] >= 1.5 && p[2] <= 48 && p[4] >= 16), dots = apart(all, 12, 30);   // its dot well in view, not on the map's edge
     if (all.length <= 80) dots.push(...all.filter(p => !dots.includes(p)));   // a small area whose middle is its town's own dot: any point of it if (!dots.length) { why("no room for its dot"); return false; }
@@ -2342,7 +2383,7 @@ function peoplesNames() {
     for (const p of dots) {
       const pd = [p[0] - 2.5, p[1] - 2.5, p[0] + 2.5, p[1] + 2.5];
       if (calls.some(o => hit(pd, o, 2)) || namesT.some(o => hit(pd, o, 2)) || others.some(o => hit(pd, o, 1)) || pboxes.some(o => hit(pd, o, 2))) { why("its dot"); continue; }
-      for (const L of [20, 28, 42, 56]) for (const a of [45, 60]) for (const [sx, sy] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+      for (const L of far ? [20, 28, 42, 56, 70, 84] : [20, 28, 42, 56]) for (const a of [45, 60]) for (const [sx, sy] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
         const A = a * Math.PI / 180, Q = [sx * L * Math.cos(A), sy * L * Math.sin(A)];
         Q[1] = Math.floor(p[1] + Q[1]) + .5 - p[1];                  // the landing on the middle of a screen pixel (L044)
         const R = [Q[0] + sx * LAND, Q[1]], ax = R[0] + sx * GAP, yb = Q[1] + fsz * .23;   // the landing through the first name's small letters (D10)
@@ -2376,10 +2417,27 @@ function peoplesNames() {
     if (fs / z < 6) return false;                                    // too small to read far out: there named as the others are
     const S0 = f0.g.spine, sp = S0[0][1] < S0[S0.length - 1][1] ? [...S0].reverse() : S0;   // from the south up
     const off = d => sp.map((q, i) => { const a = sp[Math.max(0, i - 1)], c = sp[Math.min(sp.length - 1, i + 1)], tx = c[0] - a[0], ty = c[1] - a[1], L = Math.hypot(tx, ty) || 1;
-      return [q[0] - ty / L * d, q[1] + tx / L * d]; });
+      const di = Array.isArray(d) ? d[i] : d; return [q[0] - ty / L * di, q[1] + tx / L * di]; });
+    // v78 (the owner, 11/19/2026: "the label for Canaanites Girgashites is pushed way up against the coast ... Can we please
+    // move it to be slightly more centered horizontally between the water and Yellow/Purple areas?"; until v78 its foot a
+    // little inland of the shore, at his word of 10/07/2026, "move it toward the coast slightly"): across the curve at each
+    // of its points, the shore and the land's inland edge, where the hill country's peoples begin (or ten of its letters
+    // in, where none is nearer), and the letters' middle halfway between, smoothed into one gentle curve; never nearer the
+    // shore than before
+    const across = (() => { const h = fs / 4, cap = 10 * fs;
+      let m = sp.map((q, i) => {
+        const a = sp[Math.max(0, i - 1)], c = sp[Math.min(sp.length - 1, i + 1)], tx = c[0] - a[0], ty = c[1] - a[1], L = Math.hypot(tx, ty) || 1;
+        const at = s => [q[0] - ty / L * s, q[1] + tx / L * s], dry = s => { const p = at(s); return !isWater(p[0], p[1]); };
+        let s0 = 0;
+        if (dry(0)) { while (s0 > -cap && dry(s0 - h)) s0 -= h; } else { while (s0 < cap && !dry(s0)) s0 += h; }   // the shore
+        let s1 = s0 + h; while (s1 < s0 + cap && dry(s1) && insideShape(f0, at(s1))) s1 += h;                          // the inland edge
+        return (s0 + s1) / 2; });
+      for (let pass = 0; pass < 3; pass++) m = m.map((_, i) => { let s = 0, w = 0;
+        for (let j = -5; j <= 5; j++) { const v = m[i + j]; if (v == null) continue; const k = 6 - Math.abs(j); s += v * k; w += k; } return s / w; });
+      return m.map(v => Math.max(fs, v + fs * .35)); })();   // the baseline: the letters' middle .35 of their size seaward of it
     const g = el("g", {"aria-hidden": "true", "data-sk": tag, transform: "translate(0,0)"}, peopleLayer); g._fixed = true;
     const lines = [names.join(" \u00b7 ")].map((nm, i) => {         // the two names on one line, a dot between them (the owner)
-      const pts = off(fs);                                           // its letters 0.3 to 1 of their size inland
+      const pts = off(across);                                       // v78: its letters' middle halfway across its plain
       el("path", {id: `cv_${tag}_${i}`, d: "M" + pts.map(q => `${q[0].toFixed(1)},${q[1].toFixed(1)}`).join(" L"), fill: "none"}, g);
       const t = el("text", {class: "lbl", "font-size": fs.toFixed(2), "font-style": "italic", "letter-spacing": (fs * .14).toFixed(2), "text-anchor": "middle"}, g);
       t.style.fill = INK; t.style.strokeWidth = (2.8 * z).toFixed(2) + "px";   // the halo as the other names'
@@ -2417,6 +2475,28 @@ function peoplesNames() {
       lay(g, sx, sy); t.setAttribute("y", y0.toFixed(2)); pboxes.push(b); named.add(s.text); ok = true; break; }
     if (!ok) g.remove();
   }
+  // v78 (the owner, 11/19/2026: "Why do we show Isaac's household or Israel rather than just labeling it like we do all the
+  // others?"; "It needs to be consistent and Israel needs to be labeled"): Israel's camp named on the map as the peoples are,
+  // in their italic capitals, beside its colour on a leader with the leader's dot inside it (a small area's way), on two
+  // lines where one does not fit ("Isaac's household, with Jacob"); while it stands at a stop, not while it journeys; one
+  // copy of the name (in Goshen the land's own CHILDREN OF ISRAEL stands for it, and the camp is named only where the
+  // land's name finds no room); placed before the peoples' names, which keep clear of it
+  const bare = s => String(s || "").toUpperCase().replace(/^THE /, "");
+  const campWho = trk && trk.st === "stated" && !anim && trkShown && trkShown.length > 2 ? bare(trk.k.who) : null;
+  const landSays = !!campWho && Object.values(SHAPES).some(fs => fs.some(f => state(f, y) && [f.g.name, ...nameOf(f)].some(n => bare(n) === campWho)));
+  const campName = () => {
+    const who = campWho, two = who.split(/,\s*/);
+    if (![...named].some(n => bare(n) === who)) {
+      const c = cen(trkShown), r = Math.sqrt(areaOf(trkShown) / Math.PI), deep = [c[0], c[1], Math.min(r, 40 * z)];
+      for (let k = 0; k < 8; k++) { const A = k * Math.PI / 4; deep.push(c[0] + .75 * r * Math.cos(A), c[1] + .75 * r * Math.sin(A), Math.min(.25 * r, 40 * z)); }
+      const f0 = {id: "TRACK", g: {kind: "circle", x: c[0], y: c[1], r: r / .8, deep, lp: c, lpw: 2 * r, sk: "TRACK|" + c.map(v => v.toFixed(1)).join(",")}};
+      const w = who.replace(/,/g, "").split(" "), h = Math.ceil(w.length / 2), halves = [w.slice(0, h).join(" "), w.slice(h).join(" ")];
+      if ([[who.replace(/,/g, "")], ...(two.length > 1 ? [two] : []), ...(w.length > 1 && two.length < 2 ? [halves] : [])].some(L => leader(f0, L, "TRACK", true))) { named.add(who);
+        // it gives way by its letters only: its leader's dot is the stop's own, where the stop's name is called out too
+        const g = peopleLayer.querySelector('g[data-sk="TRACK"]'); if (g) g._boxes = [boxOf(g.querySelector("text"))]; }
+    }
+  };
+  if (campWho && !landSays) campName();
   for (const [key, fs] of byRoom) {   // the smallest areas first, with the fewest places for their names; the largest last, with the most
     if (curvedDone.has(key)) continue;
     const on = fs.filter(f => state(f, y)); if (!on.length || !on[0].g.lp) continue;
@@ -2448,6 +2528,7 @@ function peoplesNames() {
     if (put(f0, names, key) || names.length < 2) continue;            // the peoples of one land together, in Scripture's order (Genesis 13:7)
     for (const n of names) put(f0, [n], key + "|" + n);               // else each where it fits
   }
+  if (campWho && landSays) campName();  // v78: the camp named where its land's own name found no room
   if (PEOPLEMEMO.size > 600) PEOPLEMEMO.clear();
   PEOPLEMEMO.set(SIG, [...peopleLayer.children].map(g => ({node: g.cloneNode(true), boxes: g._boxes, fixed: g._fixed})));
   peoplesGiveWay(); jNamesSync();
@@ -3229,7 +3310,7 @@ async function playLoop(g) {
 }
 function setPlaying(on) {
   if (!on && cam) wantTiles(cam);
-  playing = on; if (on) play.classList.remove("invite"); play.textContent = on ? "Pause" : "Play";   // v77: the pulse until Play is first pressed play.setAttribute("aria-pressed", on ? "true" : "false");
+  playing = on; if (on) play.classList.remove("invite"); play.textContent = on ? "Pause" : "Play"; play.setAttribute("aria-pressed", on ? "true" : "false");   // v77: the pulse until Play is first pressed (v78: its pressed state set again, which v77's comment had swallowed)
   document.body.classList.toggle("playing", on);       // (the lists do not change at Pause: the user, 10/01/2026)
   if (on) { hold(false); if (!looping) { if (jMove != null && alive(jMove)) { ++gen; cancelAnim(); if (camAnim) camView = null; cancelCam(); } playLoop(gen); } }   // Play from one of His moves: the move's own sequence ends first (D059)
   else hold(true);                                                                     // Pause holds everything (L085)
@@ -3386,11 +3467,15 @@ function under(e) {
   const lev = els.find(n => n.dataset && n.dataset.lev != null && n.getAttribute("display") !== "none");
   const tk = els.find(n => n.dataset && n.dataset.taken != null && n.getAttribute("display") !== "none");
   const co = els.map(n => n.closest && n.closest("#callouts g.callout")).find(Boolean);
+  // v78: the lists' column gone on a laptop, Israel's camp and the tribes are opened by their names on the map
+  const near = n => { const r = n.getBoundingClientRect(); return r.width && e.clientX >= r.left - 3 && e.clientX <= r.right + 3 && e.clientY >= r.top - 3 && e.clientY <= r.bottom + 3; };
+  const campName = trk && [...peopleLayer.querySelectorAll('g[data-sk="TRACK"] text')].some(near);
+  const tribeAt = TW.allotment.find(a => a.node.getAttribute("display") !== "none" && a.lbl.style.opacity !== "0" && near(a.lbl));
   let stop = null, name = null;            // D064: in a close view His stop's name or dot, or a map name or its dot: the nearer
   if (!co && d64On()) { const s = d64StopAt(e.clientX, e.clientY), n = d64NameAt(e.clientX, e.clientY);
     if (s && (!n || s.d <= n.d)) stop = s.stop; else if (n) name = n.v; }
   else if (!co) name = nameAt(e);
-  return {items, co, stop, name, track: trk && els.includes(trkPath), town: town && TW.towns[+town.dataset.town], lev: lev && TW.levites[+lev.dataset.lev], taken: tk && TAKEN[+tk.dataset.taken]};
+  return {items, co, stop, name, campName, tribe: tribeAt && tribeAt.tribe, track: trk && els.includes(trkPath), town: town && TW.towns[+town.dataset.town], lev: lev && TW.levites[+lev.dataset.lev], taken: tk && TAKEN[+tk.dataset.taken]};
 }
 map.addEventListener("mousemove", e => {
   const u = under(e);
@@ -3463,6 +3548,8 @@ map.addEventListener("click", e => {
   const u = under(e);
   if (u.co) { chooseCallout(u.co); return u.co.classList.contains("chosen") ? cardAt(e) : gcardHide(); }
   if (u.stop) { stopDetail(u.stop); return cardAt(e); }
+  if (u.campName) { detail("TRACK"); return cardAt(e); }   // v78
+  if (u.tribe) { detail("T:" + u.tribe); return cardAt(e); }
   if (u.name) { nameDetail(u.name); return cardAt(e); }
   if (u.track) { detail("TRACK"); return cardAt(e); }
   if (u.town) { detail("T:" + u.town.tribe); return cardAt(e); }
