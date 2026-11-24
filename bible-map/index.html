@@ -192,7 +192,8 @@ details.credit summary { font-size:10px; letter-spacing:.16em; padding:4px 0 3px
 #mapPulse.on { display:block; animation:pulse 2.6s ease-in-out infinite; }
 @keyframes pulse { 0%, 100% { opacity:0; } 50% { opacity:1; } }
 body.lessmotion #mapPulse.on { animation:none; opacity:.5; }
-#map.flying g[display="none"] text, #map.flying #names .tiny text { display:none; }   /* v54: the names no one can see, left out while the camera moves */
+#map.flying g[display="none"] text, #map.flying #names .tiny text { display:none; }
+#names .farDots circle[fill="#3a2c1c"] { stroke:none; }   /* v54: the names no one can see, left out while the camera moves */
 #tip { position:absolute; pointer-events:none; background:rgba(255,252,244,.96); border:1px solid var(--rule);
   padding:6px 9px; font-size:12.5px; line-height:1.35; max-width:300px; display:none; box-shadow:0 1px 4px rgba(0,0,0,.2); }
 #legend { position:absolute; top:8px; left:8px; display:grid; grid-template-columns:auto auto; align-items:center; gap:1px 7px;
@@ -200,9 +201,14 @@ body.lessmotion #mapPulse.on { animation:none; opacity:.5; }
   text-shadow:0 0 2px var(--paper), 0 0 2px var(--paper), 0 0 3px var(--paper); }   /* no box (the owner, 10/07/2026) */
 #legend .s { justify-self:center; }
 /* the ages (Map Assets' add_ages.py, 11/24/2026), in the rulers' box */
-#rulers .ages { display:grid; grid-template-columns:minmax(4.6em,auto) minmax(1.9em,auto); column-gap:10px; width:max-content; padding:4px 7px; font-size:14px; line-height:1.35;
+#rulers .ages { position:relative; display:grid; grid-template-columns:auto auto auto; column-gap:11px; row-gap:0; width:max-content; margin:8px 0 10px 6px; padding:2px 4px;
+  font-family:"EB Garamond", var(--serif); font-size:12px; font-variant-caps:small-caps; letter-spacing:.05em; line-height:1.3;
   color:var(--callink); font-variant-numeric:lining-nums tabular-nums; will-change:transform;
-  text-shadow:0 0 2px var(--paper), 0 0 2px var(--paper), 0 0 3px var(--paper), 0 0 5px var(--paper); }
+  text-shadow:0 0 3px rgba(255,255,255,.75), 0 0 7px rgba(255,255,255,.6); }
+#rulers .ages::before { content:""; position:absolute; z-index:-1; inset:-74px -100px -84px; pointer-events:none;   /* a white fog, thinning out gradually to nothing (the owner, 11/24/2026) */
+  background:radial-gradient(closest-side, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.9) 14%, rgba(255,255,255,0.84) 26%, rgba(255,255,255,0.73) 37%, rgba(255,255,255,0.6) 47%, rgba(255,255,255,0.46) 56%, rgba(255,255,255,0.33) 65%, rgba(255,255,255,0.22) 73%, rgba(255,255,255,0.13) 81%, rgba(255,255,255,0.065) 88%, rgba(255,255,255,0.025) 94%, rgba(255,255,255,0) 100%); }
+#rulers .ages span.h { font-size:11px; color:var(--accent); }
+#rulers .ages span.n { text-align:right; }
 #rulers .ages b { font-weight:normal; text-align:right; }
 #legend.low { top:40px; }               /* under the year where the map is too narrow for both at its top */
 #legend .star { font-size:17px; line-height:12px; height:10px; }
@@ -501,7 +507,7 @@ details.credit { font-size:10px; color:var(--soft); padding:0 12px 4px 0; line-h
     </g>
    </g>
    <g id="trkPast"></g>
-   <path id="trkTrail" fill="none" stroke-width="1.6" stroke-linecap="round" vector-effect="non-scaling-stroke" opacity="0"/>
+   <path id="trkTrail" fill="none" stroke-width="2" stroke-linecap="round" vector-effect="non-scaling-stroke" opacity="0"/>
    <g id="levites" clip-path="url(#face)"></g>
    <g id="house" aria-hidden="true"></g>
    <g id="allot" clip-path="url(#face)"></g>
@@ -546,7 +552,7 @@ details.credit { font-size:10px; color:var(--soft); padding:0 12px 4px 0; line-h
  <b>About our dates.</b> Years from Adam. These are counted from the numbers the Bible gives (New King James Version): the ages in Genesis, the 430 years of Exodus 12:40, the 480th year of 1 Kings 6:1 and the years of the kings. The count assumes that the genealogies of Genesis 5 and 11 run without gaps. Where the numbers allow more than one year, we keep each one. A year from Adam runs from autumn to autumn, so it covers parts of two years BC; where the month is not known we give the later one.<br>Years BC and AD. The Bible itself gives none. The notes of the New King James Version give a few, and we show them wherever they speak (circa 605 to circa 536 B.C. at Jeremiah 25:12; Xerxes I, 485-464 B.C., at Esther 1:1). Every other year BC or AD comes from a named source outside the Bible, read first-hand, and is kept apart from the count from Adam. A plain year (853 BC) is fixed by a dated record. &#x27;c.&#x27; (about) marks a year worked out by reckoning, which may be a year or more off. A range (c. 912-871 BC) means somewhere within it. A slash (931/930 BC) means one year that ran across the turn of two.<br>Our year first. Where readers&#x27; Bibles print another year, it follows ours in brackets, with where it is printed: c. 1446 BC (1445 in the MacArthur Study Bible).<br>The link. The two counts are joined at one point: Solomon&#x27;s fourth year, when the temple was begun (1 Kings 6:1), is the spring of 967 BC. That puts the Exodus c. 1446 BC and the crossing of the Jordan c. 1406 BC. Study Bibles that use 966 give the years before Solomon one year later than ours.<br>The earliest years. We give no year BC for the Creation, the Flood or Babel, nor for anything before Abram&#x27;s birth. Before the Exodus we give two years, because the 430 years of Exodus 12:40 can be counted from Abram&#x27;s call or spent wholly in Egypt: Abram was born c. 1951 BC, or c. 2166 BC if the 430 years were spent in Egypt.<br>Where the records and the count part. From Jotham to Josiah, the kings&#x27; years that the Assyrian and Babylonian records fix run up to eight years apart from the count of the Bible&#x27;s own numbers with the fewest shared reigns, because the records need reigns to overlap where the Bible does not say so. There the year BC is shown beside the count as a comparison, not in its place.<br>Why the old margin dates differ. Older Bibles printed in their margins the years of Archbishop James Ussher (1650), which run about 45 years earlier than ours from the kings back. He left out reigns that overlapped, though Scripture shows them (one is the New King James Version&#x27;s own note at 2 Kings 8:16), and so needed years when Israel had no king, which 2 Kings 14:29 and 15:30 do not allow.<br>Our sources and their uses.<br>The New King James Version, its text and notes (Thomas Nelson, 1982): the years from Adam, and the notes&#x27; own years.<br>Rodger C. Young, articles in the Journal of the Evangelical Theological Society (2003, 2004 and 2005): the years of the kings of Judah and Israel, Solomon&#x27;s fourth year and the falls of Jerusalem; checked against Leslie McFall, Bibliotheca Sacra (1991), and Edwin R. Thiele, The Mysterious Numbers of the Hebrew Kings (1983).<br>The Assyrian royal inscriptions of Shalmaneser III and Sennacherib: 853, 841 and 701 BC.<br>The Babylonian Chronicles: 609, 605, 597 and 539 BC.<br>R. A. Parker and W. H. Dubberstein, Babylonian Chronology 626 B.C.-A.D. 45 (1942): the years of the kings of Babylon and Persia; checked against the astronomical tablet VAT 4956, as J. Neuffer reports it (1979).<br>Josephus, Antiquities, and Suetonius, Life of Augustus: Herod&#x27;s death (c. 4 BC), so the birth of Jesus c. 6-4 BC, and the fifteenth year of Tiberius (AD 28/29), so the cross in AD 30 or 33; Rodger C. Young, Bible and Spade (2013), for the other reading (Herod&#x27;s death in 1 BC, the birth c. 3/2 BC, the cross in AD 33).<br>The NKJV Study Bible and the MacArthur Study Bible: only to check our years and for the years in brackets.
  Scripture taken from the New King James Version®. Copyright © 1982 by Thomas Nelson. Used by permission. All rights reserved.
  Site positions from the OpenBible.info Bible Geocoding data (CC BY 4.0), the copy committed 10/31/2021, at OpenBible.info's leading sites.
- Ground: the Base Map, the same four windows and the window for the Table of Nations, its waters as c. 2000 BC (the Delta's branches, coast and lakes as the Base Map judges them for the time); relief from the Copernicus GLO-90 digital elevation model (ESA, 2021), produced using Copernicus WorldDEM™-90 © DLR e.V. 2010–2014 and © Airbus Defence and Space GmbH 2014–2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. Rivers guided by OpenStreetMap (© OpenStreetMap contributors, ODbL; openstreetmap.org/copyright). The window for the Table of Nations: relief from FABDEM V1-2, the Copernicus GLO-30 elevation model with buildings and forests taken off (Hawker et al. 2022, Environmental Research Letters 17, 024016; University of Bristol, doi:10.5523/bris.s5hqmjcdj8yo2ibzi9b4ew3sn; CC BY-NC-SA 4.0), made from the Copernicus GLO-30 digital elevation model (European Space Agency, 2021); produced using Copernicus WorldDEM™-30 © DLR e.V. 2010–2014 and © Airbus Defence and Space GmbH 2014–2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; today's reservoirs not drawn as water, the heights under them their water surface. Because that ground is drawn from FABDEM, this map is shared under the same licence, CC BY-NC-SA 4.0 (creativecommons.org/licenses/by-nc-sa/4.0). Where Palatino is not on the device, the lettering is in Domitian, a free Palatino by Daniel Benjamin Miller after Hermann Zapf's design (© 2014, 2015 (URW)++ Design &amp; Development; © 2019, 2020 Daniel Benjamin Miller), under the SIL Open Font License 1.1. A proof of concept, v95, 11/24/2026.</div></details>
+ Ground: the Base Map, the same four windows and the window for the Table of Nations, its waters as c. 2000 BC (the Delta's branches, coast and lakes as the Base Map judges them for the time); relief from the Copernicus GLO-90 digital elevation model (ESA, 2021), produced using Copernicus WorldDEM™-90 © DLR e.V. 2010–2014 and © Airbus Defence and Space GmbH 2014–2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. Rivers guided by OpenStreetMap (© OpenStreetMap contributors, ODbL; openstreetmap.org/copyright). The window for the Table of Nations: relief from FABDEM V1-2, the Copernicus GLO-30 elevation model with buildings and forests taken off (Hawker et al. 2022, Environmental Research Letters 17, 024016; University of Bristol, doi:10.5523/bris.s5hqmjcdj8yo2ibzi9b4ew3sn; CC BY-NC-SA 4.0), made from the Copernicus GLO-30 digital elevation model (European Space Agency, 2021); produced using Copernicus WorldDEM™-30 © DLR e.V. 2010–2014 and © Airbus Defence and Space GmbH 2014–2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; today's reservoirs not drawn as water, the heights under them their water surface. Because that ground is drawn from FABDEM, this map is shared under the same licence, CC BY-NC-SA 4.0 (creativecommons.org/licenses/by-nc-sa/4.0). Where Palatino is not on the device, the lettering is in Domitian, a free Palatino by Daniel Benjamin Miller after Hermann Zapf's design (© 2014, 2015 (URW)++ Design &amp; Development; © 2019, 2020 Daniel Benjamin Miller), under the SIL Open Font License 1.1. A proof of concept, v96, 11/24/2026.</div></details>
   <div id="controls"><button id="back" aria-label="Back a stop">‹</button><button id="play" class="invite" aria-pressed="false">Play</button><button id="next" aria-label="Next stop">›</button><span class="speedbox"><button id="slower" aria-label="Slower">‹</button><span id="speedchip">Normal</span><button id="faster" aria-label="Faster">›</button></span></div>
  </aside>
 </main>
@@ -885,7 +891,16 @@ const H_BLUE = "#1f4fa6", H_HEAD = "#5a82c8", H_INK = mix(ISRAEL_LAND, "#000000"
 // again as v78 had them); v80's drawing (#house: the circles, the ways, hDraw) not drawn
 const H_V78 = true;
 const houseLayer = document.getElementById("house");
-if (H_V78) houseLayer.style.display = "none";
+// the owner, 11/24/2026: a dashed sky-blue circle about the marker where it stands (none on the way), and its line dashed, in the same blue
+const SKY = "#2f9fe6";
+const hRing = el("circle", {fill: "none", stroke: SKY, "stroke-width": 2, "stroke-dasharray": "5 4", "vector-effect": "non-scaling-stroke", "pointer-events": "none", display: "none"}, houseLayer);
+function hRingDraw() {
+  const sh = cam && trkShown && trkShown.length > 2 ? trkShown : null;
+  hRing.setAttribute("display", sh ? "inline" : "none"); if (!sh) return;
+  const z = camZ(), c = cen(sh);
+  hRing.setAttribute("cx", c[0].toFixed(2)); hRing.setAttribute("cy", c[1].toFixed(2));
+  hRing.setAttribute("r", (Math.max(13, Math.min(60, Math.sqrt(areaOf(sh) / Math.PI) / z + 5)) * z).toFixed(2));
+}
 const hFill = el("circle", {fill: H_BLUE, stroke: H_BLUE, "stroke-width": 2, "vector-effect": "non-scaling-stroke", display: "none"}, houseLayer);
 const hHere = el("circle", {fill: "none", stroke: H_BLUE, "stroke-width": 1.5, "stroke-dasharray": "3 3", "vector-effect": "non-scaling-stroke", display: "none"}, houseLayer);
 const hDot = el("circle", {fill: H_BLUE, display: "none"}, houseLayer);
@@ -930,6 +945,7 @@ function hWay(w, pts, op, z, line, dash, cut) {   // a way: its line (v87: as v7
   w.q.setAttribute("display", "none");
 }
 function hDraw() {                      // the household's look as the map now stands
+  hRingDraw();
   if (!cam || H_V78) return;            // v89: not drawn; the household as v78 drew it
   const z = camZ(), t = now(), sh = trkShown && trkShown.length > 2 ? trkShown : null;
   let c = null, r = 0, dot = false, k = 0;
@@ -1069,8 +1085,8 @@ function journey(from, to, back, nameLater) {
       travel = legs ? to.dur - SHRINK - GROW : Math.min(4000, Math.max(1500, len * 9));
     const c0 = cen(from.pts), c1 = cen(to.pts), col0 = tintOf(from), col1 = tintOf(to), own = back ? from : to,
       traced = !!own.way && K[K.indexOf(own) - 1] === (back ? to : from);        // the way traced on the ground (D021)
-    trkTrail.style.transition = "none"; trkTrail.setAttribute("opacity", 1); trkTrail.setAttribute("stroke", lineOf(to)); trkTrail.setAttribute("d", "");
-    trkTrail.setAttribute("stroke-dasharray", "none");
+    trkTrail.style.transition = "none"; trkTrail.setAttribute("opacity", 1); trkTrail.setAttribute("stroke", SKY); trkTrail.setAttribute("d", "");
+    trkTrail.setAttribute("stroke-dasharray", "5 5");
     hDest = to;                                       // v86: the ways end at its circle
     // the stop left behind keeps its name at full strength while it stays clear of the new ones; the one before it goes
     // now, well before the new name comes, and nothing faded is left under a new name (the user, 10/01/2026)
@@ -1255,6 +1271,7 @@ function setCam(c) {
   restyleCallouts();               // the names called out keep their screen size at this scale (L078)
   mapLettering();                  // the map's own lettering: none drawn too small to read (L131)
   jesusRestyle();                  // Jesus' marks keep their screen size (D059)
+  hRingDraw();                     // the dashed circle keeps its screen size
   hRest();                         // v88: the household's look redrawn once the camera stands still, not on every frame
 }
 // v88 (the owner, 11/23/2026, of the flicker seen since the battles came in and not in v78: "I would like to see if that
@@ -1421,6 +1438,7 @@ async function travel(from, to, back, g) {
   // there, and their events (Gilead, Mahanaim, the Jabbok, Peniel), are seen at its scale; before, it went in only after
   // the dot had landed and every one of them had been listed
   let early = null;
+  if (!back) { curRoute = route(from, to); moveCard(K.indexOf(to), from, g); }   // its Scripture starts as its line starts, and holds nothing (the owner)
   const going = journey(from, to, back, false);       // named as the dot lands, the name riding the zoom (the user: no gap)
   if (!OFF90 && dest === "view" && (back || !to.stations)) {   // v90: off, the camera going in after the dot lands, as v85
     const F = fit(stopRect(to)), [cw, ch] = box(), hv = F[2] * ch / cw;
@@ -1532,10 +1550,10 @@ const yearText = yi => bcText(yi) ? `Year ${yi} · ${bcText(yi)}` : `Year ${yi}`
 const rulersBox = document.getElementById("rulers");
 // the ages of the family the map is following (the owner, 11/24/2026), as the Inventory gives their years
 const AGES = [{"n": "Terah", "a": 1878, "b": 2083}, {"n": "Abraham", "a": 2008, "b": 2183, "was": "Abram"}, {"n": "Sarah", "a": 2018, "b": 2145, "was": "Sarai"}, {"n": "Lot", "a": 2083, "b": 2107, "none": 1}, {"n": "Ishmael", "a": 2094, "b": 2231}, {"n": "Isaac", "a": 2108, "b": 2288}, {"n": "Esau", "a": 2168, "b": 2288}, {"n": "Jacob", "a": 2168, "b": 2315}, {"n": "Joseph", "a": 2259, "b": 2369}, {"n": "Aaron", "a": 2430, "b": 2552, "said": {"2552": 123}}, {"n": "Moses", "a": 2433, "b": 2553}], AGES_NAMED = 2107;
-const agesAt = yi => AGES.filter(p => yi >= p.a && yi <= p.b).map(p => `<span>${yi < AGES_NAMED && p.was || p.n}</span><b>${p.none ? '' : p.said && p.said[yi] || yi - p.a}</b>`).join("");
+const agesAt = yi => AGES.filter(p => yi >= p.a && yi <= p.b).map(p => `<span>${yi < AGES_NAMED && p.was || p.n}</span><b>${p.none ? '' : p.said && p.said[yi] || yi - p.a}</b><b>${p.none ? '' : p.a}</b>`).join("");
 function setRulers(yi) {             // the rulers the Gospels name, in the years the Inventory gives (v61)
   const on = (PLAN.rulers || []).filter(r => { const a = r.a ?? r.b, b = r.b ?? r.a; return yi >= a && yi <= b; });   // no end given: its own year only
-  const ag = agesAt(yi), h = on.map(r => esc(r.t)).join("<br>") + (ag ? `<div class="ages">${ag}</div>` : "");
+  const ag = agesAt(yi), h = on.map(r => esc(r.t)).join("<br>") + (ag ? `<div class="ages"><span class="h">Name</span><span class="h n">Age</span><span class="h n">Born</span>${ag}</div>` : "");
   if (rulersBox.innerHTML !== h) rulersBox.innerHTML = h;
   rulersBox.style.left = keyLeft() + "px"; rulersBox.style.top = matchMedia("(max-width:839px)").matches ? (yearBox.offsetHeight + 10) + "px" : "8px";
   placeLegend();
@@ -1669,7 +1687,8 @@ const BLINKS = [];                 // live blinks, kept clear of names (L057)
 function blink(e, delay) {        // the same size on the screen at any scale; only where the place is in view (a blink
   if (!e.px) return;              // set at the map's edge flashed in the open sea as the camera moved: the user, 10/01/2026)
   if (!onScreen(e.px)) return;
-  const [x, y] = edgePoint(e.px[0], e.px[1]), g = el("g", {transform: `translate(${x.toFixed(1)},${y.toFixed(1)}) scale(${(camZ() / zRef()).toFixed(3)})`, "aria-hidden": "true"}, blinkLayer);
+  const far = 1 + 1.2 * Math.max(0, Math.min(1, (camZ() / zRef() - 1.5) / 2.5));   // larger zoomed out (the owner, 11/24/2026)
+  const [x, y] = edgePoint(e.px[0], e.px[1]), g = el("g", {transform: `translate(${x.toFixed(1)},${y.toFixed(1)}) scale(${(camZ() / zRef() * far).toFixed(3)})`, "aria-hidden": "true"}, blinkLayer);
   el("circle", {cx: 0, cy: 0, r: 2.4, class: "blink", style: `animation-delay:${delay}ms`}, g);
   el("circle", {cx: 0, cy: 0, r: 2.4, class: "blinkring", style: `animation-delay:${delay}ms`}, g);
   const b = {p: [x, y]}; BLINKS.push(b);
@@ -1726,8 +1745,22 @@ async function sayLine(e, g) {
   const me = evLineOn = {e}, text = e.ref ? `${e.t} (${e.ref})` : e.t;
   evLine.textContent = text; placeEvLine(); evLine.style.display = ""; evLine.style.opacity = 1;
   announceEvent(e);
-  await wait(holdFor({name: text}));
+  await wait(readFor(text));
   if (evLineOn === me) evLineOff();
+}
+// the wait after an event, by what comes next (the owner, 11/24/2026): where the next event's name takes its place, the time to
+// read it; where nothing does (a birth's or a death's card stays its own time; or a line, with its own Scripture, is next), half a second
+const readFor = text => Math.max(1000, 400 + 210 * String(text || "").split(/\s+/).filter(w => /\w/.test(w)).length);
+function nextUp(e) {                   // the next event as Play will tell it; none where a move comes first
+  const q = queue.find(x => x !== e && okEv(x)); if (q) return q;
+  const y = +slider.value, m = Math.min(Infinity, ...K.map(k => k.a).concat(JS.map(s => s.a), [TRACK_END]).filter(a => a > y + 1e-9));
+  let b = null; for (const x of EV) { const t = evAt(x); if (t > y + 1e-9 && seenEv(x) && (!b || t < evAt(b))) b = x; }
+  return b && evAt(b) < m - 1e-9 ? b : null;
+}
+function pace(e, text, card) {
+  const x = nextUp(e); if (!x) return 500;
+  const same = x.pid && x.pid === e.pid || x.px && e.px && Math.hypot(x.px[0] - e.px[0], x.px[1] - e.px[1]) < 1;
+  return card && !same ? 500 : readFor(text);
 }
 async function dripOne(e, g) {
   if ((e.s19 || e.nosite) && !e.px) { addRow(e); if (alive(g)) await sayLine(e, g); return; }   // v60: Study 19's with no site, listed in its year, not drawn (J4-A); v86: and the births the Inventory gives no place, each said on the map in its turn
@@ -1746,9 +1779,9 @@ async function dripOne(e, g) {
     await wait(250); if (!alive(g)) return;
     const ms = holdFor(items[0]);
     callout(items, 1, ms);
-    await wait(FADE_IN + ms); if (ruin) await ruin; return;
+    await wait(FADE_IN + pace(e, items[0].name, false)); if (ruin) await ruin; return;
   }
-  await wait(Math.max(1100 / speed * Math.min(1, 12 / Math.max(queue.length, 1)), 480 / speed));
+  await wait(Math.max(700 / speed * Math.min(1, 12 / Math.max(queue.length, 1)), 400 / speed));
   if (ruin) await ruin;
 }
 // v87: the burning (RUIN), on the map's clock (Pause holds it), its times at Normal shortened as Play goes faster: over the
@@ -1966,16 +1999,18 @@ function wordSet(k, p, kb, fs, dm) {
   p.lines.forEach((pc, i) => { const sp = el("tspan", {x: x0.toFixed(2), y: (kb[1] + dm.padY + dm.lh * (i + .5 + (i >= p.top ? .4 : 0)) + .345 * fs).toFixed(2)}, t); wordFill(sp, pc, fs); });
 }
 async function moveCard(j, from, g) {             // j: the stop it goes to
-  const V = visibleMap(), seen = [...route(from, K[j]), ...from.pts, ...K[j].pts].every(q => { const s = toScreen(q[0], q[1]); return s[0] >= V.left + 30 && s[0] <= V.right - 30 && s[1] >= V.top + 30 && s[1] <= V.bottom - 30; });
-  await noteAt(MOVE_CARDS[K[j].id], "move" + j, from.place, cen(from.pts), {fix: K[j].id === "K02" ? {sx: -1, sy: -1, L: 70, a: 60} : null, stay: seen || from.id === "K00"}, g);   // Haran, the owner's choice
+  await noteAt(MOVE_CARDS[K[j].id], "move" + j, from.place, cen(from.pts), {fix: K[j].id === "K02" ? {sx: -1, sy: -1, L: 70, a: 60} : K[j].id === "K01" ? {sx: -1, sy: 1, L: 70, a: 40} : null}, g);   // Haran, the owner's choice
 }
 async function jesusCard(j, fly, g) {             // one of His moves, at the place He leaves, His line and the marks of His stops kept clear
   await noteAt(MOVE_CARDS[JS[j].ev], "jesus" + j, JS[j - 1].place, JS[j - 1].px, {stay: !fly, path: fly ? [] : [JS[j - 1].px, JS[j].px]}, g);
 }
-async function noteAt(m, name, place, P, o, g) {  // o.fix: its own spot; o.stay: still up for a second as the line starts; o.path: His line to come
+async function noteAt(m, name, place, P, o, g, left) {  // o.fix: its own spot; o.stay: still up for a second as the line starts; o.path: His line to come
   if (!m || mode === "off" || mapRoom() === 1 || !alive(g)) return;
   const p = {kind: "word", who: "", unnamed: false, w: m.w, ref: m.ref, w2: m.w2, ref2: m.ref2, wide: m.wide, cur: [m.w, m.ref, m.w2, m.ref2].filter(Boolean).join(" "), all: [m.w + " " + m.ref], host: null};
   const at = toScreen(P[0], P[1]);
+  if (!left) { const up = [...CALL].filter(([, c]) => c.note && !c.leaving); if (up.length > 1) { up[0][1].ms = 1; release(up[0][0]); } }   // never more than two at once
+  for (const [k, c] of [...CALL]) if (!c.note && !c.leaving && c.Ps && Math.hypot(c.Ps[0] - at[0], c.Ps[1] - at[1]) < 30) {   // a birth's or a death's card at the place gives way to it
+    if (/^card:/.test(k)) { c.ms = 1; release(k, 300); } else if (c.card) dropCard(c); }
   const it = {name: place, px: P, person: p, cardOnly: true, noPlace: true}, saveG = curGroup;
   const host = [...CALL.values()].find(c => c.Ps && !c.leaving && Math.hypot(c.Ps[0] - at[0], c.Ps[1] - at[1]) < 14);
   // every spot about the place, each by what its paper and leader would cover (the map's own measure of overlap), a leader
@@ -2003,13 +2038,12 @@ async function noteAt(m, name, place, P, o, g) {  // o.fix: its own spot; o.stay
   // (the owner: "It also hold too long and reading is over well before it goes away.  The dashed line can start before it goes
   // away."); where the camera must first go out, it goes as the camera starts (but from Ur, where the line starts with it)
   const read = Math.max(2000, 400 + 210 * [m.w, m.w2].filter(Boolean).join(" ").split(/\s+/).filter(w => /\w/.test(w)).length);
-  const key = "card:" + name, ms = read + (o.stay ? 1000 : 0);
-  const e = {...d, v: null, it, key, rank: 1, pinned: false, born: now(), grp: host ? host.grp : ++groupN, ms, z: camZ(), relax: true, far: true};
+  const key = "card:" + name, ms = left || read;
+  const e = {...d, v: null, it, key, rank: 1, pinned: false, born: now(), grp: host ? host.grp : ++groupN, ms, z: camZ(), relax: true, far: true, note: {m, name, place, P, o, g}};
   releaseNow(key); CALL.set(key, e); p.host = e; anchorsGiveWay(); peoplesGiveWay();
   window.__move = {name, how, pen: d.pen};
   if (typeof say === "function") say([m.w, m.ref, m.w2, m.ref2].filter(Boolean).join(". "));
   e.timer = later(() => release(key), ms + FADE_IN);
-  await wait(FADE_IN + read);
 }
 function swapCard(p, pk, line) {       // a family's next name: the line cross-fades in place (out 150 ms, in 200 ms), the mark and
   Object.assign(p, {kind: pk.kind, who: pk.who, unnamed: pk.unnamed, cur: line});   // the rule changing with it where a birth
@@ -2037,7 +2071,7 @@ async function dripPerson(e, g) {      // a birth or a death: its row and blink;
     : (a.ord || 0) - (b.ord || 0) || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));   // the story order (v65); else the verse's (the Inventory's ids follow it)
   const ps = run.map(personOf), place = titled(run[0].vname || run[0].place);
   const lines = ps.map(p => p.line);     // each person's own title in turn at every speed, never "and 1 more" (the owner, 10/07/2026)
-  const per = l => Math.max(2400, 1000 + l.length / 17 * 1000);         // each name its own time, at least 2.4 s (D34)
+  const per = l => readFor(l);           // each name its own time to be read (the owner, 11/24/2026)
   const p = {...ps[0], cur: lines[0], all: lines, kinds: new Set(ps.map(x => x.kind)), host: null};
   addRow(run[0]); blink(run[0], 0);
   for (const m of run[0].more || []) blink(m, 0);
@@ -2045,7 +2079,7 @@ async function dripPerson(e, g) {      // a birth or a death: its row and blink;
   const it = {...eventItem(run[0]), person: p}, before = lines.slice(0, -1).reduce((s, l) => s + per(l), 0);
   const hold = before + holdFor({...it, person: {...p, cur: lines[lines.length - 1]}});
   if (mode === "off") {                                                  // no names (Settings); else every birth and death shows (the owner)
-    await wait(Math.max(1100 / speed * Math.min(1, 12 / Math.max(queue.length, 1)), 480 / speed)); return;
+    await wait(Math.max(700 / speed * Math.min(1, 12 / Math.max(queue.length, 1)), 400 / speed)); return;
   }
   namedYear = yr;
   await wait(250); if (!alive(g)) return;
@@ -2055,7 +2089,7 @@ async function dripPerson(e, g) {      // a birth or a death: its row and blink;
     addRow(run[k]); blink(run[k], 0);
     const pk = ps[k], line = lines[k]; later(() => swapCard(p, pk, line), 250);
   }
-  await wait(FADE_IN + hold - (lines.length > 1 ? before - 250 : 0));
+  await wait(FADE_IN + pace(run[run.length - 1], lines[lines.length - 1], true) + (lines.length > 1 ? 250 : 0));
 }
 const dockEl = document.getElementById("dock");
 let dockT = null;
@@ -2141,6 +2175,9 @@ for (const S of NM) {
     const fig = (v.svg.join("").match(/\((\d+)\/1000\)/) || [])[1]; v.fig = fig ? +fig : null;   // the figure the Base Map letters (step 4)
   }
   for (const s of S.symbols) { const g = el("g", {"data-sym": s.id}, sy); g.innerHTML = s.svg.join(""); s.node = g; SYMS.push(s); }
+  if (S.key === "t" || S.key === "o") {   // zoomed out (the owner, 11/24/2026)
+    sy.setAttribute("class", "farDots");
+    for (const c of sy.querySelectorAll("circle")) if (+c.getAttribute("r") > 1.71) c.setAttribute("r", "1.7008"); }
   // v76: the window's largest town name, by which setCam tells whether its towns' names can be read at the camera's scale
   S.fsTown = Math.max(0, ...S.labels.filter(v => v.kind === "settlement").map(v => v.fs));
 }
@@ -3387,6 +3424,9 @@ function landed(resized) {
   later(() => {
     const again = new Map();                                            // the map's scale changed: each spot checked again, the names
     for (const [k, c] of [...CALL]) {                                   // called out together placed again together (a land's name
+      if (c.note) { const t = c.born + c.ms + FADE_IN - now(); c.z = camZ();
+        if (!onScreen(c.P)) { c.ms = 1; release(k, 300); } else if (c.out && t > 1200) { const q = c.note; releaseNow(k); noteAt(q.m, q.name, q.place, q.P, q.o, q.g, t - FADE_IN); }
+        continue; }
       if (!onScreen(c.P)) { release(k, 300); continue; }               // stays by its circle; Bethel to the left, Ai to the right)
       const zoomed = c.z && Math.abs(camZ() / c.z - 1) > .15;
       if (zoomed && !c.out && !resized && stillGood(k, c)) { c.z = camZ(); continue; }   // its spot still serves: it stays (no flicker)
@@ -3475,7 +3515,7 @@ function place(items, rank, ms, pin) {
 let lastBorn = 0;
 function roomFor(rank, lines) {        // the ceiling of lines of type (D19's skeptic; L123): the oldest event names leave first
   const cap = Math.min(ceilingLines(), mapRoom() === 2 ? 2 : 99);
-  const live = [...CALL.values()].filter(c => !c.leaving);
+  const live = [...CALL.values()].filter(c => !c.leaving && !c.note);
   let used = live.reduce((s, c) => s + (mapRoom() === 2 ? 1 : c.lineCount || 1), 0);
   const victims = live.filter(c => c.rank > rank && !c.pinned).sort((a, b) => b.rank - a.rank || a.born - b.born);
   while (used + lines > cap && victims.length) { const c = victims.shift(); used -= mapRoom() === 2 ? 1 : c.lineCount || 1; release(c.key); }
@@ -3555,7 +3595,7 @@ function nameStop(k) {                 // Israel's stop named and held while Isr
   // (the user, 10/01/2026: "these labels would have overlapped. You will need to check that"); an event's name goes (L111)
   let delay = 0;
   if (mode !== "off" && cam && !camAnim && !fitsNow(items, () => false)) {
-    const ev = c => c.rank !== 0 && c.rank !== 2 && c.rank !== 6 && !c.pinned, all = c => c.rank > 0 && !c.pinned;
+    const ev = c => c.rank !== 0 && c.rank !== 2 && c.rank !== 6 && !c.pinned && !c.note, all = c => c.rank > 0 && !c.pinned && !c.note;
     if (fitsNow(items, ev)) { delay = 300; for (const [key, c] of [...CALL]) if (ev(c)) release(key, 300); }
     else if (fitsNow(items, all)) { delay = 900; later(() => { for (const [key, c] of [...CALL]) if (all(c)) release(key, 400); }, 500); }
     // else the names left are not in its way: they stay, and it takes the clearest spot there is
@@ -3630,7 +3670,7 @@ function eventsOnWay(evs, it, q, gap) {  // the events at a place on the way, on
 function personsOnWay(run, it, q, g0) {  // the births and deaths at a place on the way: their card on the place's name, the names in
   const ps = run.map(personOf), place = titled(run[0].vname || run[0].place);   // turn,
   const lines = ps.map(p => p.line);   // as dripPerson: each person's own title in turn, never "and 1 more"
-  const per = l => Math.max(2400, 1000 + l.length / 17 * 1000);         // each name its own time, at least 2.4 s (D34)
+  const per = l => readFor(l);           // each name its own time to be read (the owner, 11/24/2026)
   const p = {...ps[0], cur: lines[0], all: lines, kinds: new Set(ps.map(x => x.kind)), host: null};
   addRow(run[0]); blink(run[0], 0);
   sayPersons(run, ps, place);
@@ -3710,20 +3750,19 @@ async function stepTo(n, g) {
   if (step || (from != null && from !== i)) {
     if (step) await dripReady(g, e => evFirst(e, step));       // Scripture's earlier verses first (L067)
     if (!alive(g)) return;
-    await until(() => now() >= holdUntil);                                      // the stop's name has had its time (L090)
+    await until(() => now() >= Math.min(holdUntil, standFrom + 1000));          // the stop's name has been read (it stays as the line starts)
     if (!alive(g)) return;
-    if (step && i > from) { await moveCard(i, K[from], g); if (!alive(g)) return; }
     if (i >= 0) startEvents(i);                                                 // the stop's own events as it starts (the user)
     if (step) await travel(K[from], step, i < from, g);                          // out, the line, in (the user)
     else {
       // v86 (the owner, 11/21/2026: "1878, zoom is way too fast to 1948"; "1948, zoom is way too fast to 2008"): a change of
       // view as Play moves on at the pace of the map's own flights (travel: 2.8 to 5 s), no longer 0.7 to 1.5 s
       if (i >= 0 ? (v !== camView || !stopSeen(K[i])) : v !== camView) { await (i >= 0 ? flyToStop(K[i], 2800, 5000, 2) : flyTo(v, 2800, 5000, 2)); if (!alive(g)) return; }
-      if (from === K.length - 1 && i === -1 && n >= TRACK_END) { await noteAt(MOVE_CARDS.END, "moveEnd", K[from].place, cen(K[from].pts), {stay: false}, g); if (!alive(g)) return; trkIdx = i; await disperse(K[from]); }
+      if (from === K.length - 1 && i === -1 && n >= TRACK_END) { trkIdx = i; const out = disperse(K[from]); noteAt(MOVE_CARDS.END, "moveEnd", K[from].place, cen(K[from].pts), {}, g); await out; }
       else { trkIdx = i; releaseAll(true); staticTrack(n); await wait(300); nameStop(K[i]); }
     }
     if (!alive(g)) return;
-    await until(() => now() >= standFrom + 1000);                              // the stop's name alone, 1 s (L068)
+    await until(() => now() >= standFrom + 300);                               // the stop's name in, then its events
   } else { trkIdx = i; const jMoves = JS.length && jIdx < JS.length - 1 && JS[jIdx + 1].a <= n + 1e-9;   // His move: its leg flies the camera (D059)
     // v86 (the owner, 11/21/2026: "1948, map is not finished and the zoom level is focused in the incorrect areas"): at the
     // scattering the confusion of tongues is told where it happens, at Babel in Shinar's view (Genesis 11:5-9), and only then
@@ -3747,11 +3786,15 @@ async function playLoop(g) {
       if (bScene) { await battleWaits(g); if (!alive(g) || !playing) return; }   // v79: nor does the year move on
       const y = +slider.value, own = evFrom != null && trkIdx >= 0 && K[trkIdx].id === "K00"; let n = own ? y : nextStop(y);   // the stop at Ur: that year's own events first
       const quiet = z => weightIn(y, z) === 0 && !K.some(k => k.a > y && k.a <= z) && !JS.some(s => s.a > y + 1e-9 && s.a <= z + 1e-9) && !(TRACK_END > y && TRACK_END <= z);
-      if (!own && quiet(n + 4)) n = Math.min(n + 4, MAX);            // hurry through the quiet years
+      if (!own && quiet(n)) {                                        // on to the next event, move or battle's step (the owner, 11/24/2026)
+        let m = Infinity; const at = a => { if (a > y + 1e-9 && a < m) m = a; };
+        for (const e of EV) if (e.w && seenEv(e)) { const t = evAt(e); if (t > y + 1e-9) at(Math.max(Math.ceil(t - 1e-9), n)); }
+        for (const k of K) at(k.a); for (const x of JS) at(x.a); at(TRACK_END); for (const b of BATTLES) if (b.pre) at(b.pre.yr);
+        n = m < Infinity ? m : y < MAX ? MAX : MAX + 1; }
       if (n > MAX) { n = MIN; lastEvY = null; }
       await stepTo(n, g);                                     // Play's start too: K01 Haran named at 2008 (L084)
       if (!alive(g) || !playing) return;
-      await wait((160 + Math.min(weightIn(y, n), 14) * 40) / speed);
+      await wait(120 / speed);
     }
   } finally { if (alive(g)) looping = false; }
 }
@@ -4546,11 +4589,11 @@ function goStop(d) {
     queue = EV.filter(e => okEv(e) && !shown.includes(e) && homeOf(e) === j && evAt(e) <= k.a + 1e-9); queue.sort(byStory);   // as Play gives them
     if (from != null && from >= 0 && Math.abs(j - from) === 1) {
       if (j > from) { await dripReady(g, e => evFirst(e, k)); if (!alive(g)) return; }   // the verses before it first, at the stop being left (L067)
-      if (j > from) { await moveCard(j, K[from], g); if (!alive(g)) return; } startEvents(j); await travel(K[from], k, j < from, g); }                  // its own events as it starts (the user)
+      startEvents(j); await travel(K[from], k, j < from, g); }                  // its own events as it starts (the user)
     else { startEvents(j); if (k.view !== camView || !stopSeen(k)) { await flyToStop(k, 700, 2500); if (!alive(g)) return; }
       trkIdx = j; releaseAll(true); staticTrack(k.a); drawLists(k.a); nameStop(k); }
     if (!alive(g)) return;
-    await until(() => now() >= standFrom + 1000); await dripReady(g); lastEvY = k.a;
+    await until(() => now() >= standFrom + 300); await dripReady(g); lastEvY = k.a;
     if (alive(g)) hold(true);                                                  // and waits
   })();
 }
@@ -4906,10 +4949,9 @@ function jesusDisc(y) {                  // at a land or a place the map cannot 
 function jesusStatic(y) { jIdx = jsIdxAt(y); drawWake(jIdx); jesusDisc(y); }   // the map at rest at a year: the wake of the move shown
 async function jesusLeg(j, g) {          // the camera first where the leg needs another view (at the pace of Israel's journeys), then the line
   const p = JS[j - 1], q = JS[j], b = viewRect(), inV = s => s.px[0] >= b[0] && s.px[0] <= b[0] + b[2] && s.px[1] >= b[1] && s.px[1] <= b[1] + b[3];
-  const fly = q.view !== camView || !inV(p) || !inV(q), here = inV(p);      // His note at the place He leaves, where it is in view; else once the camera has come
-  if (here) { await jesusCard(j, fly, g); if (!alive(g)) return; }
+  const fly = q.view !== camView || !inV(p) || !inV(q);
   if (fly) { await flyTo(q.view, 2800, 5000, 2); if (!alive(g)) return; }
-  if (!here) { await jesusCard(j, false, g); if (!alive(g)) return; }
+  jesusCard(j, false, g);                 // His note starts as His line starts, and holds nothing
   const a = toScreen(p.px[0], p.px[1]), c = toScreen(q.px[0], q.px[1]);
   const T = Math.min(1700, Math.max(700, Math.hypot(c[0] - a[0], c[1] - a[1]) / 300 * 1000));   // a steady 300 screen px a second
   await new Promise(res => { const t0 = now(); frames(t => { if (!alive(g)) { res(); return false; }
