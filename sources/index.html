@@ -9,7 +9,7 @@
   if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   document.documentElement.dataset.theme = t; })();</script>
 <title>Sources and License Notices | View.Bible</title>
-<meta name="description" content="Every source behind View.Bible’s maps, charts and timeline (NKJV, Copernicus, OpenStreetMap, OpenBible.info, Thiele, Ussher), each notice word for word.">
+<meta name="description" content="Every source behind View.Bible’s maps, charts and timeline (NKJV, Copernicus, FABDEM, OpenStreetMap, OpenBible.info, Thiele, Ussher), each notice word for word.">
 <meta name="robots" content="max-image-preview:large">
 <link rel="canonical" href="https://view.bible/sources/">
 <meta property="og:type" content="website">
@@ -17,7 +17,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:url" content="https://view.bible/sources/">
 <meta property="og:title" content="Sources and License Notices">
-<meta property="og:description" content="Every source behind View.Bible’s maps, charts and timeline (NKJV, Copernicus, OpenStreetMap, OpenBible.info, Thiele, Ussher), each notice word for word.">
+<meta property="og:description" content="Every source behind View.Bible’s maps, charts and timeline (NKJV, Copernicus, FABDEM, OpenStreetMap, OpenBible.info, Thiele, Ussher), each notice word for word.">
 <meta property="og:image" content="https://view.bible/img/view-bible-card-og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -35,7 +35,7 @@
    "@type": "WebPage",
    "@id": "https://view.bible/sources/#webpage",
    "url": "https://view.bible/sources/",
-   "dateModified": "2026-11-17",
+   "dateModified": "2026-11-24",
    "name": "Sources and License Notices",
    "isPartOf": {
     "@id": "https://view.bible/#website"
@@ -120,9 +120,15 @@ a { overflow-wrap: anywhere; }
 
   <section id="copernicus">
     <h2>Copernicus digital elevation models</h2>
-    <p class="use">GLO-90: the shaded relief of <i>The Allotment of the Land</i>, of <i>Who Lived Where, and When</i> (the Bible Map) and of the Abraham maps now in progress. GLO-30: the shaded relief and contours of <i>The Route of the Exodus</i> and <i>Cities of Refuge and the Levites</i>, whose streams are traced on the GLO-90.</p>
+    <p class="use">GLO-90: the shaded relief of <i>The Allotment of the Land</i> and of the Abraham maps now in progress, and, on <i>Who Lived Where, and When</i> (the Bible Map), the streams and the heights its peoples’ areas are drawn by. GLO-30: the shaded relief and contours of <i>The Route of the Exodus</i> and <i>Cities of Refuge and the Levites</i>, whose streams are traced on the GLO-90, and the shaded relief of the Bible Map’s two wider views, and of its Canaan and Nile Delta where FABDEM has no heights.</p>
     <blockquote>© DLR e.V. 2010–2014 and © Airbus Defence and Space GmbH 2014–2018 provided under COPERNICUS by the European Union and ESA; all rights reserved.</blockquote>
     <p style="margin-top:12px">Copernicus DEM, <a href="https://spacedata.copernicus.eu/collections/copernicus-digital-elevation-model">https://spacedata.copernicus.eu/collections/copernicus-digital-elevation-model</a></p>
+  </section>
+
+  <section id="fabdem">
+    <h2>FABDEM</h2>
+    <p class="use">The shaded relief of Canaan, the Nile Delta and the Table of Nations on <i>Who Lived Where, and When</i> (the Bible Map).</p>
+    <blockquote>FABDEM V1-2, the Copernicus GLO-30 elevation model with buildings and forests taken off (Hawker et al. 2022, Environmental Research Letters 17, 024016; University of Bristol, <a href="https://doi.org/10.5523/bris.s5hqmjcdj8yo2ibzi9b4ew3sn">doi:10.5523/bris.s5hqmjcdj8yo2ibzi9b4ew3sn</a>), licensed under CC BY-NC-SA 4.0 (<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">https://creativecommons.org/licenses/by-nc-sa/4.0/</a>). Produced using Copernicus WorldDEM™-30 © DLR e.V. 2010–2014 and © Airbus Defence and Space GmbH 2014–2018 provided under COPERNICUS by the European Union and ESA; all rights reserved.</blockquote>
   </section>
 
   <section id="openbible">
@@ -164,7 +170,7 @@ a { overflow-wrap: anywhere; }
 
   <section id="inventory">
     <h2>The Bible Inventory</h2>
-    <p>The people, events and years on the timeline, and every fact on its cards, come from the Bible Inventory: View.Bible’s own record of the people, places and events of Scripture, each fact with the verses it rests on, read in the New King James Version. It is written book by book and grows as it goes. The peoples, events and place names of <i>Who Lived Where, and When</i> come from it too, with a few facts from a second reading of the same chapters that it does not yet hold, each marked so. It is part of the site’s own work, below.</p>
+    <p>The people, events and years on the timeline, and every fact on its cards, come from the Bible Inventory: View.Bible’s own record of the people, places and events of Scripture, each fact with the verses it rests on, read in the New King James Version. It covers every book, Genesis to Revelation. The peoples, events and place names of <i>Who Lived Where, and When</i> come from it too. It is part of the site’s own work, below.</p>
   </section>
 
   <section id="type">
@@ -174,8 +180,10 @@ a { overflow-wrap: anywhere; }
 
   <section id="license">
     <h2>This site’s own work</h2>
-    <p>The timeline, the maps and charts, their pictures and the Bible Inventory, made for View.Bible, are licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0, <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a>). You may copy, share and adapt them for any purpose, provided you credit View.Bible, link to the license and say if you changed them.</p>
+    <p>The timeline, the printed maps and charts, their pictures and the Bible Inventory, made for View.Bible, are licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0, <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a>). You may copy, share and adapt them for any purpose, provided you credit View.Bible, link to the license and say if you changed them.</p>
     <p class="use">Suggested credit: “From View.Bible (https://view.bible/), CC BY 4.0.”</p>
+    <p>The Bible Map (<i>Who Lived Where, and When</i>) and its pictures are licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (CC BY-NC-SA 4.0, <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">https://creativecommons.org/licenses/by-nc-sa/4.0/</a>), because much of its ground is drawn from FABDEM. You may copy, share and adapt it with credit, but not for commercial use, and what you make from it takes the same license.</p>
+    <p class="use">Suggested credit: “From View.Bible (https://view.bible/bible-map/), CC BY-NC-SA 4.0.”</p>
     <p>The license covers only View.Bible’s own work. The Scripture quotations and the material named above stay under their own terms. Where a document is under a different license, its page says so.</p>
   </section>
 </main>

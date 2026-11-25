@@ -59,7 +59,7 @@
    "@type": "WebPage",
    "@id": "https://view.bible/bible-timeline/#webpage",
    "url": "https://view.bible/bible-timeline/",
-   "dateModified": "2026-11-19",
+   "dateModified": "2026-11-24",
    "name": "Bible Timeline",
    "description": "Scroll through the Bible’s people and events on one timeline, with the verses for each, and download free maps and charts as printable PDFs.",
    "isPartOf": {
@@ -1174,7 +1174,20 @@ const FIRST = ["name", "birth of", "death of", "creation of", "father", "mother"
   "place", "participant", "led by", "part of", "destination", "place type", "located in", "lived at", "burial place"];
 const HIDE = new Set(["date", "earliest date", "latest date", "occurred before", "designation"]);
 const go = id => { const n = NM[id] || (CARDS[id] && CARDS[id].n); return n ? `<a class="go" data-go="${id}">${n}</a>` : ""; };
-const yearOf = id => { const y = INV.events[id]; return !y ? null : y.y != null ? y.y : y.lo; };
+// an event's window and its placed year (decision D037): on its own card w holds the earliest year (a), the latest (z), the placed
+// year (y), the kind (k: S Scripture's own year, O one year by the order of events, P placed in its window, F from its earliest
+// year, B by its latest), what sets the ends (t), their verses (r) and Scripture's clock (c); wy on another card holds the placed
+// year and kind of each event it lists. The placed year is labelled so, never shown as a date
+const PLACED = { P: "placed", F: "from this year", B: "by this year" };
+const evYear = (en, id) => { const q = en.wy && en.wy[id], y = INV.events[id]; return q || (y ? [y.y != null ? y.y : y.lo, "S"] : null); };
+const evLine = (en, id) => { const q = evYear(en, id);
+  return `<div class="evl">${q ? `<span class="num yr">${cal(q[0])}</span>` : `<span class="yr"></span>`}<span>${go(id)}${q && PLACED[q[1]] ? ` <span class="ctx">${PLACED[q[1]]}</span>` : ""}</span></div>`; };
+const amOf = y => `<span class="amy num">AM ${Math.round(y).toLocaleString()}</span>`;
+const windowText = w => w.k === "P" ? `between ${cal(w.a)} and ${cal(w.z)}` : w.k === "F" ? `from ${cal(w.a)}` : w.k === "B" ? `by ${cal(w.z)}` : cal(w.y);
+const windowHow = w => w.b === "calculated" ? `<sup class="bs" title="Reckoned: ${tipText(w.t)}">†</sup>` : `<sup class="bs" title="Inferred: ${tipText(w.t)}">*</sup>`;
+const clockLine = w => w && w.c ? `<div class="ctx">${w.c}</div>` : "";
+const windowRow = w => { const end = w.k === "F" ? w.a : w.k === "B" ? w.z : w.y, apart = w.k === "P" || w.y !== end;
+  return `<div>${windowText(w)}${windowHow(w)}${w.k === "P" ? "" : ` ${amOf(end)}`}${w.r ? `<span class="rf">${w.r}</span>` : ""}</div>${apart ? `<div>placed ${cal(w.y)} ${amOf(w.y)}</div>` : ""}${clockLine(w)}`; };
 const yearText = (y, mark = "") => y.y != null ? `${cal(y.y)}${mark} <span class="amy num">AM ${Math.round(y.y).toLocaleString()}</span>` : `between ${cal(y.lo)} and ${cal(y.hi)}${mark}`;
 const tipText = s => (s || "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 const how = f => f.b === "calculated" ? `<sup class="bs" title="Reckoned: ${tipText(f.w)}">†</sup>` : f.b === "inferred" ? `<sup class="bs" title="Inferred: ${tipText(f.w)}">*</sup>` : "";
@@ -1194,20 +1207,23 @@ function invCard(id, band, o) {
     const dateLine = x => `<div>${yearText(x, how(x))}${x.r ? `<span class="rf">${x.r}</span>` : ""}</div>`;
     if (born) row(bd.born ? "Born" : "Made", dateLine(born));
     if (died) row("Died", dateLine(died));
+  } else if (en.k === "event" && en.w && en.w.k !== "S") {
+    when = en.w.k === "P" ? `${cal(en.w.a)} – ${cal(en.w.z)}` : windowText(en.w);
+    row("When", windowRow(en.w));
   } else if (en.k === "event" && INV.events[id]) {
     const y = INV.events[id], d = fs.find(f => (f.p === "date" || f.p === "earliest date") && !f.s) || {};
     when = y.y != null ? cal(y.y) : `${cal(y.lo)} – ${cal(y.hi)}`;
-    row("When", `<div>${yearText(y, how(d))}${d.r ? `<span class="rf">${d.r}</span>` : ""}</div>`);
+    row("When", `<div>${yearText(y, how(d))}${d.r ? `<span class="rf">${d.r}</span>` : ""}</div>${clockLine(en.w)}`);
   }
   const order = [...FIRST.filter(p => byProp[p]), ...Object.keys(byProp).filter(p => !FIRST.includes(p) && !HIDE.has(p)).sort()];
   order.forEach(p => { if (p === "name" && byProp.name.length === 1 && byProp.name[0].v === en.n) return; row(LABEL[p] || p[0].toUpperCase() + p.slice(1), cell(byProp[p])); });
   // what the rest of the Inventory says of this entry: children, and the events it belongs to
   row("Children", (rv.kids || []).map(k => `<div>${go(k)}</div>`).join(""));
-  if (en.k !== "event") row("Events", (rv.evs || []).map(e => `<div class="evl">${yearOf(e) != null ? `<span class="num yr">${cal(yearOf(e))}</span>` : `<span class="yr"></span>`}${go(e)}</div>`).join(""));
+  if (en.k !== "event") row("Events", (rv.evs || []).map(e => evLine(en, e)).join(""));
   else row("Includes", (rv.inc || []).map(e => `<div>${go(e)}</div>`).join(""));
   const onChart = o && o.kind === "Person" && o.b <= 2553 && !o.approx;
   return `<div class="body"><div class="kind">${band || kind}</div><h3>${en.n}</h3>${when ? `<div class="when num">${when}</div>` : ""}<div class="desc">${en.d}</div>
-    <dl>${rows.join("")}</dl>${rows.join("").includes('class="bs"') ? `<div class="key"><b>†</b> reckoned from the years and ages Scripture gives<span>·</span><b>*</b> inferred from Scripture<span>·</span>rest the pointer on a mark to see the working</div>` : ""}${onChart ? `<div class="acts"><a class="btn2" href="#" onclick="openPanel('d0');return false">See it on From Adam to Moses</a></div>` : ""}
+    <dl>${rows.join("")}</dl>${rows.join("").includes('class="bs"') ? `<div class="key"><b>†</b> reckoned from the years and ages Scripture gives<span>·</span><b>*</b> inferred from Scripture<span>·</span>rest the pointer on a mark to see the working</div>` : ""}${/>placed /.test(rows.join("")) || /class="ctx">placed</.test(rows.join("")) ? `<div class="key"><b>placed</b> put within its years by the order of events, not a date Scripture gives</div>` : ""}${onChart ? `<div class="acts"><a class="btn2" href="#" onclick="openPanel('d0');return false">See it on From Adam to Moses</a></div>` : ""}
     <div class="fine">From the Bible Inventory, ${id}. Every line is approved against the New King James Version; the Inventory now reaches ${INV.through}.</div></div>`;
 }
 function openEntry(id) { const o = Object.values(ALL).find(o => o.inv === id); if (o) { openPanel(o.id); return; }
@@ -1296,7 +1312,7 @@ function showList() {
   nHits = search(raw); nGold = -1;
   nlsc.innerHTML = nHits.length ? nHits.map((h, i) => { const w = bandWords(h.p.row);
       return `<div class="nl" role="option" id="nl${i}" data-i="${i}"><div class="nl-n">${w.pre}${esc(h.p.n)}${h.alt ? ` <i>(${esc(h.alt)})</i>` : ""}${w.post ? `<span class="nl-w">${w.post}</span>` : ""}</div>${h.p.d ? `<div class="nl-d">${esc(h.p.d)}</div>` : ""}</div>`; }).join("")
-    : `<div class="nl-none">No one of that name in the Bible Inventory, which does not yet reach every book.</div>`;
+    : `<div class="nl-none">No one of that name in the Bible Inventory.</div>`;
   nlct.textContent = nHits.length === 1 ? "1 person" : `${nHits.length.toLocaleString()} people`; nlct.style.display = nHits.length ? "" : "none";
   placeList(); nlist.classList.add("on"); nlsc.scrollTop = 0; nq.setAttribute("aria-expanded", "true"); nq.removeAttribute("aria-activedescendant");
 }

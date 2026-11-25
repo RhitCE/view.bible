@@ -6,20 +6,20 @@
 <link rel="preload" href="fonts/eb-garamond-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>document.documentElement.dataset.theme = "dark";  /* always dark on opening (the owner, 11/18/2026) */</script>
-<title>View.Bible: Interactive Bible Timeline, Free Maps and Charts</title>
-<meta name="description" content="Scroll through the Bible’s people and events on one timeline, with the verses for each, and download free maps and charts as printable PDFs.">
+<title>View.Bible: Bible Map, Bible Timeline, Free Maps and Charts</title>
+<meta name="description" content="Follow the Bible on an animated map and an interactive timeline, find anyone in it by name, with the verses, and download free maps and charts to print.">
 <meta name="robots" content="max-image-preview:large">
 <link rel="canonical" href="https://view.bible/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="View.Bible">
 <meta property="og:locale" content="en_US">
 <meta property="og:url" content="https://view.bible/">
-<meta property="og:title" content="View.Bible: Interactive Bible Timeline, Free Maps and Charts">
-<meta property="og:description" content="Scroll through the Bible’s people and events on one timeline, with the verses for each, and download free maps and charts as printable PDFs.">
-<meta property="og:image" content="https://view.bible/img/view-bible-timeline-og.jpg">
+<meta property="og:title" content="View.Bible: Bible Map, Bible Timeline, Free Maps and Charts">
+<meta property="og:description" content="Follow the Bible on an animated map and an interactive timeline, find anyone in it by name, with the verses, and download free maps and charts to print.">
+<meta property="og:image" content="https://view.bible/img/view-bible-home-og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="The View.Bible timeline: the lives from Adam to Moses as bars on one scale of years, with the events and books of the Bible below">
+<meta property="og:image:alt" content="The View.Bible front page: The Bible Map and The Bible Timeline, a window with the map playing, and a box to find anyone in the Bible">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.ico" sizes="48x48">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -57,16 +57,16 @@
    "@type": "WebPage",
    "@id": "https://view.bible/#webpage",
    "url": "https://view.bible/",
-   "dateModified": "2026-11-19",
-   "name": "View.Bible: Interactive Bible Timeline, Free Maps and Charts",
-   "description": "Scroll through the Bible’s people and events on one timeline, with the verses for each, and download free maps and charts as printable PDFs.",
+   "dateModified": "2026-11-24",
+   "name": "View.Bible: Bible Map, Bible Timeline, Free Maps and Charts",
+   "description": "Follow the Bible on an animated map and an interactive timeline, find anyone in it by name, with the verses, and download free maps and charts to print.",
    "isPartOf": {
     "@id": "https://view.bible/#website"
    },
    "inLanguage": "en-US",
    "primaryImageOfPage": {
     "@type": "ImageObject",
-    "contentUrl": "https://view.bible/img/view-bible-timeline-og.jpg",
+    "contentUrl": "https://view.bible/img/view-bible-home-og.jpg",
     "width": 1200,
     "height": 630
    },
@@ -257,7 +257,7 @@ function show(faint) {
         : `<span class="go off"><span class="arr" aria-hidden="true">${ARROW}</span>No years given for the map</span>`;
       return `<div class="row" role="option" id="r${i}" data-i="${i}"><div class="who"><div class="n">${esc(p.n)}${p.alts.length ? `<i>also ${esc(p.alts.join(", "))}</i>` : ""}</div>${p.d ? `<div class="d">${esc(p.d)}</div>` : ""}</div>`
         + `<a class="go first" href="bible-timeline/index.html#${id}"><span class="arr" aria-hidden="true">${ARROW}</span>On the timeline</a>${map}</div>`; }).join("")
-    : `<div class="none">No one of that name in the Bible Inventory, which does not yet reach every book.</div>`;
+    : `<div class="none">No one of that name in the Bible Inventory.</div>`;
   ct.textContent = hits.length === 1 ? "1 person" : `${hits.length.toLocaleString()} people`; ct.style.display = hits.length ? "" : "none";
   list.classList.add("on"); list.classList.toggle("faint", !!faint); sc.scrollTop = 0;
   box.setAttribute("aria-expanded", "true"); box.removeAttribute("aria-activedescendant");
@@ -282,7 +282,20 @@ const FIRST = ["name", "birth of", "death of", "creation of", "father", "mother"
   "place", "participant", "led by", "part of", "destination", "place type", "located in", "lived at", "burial place"];
 const HIDE = new Set(["date", "earliest date", "latest date", "occurred before", "designation"]);
 const lk = id => { const n = NM[id] || (CARDS[id] && CARDS[id].n); return n ? `<a class="lk" data-go="${id}">${n}</a>` : ""; };
-const yearOf = id => { const y = INV.events[id]; return !y ? null : y.y != null ? y.y : y.lo; };
+// an event's window and its placed year (decision D037): on its own card w holds the earliest year (a), the latest (z), the placed
+// year (y), the kind (k: S Scripture's own year, O one year by the order of events, P placed in its window, F from its earliest
+// year, B by its latest), what sets the ends (t), their verses (r) and Scripture's clock (c); wy on another card holds the placed
+// year and kind of each event it lists. The placed year is labelled so, never shown as a date
+const PLACED = { P: "placed", F: "from this year", B: "by this year" };
+const evYear = (en, id) => { const q = en.wy && en.wy[id], y = INV.events[id]; return q || (y ? [y.y != null ? y.y : y.lo, "S"] : null); };
+const evLine = (en, id) => { const q = evYear(en, id);
+  return `<div class="evl">${q ? `<span class="num yr">${cal(q[0])}</span>` : `<span class="yr"></span>`}<span>${lk(id)}${q && PLACED[q[1]] ? ` <span class="ctx">${PLACED[q[1]]}</span>` : ""}</span></div>`; };
+const amOf = y => `<span class="amy num">AM ${Math.round(y).toLocaleString()}</span>`;
+const windowText = w => w.k === "P" ? `between ${cal(w.a)} and ${cal(w.z)}` : w.k === "F" ? `from ${cal(w.a)}` : w.k === "B" ? `by ${cal(w.z)}` : cal(w.y);
+const windowHow = w => w.b === "calculated" ? `<sup class="bs" title="Reckoned: ${tipText(w.t)}">†</sup>` : `<sup class="bs" title="Inferred: ${tipText(w.t)}">*</sup>`;
+const clockLine = w => w && w.c ? `<div class="ctx">${w.c}</div>` : "";
+const windowRow = w => { const end = w.k === "F" ? w.a : w.k === "B" ? w.z : w.y, apart = w.k === "P" || w.y !== end;
+  return `<div>${windowText(w)}${windowHow(w)}${w.k === "P" ? "" : ` ${amOf(end)}`}${w.r ? `<span class="rf">${w.r}</span>` : ""}</div>${apart ? `<div>placed ${cal(w.y)} ${amOf(w.y)}</div>` : ""}${clockLine(w)}`; };
 const yearText = (y, mark = "") => y.y != null ? `${cal(y.y)}${mark} <span class="amy num">AM ${Math.round(y.y).toLocaleString()}</span>` : `between ${cal(y.lo)} and ${cal(y.hi)}${mark}`;
 const tipText = s => (s || "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 const how = f => f.b === "calculated" ? `<sup class="bs" title="Reckoned: ${tipText(f.w)}">†</sup>` : f.b === "inferred" ? `<sup class="bs" title="Inferred: ${tipText(f.w)}">*</sup>` : "";
@@ -302,18 +315,21 @@ function invCard(id) {
     const dateLine = x => `<div>${yearText(x, how(x))}${x.r ? `<span class="rf">${x.r}</span>` : ""}</div>`;
     if (born) row(bd.born ? "Born" : "Made", dateLine(born));
     if (died) row("Died", dateLine(died));
+  } else if (en.k === "event" && en.w && en.w.k !== "S") {
+    when = en.w.k === "P" ? `${cal(en.w.a)} – ${cal(en.w.z)}` : windowText(en.w);
+    row("When", windowRow(en.w));
   } else if (en.k === "event" && INV.events[id]) {
     const y = INV.events[id], d = fs.find(f => (f.p === "date" || f.p === "earliest date") && !f.s) || {};
     when = y.y != null ? cal(y.y) : `${cal(y.lo)} – ${cal(y.hi)}`;
-    row("When", `<div>${yearText(y, how(d))}${d.r ? `<span class="rf">${d.r}</span>` : ""}</div>`);
+    row("When", `<div>${yearText(y, how(d))}${d.r ? `<span class="rf">${d.r}</span>` : ""}</div>${clockLine(en.w)}`);
   }
   const order = [...FIRST.filter(p => byProp[p]), ...Object.keys(byProp).filter(p => !FIRST.includes(p) && !HIDE.has(p)).sort()];
   order.forEach(p => { if (p === "name" && byProp.name.length === 1 && byProp.name[0].v === en.n) return; row(LABEL[p] || p[0].toUpperCase() + p.slice(1), cell(byProp[p])); });
   row("Children", (rv.kids || []).map(k => `<div>${lk(k)}</div>`).join(""));
-  if (en.k !== "event") row("Events", (rv.evs || []).map(e => `<div class="evl">${yearOf(e) != null ? `<span class="num yr">${cal(yearOf(e))}</span>` : `<span class="yr"></span>`}${lk(e)}</div>`).join(""));
+  if (en.k !== "event") row("Events", (rv.evs || []).map(e => evLine(en, e)).join(""));
   else row("Includes", (rv.inc || []).map(e => `<div>${lk(e)}</div>`).join(""));
   return `<div class="body"><div class="kind">${kind}</div><h3>${en.n}</h3>${when ? `<div class="when num">${when}</div>` : ""}<div class="desc">${en.d}</div>
-    <dl>${rows.join("")}</dl>${rows.join("").includes('class="bs"') ? `<div class="key"><b>†</b> reckoned from the years and ages Scripture gives<span>·</span><b>*</b> inferred from Scripture<span>·</span>rest the pointer on a mark to see the working</div>` : ""}
+    <dl>${rows.join("")}</dl>${rows.join("").includes('class="bs"') ? `<div class="key"><b>†</b> reckoned from the years and ages Scripture gives<span>·</span><b>*</b> inferred from Scripture<span>·</span>rest the pointer on a mark to see the working</div>` : ""}${/>placed /.test(rows.join("")) || /class="ctx">placed</.test(rows.join("")) ? `<div class="key"><b>placed</b> put within its years by the order of events, not a date Scripture gives</div>` : ""}
     <div class="fine">From the Bible Inventory, ${id}. Every line is approved against the New King James Version; the Inventory now reaches ${INV.through}.</div></div>`;
 }
 // the card's top level with the top of The Bible Map's line; its foot 80 px below the results when it has that much to show,
